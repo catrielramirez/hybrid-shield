@@ -1,0 +1,9 @@
+langgraph
+google-cloud-aiplatform[reasoningengine,langchain]
+cloudpickle
+pydantic
+google-cloud-storage
+google-cloud-bigquery
+google-cloud-discoveryengine
+vertexai
+python-dotenv

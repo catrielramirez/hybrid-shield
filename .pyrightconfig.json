@@ -1,0 +1,17 @@
+{
+    "venvPath": ".",
+    "venv": "venv",
+    "include": [
+        "backend",
+        "scripts"
+    ],
+    "executionEnvironments": [
+        {
+            "root": "backend",
+            "pythonVersion": "3.12",
+            "extraPaths": [
+                "../venv/Lib/site-packages"
+            ]
+        }
+    ]
+}
