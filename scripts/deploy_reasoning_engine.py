@@ -75,15 +75,22 @@ if __name__ == "__main__":
     print(f"Deploying SemanticShield_ReasoningEngine to {LOCATION}...")
     
     # Requirements file path
-    # Requirements file path relative to this script
+    # Requirements file path relative to the project root
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.abspath(os.path.join(script_dir, ".."))
-    requirements_path = os.path.join(script_dir, "requirements_reasoning.txt")
+    requirements_path = os.path.join(project_root, "requirements.txt")
     
-    # Ensure project root is in sys.path so 'src' can be imported
+    # Ensure project root is in sys.path so 'backend' can be imported
     if project_root not in sys.path:
         sys.path.append(project_root)
     
+    # Validation: Ensure backend exists and is a package
+    backend_path = os.path.join(project_root, "backend")
+    if not os.path.isdir(backend_path):
+        raise FileNotFoundError(f"Backend directory not found at {backend_path}")
+    if not os.path.exists(os.path.join(backend_path, "__init__.py")):
+        print(f"Warning: {backend_path} is missing __init__.py. Reasoning Engine might fail to import it.")
+
     # Instantiate the agent
     agent = ModeratorAgent()
     
@@ -93,7 +100,7 @@ if __name__ == "__main__":
         display_name="SemanticShield_ReasoningEngine",
         requirements=requirements_path,
         # We include 'backend' as an extra package so the remote environment can find the agent logic.
-        extra_packages=[os.path.join(project_root, "backend")]
+        extra_packages=[backend_path]
     )
     
     print("\n" + "="*50)
