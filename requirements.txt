@@ -7,5 +7,5 @@ python-dotenv
 pydantic
 opentelemetry-api
 opentelemetry-sdk
-opentelemetry-exporter-google-cloud-trace
+opentelemetry-exporter-gcp-trace
 firebase-admin
