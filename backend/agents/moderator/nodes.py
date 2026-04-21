@@ -101,8 +101,10 @@ def pre_filter_node(state: AgentState):
                 "risk_score": 1.0,
                 "reasoning": f"Bloqueo automático: {result.get('reason', 'Contenido prohibido')}"
             }
-    if not result.get("is_critical"):
         firestore_service.update_job_status(thread_id, "ANALYZING_IMAGE")
+    except Exception as e:
+        logger.error(f"Error in pre_filter safety check: {e}")
+
         
     return {"early_blocked": False}
 

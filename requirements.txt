@@ -1,12 +1,11 @@
 fastapi
 uvicorn
-google-cloud-storage
 google-cloud-logging
-google-cloud-aiplatform[reasoningengine,langchain]
+google-cloud-storage
+vertexai
 python-dotenv
 pydantic
 opentelemetry-api
 opentelemetry-sdk
 opentelemetry-exporter-google-cloud-trace
-langgraph
-cloudpickle
+firebase-admin

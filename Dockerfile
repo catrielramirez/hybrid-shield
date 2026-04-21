@@ -1,27 +1,17 @@
-# Use an official lightweight Python image.
-# https://hub.docker.com/_/python
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# Allow statements and log messages to immediately appear in the logs
-ENV PYTHONUNBUFFERED=True
-# Prevents Python from writing .pyc files
-ENV PYTHONDONTWRITEBYTECODE 1
-
-# Set the working directory to /app
 WORKDIR /app
 
-# Copy local code to the container image.
+# Copiamos los requerimientos desde la raíz
 COPY requirements.txt .
-
-# Install dependencies.
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code.
+# Copiamos TODO el monorepo para mantener la estructura de carpetas
 COPY . .
 
-# Cloud Run uses the PORT environment variable, which defaults to 8080.
+# Exponemos el puerto de Cloud Run
 EXPOSE 8080
 
-# Command to run the application using uvicorn.
-# Use 0.0.0.0 to bind to all network interfaces.
+# El comando debe apuntar a la carpeta backend
+# Usamos uvicorn backend.main:app porque Python verá el paquete 'backend'
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8080"]

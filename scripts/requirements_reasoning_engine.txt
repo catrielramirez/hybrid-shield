@@ -1,0 +1,13 @@
+cloudpickle==3.0.0
+google-cloud-aiplatform[agent_engines,langgraph]==1.148.0
+langgraph
+langchain-core
+langchain-google-vertexai
+pydantic<3.0.0
+google-cloud-storage
+google-cloud-bigquery
+google-cloud-firestore
+google-cloud-discoveryengine
+python-dotenv
+opentelemetry-api
+opentelemetry-sdk

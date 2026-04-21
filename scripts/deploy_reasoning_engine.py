@@ -1,8 +1,18 @@
 import os
-import vertexai
-from vertexai.preview import reasoning_engines
-from dotenv import load_dotenv
 import sys
+import shutil
+from pathlib import Path
+import vertexai
+from vertexai import agent_engines
+from dotenv import load_dotenv
+
+# Ensure the project root is in sys.path for backend imports
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from backend.agents.moderator.builder import moderator_runnable_builder
 
 # Optional: Load env for local testing of this script
 load_dotenv()
@@ -13,94 +23,61 @@ STAGING_BUCKET = f"gs://{os.getenv('GCS_BUCKET_NAME', 'ecommerce-police-portfoli
 
 vertexai.init(project=PROJECT_ID, location=LOCATION, staging_bucket=STAGING_BUCKET)
 
-class ModeratorAgent:
-    """
-    Wrapper for the Semantic Shield LangGraph moderator agent to be deployed
-    to Vertex AI Reasoning Engine.
-    """
-    def __init__(self):
-        self.graph = None
 
-    def set_up(self):
-        """
-        Initializes the LangGraph. This runs in the remote managed environment.
-        """
-        # Late imports to ensure dependencies are available in the remote environment
-        # and to avoid pickling related issues during deployment.
-        from backend.agents.moderator.graph import create_moderator_graph
-        self.graph = create_moderator_graph()
+def cleanup_backend():
+    """Recursively removes all __pycache__ directories and .pyc files in the backend folder."""
+    backend_dir = Path(project_root) / "backend"
+    if not backend_dir.exists():
+        return
 
-    def query(self, input_data: dict = None, thread_id: str = None, human_feedback: dict = None) -> dict:
-        """
-        Entry point for the Reasoning Engine.
+    print(f"Cleaning up cache in {backend_dir}...")
+    count_dirs = 0
+    count_files = 0
+    
+    for pycache in backend_dir.rglob("__pycache__"):
+        if pycache.is_dir():
+            shutil.rmtree(pycache)
+            count_dirs += 1
+            
+    for pyc in backend_dir.rglob("*.pyc"):
+        pyc.unlink()
+        count_files += 1
         
-        Args:
-            input_data: The initial state data for the graph (required for first call).
-            thread_id: Unique session identifier for LangGraph persistence.
-            human_feedback: Optional manual feedback to resume from a breakpoint.
-            
-        Returns:
-            The final state of the graph.
-        """
-        if not self.graph:
-            self.set_up()
-            
-        # Prepare config for persistence
-        config = {}
-        if thread_id:
-            config["configurable"] = {"thread_id": thread_id}
-            
-        # Handle manual review (resumption)
-        if human_feedback:
-            # Inject feedback and clear the intervention flag
-            # This replicates the update_state logic from main.py
-            self.graph.update_state(
-                config, 
-                {"human_feedback": human_feedback, "requires_human_intervention": False}, 
-                as_node="human_pause"
-            )
-            # Resume execution
-            return self.graph.invoke(None, config)
-
-        # Initial analysis
-        if not input_data:
-            raise ValueError("input_data is required for the initial analysis.")
-            
-        if thread_id and "thread_id" not in input_data:
-            input_data["thread_id"] = thread_id
-            
-        return self.graph.invoke(input_data, config)
+    print(f"Removed {count_dirs} __pycache__ directories and {count_files} .pyc files.")
 
 if __name__ == "__main__":
-    print(f"Deploying SemanticShield_ReasoningEngine to {LOCATION}...")
+    cleanup_backend()
     
-    # Requirements file path
+    print(f"\nDeploying SemanticShield to Vertex AI Agent Engine in {LOCATION}...")
+    print(f"Monitor build progress at: https://console.cloud.google.com/cloud-build/builds?project={PROJECT_ID}")
+    print("-" * 50)
+    
     # Requirements file path relative to the project root
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.abspath(os.path.join(script_dir, ".."))
-    requirements_path = os.path.join(project_root, "requirements.txt")
-    
-    # Ensure project root is in sys.path so 'backend' can be imported
-    if project_root not in sys.path:
-        sys.path.append(project_root)
+    requirements_path = os.path.join(project_root, "scripts", "requirements_reasoning_engine.txt")
     
     # Validation: Ensure backend exists and is a package
     backend_path = os.path.join(project_root, "backend")
     if not os.path.isdir(backend_path):
         raise FileNotFoundError(f"Backend directory not found at {backend_path}")
     if not os.path.exists(os.path.join(backend_path, "__init__.py")):
-        print(f"Warning: {backend_path} is missing __init__.py. Reasoning Engine might fail to import it.")
+        raise FileNotFoundError(f"{backend_path} is missing __init__.py — required for extra_packages.")
 
-    # Instantiate the agent
-    agent = ModeratorAgent()
+    # Instantiate LanggraphAgent with custom runnable_builder.
+    # model is required by LanggraphAgent but unused in our builder —
+    # we pass a valid model name so the SDK doesn't fail on validation.
+    agent = agent_engines.LanggraphAgent(
+        model="gemini-2.0-flash",
+        runnable_builder=moderator_runnable_builder,
+    )
     
-    # Deploy to Vertex AI Reasoning Engine
-    remote_engine = reasoning_engines.ReasoningEngine.create(
-        agent,
-        display_name="SemanticShield_ReasoningEngine",
+    # Deploy to Vertex AI Agent Engine
+    # Use relative path for extra_packages to ensure consistent behavior in the remote container
+    os.chdir(project_root)
+    remote_engine = agent_engines.create(
+        agent_engine=agent,
+        display_name="SemanticShield_AgentEngine",
         requirements=requirements_path,
-        # We include 'backend' as an extra package so the remote environment can find the agent logic.
-        extra_packages=[backend_path]
+        extra_packages=["backend"],
     )
     
     print("\n" + "="*50)
