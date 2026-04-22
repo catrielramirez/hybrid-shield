@@ -14,4 +14,5 @@ EXPOSE 8080
 
 # El comando debe apuntar a la carpeta backend
 # Usamos uvicorn backend.main:app porque Python verá el paquete 'backend'
+ENV PYTHONPATH=/app
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8080"]
