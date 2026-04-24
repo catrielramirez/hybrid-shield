@@ -30,6 +30,7 @@ load_dotenv(dotenv_path=project_root / ".env")
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "ecommerce-police-portfolio-buckets")
+SERVICE_ACCOUNT_EMAIL = "679252770153-compute@developer.gserviceaccount.com"
 
 if not PROJECT_ID:
     logger.warning("GOOGLE_CLOUD_PROJECT is not set.")
@@ -103,6 +104,7 @@ async def create_metadata(request: MetadataRequest):
             expiration=timedelta(minutes=15),
             method="PUT",
             content_type=request.content_type,
+            service_account_email=SERVICE_ACCOUNT_EMAIL,
         )
 
         # --- Step 3: Persist metadata JSON to Cloud Storage ---
