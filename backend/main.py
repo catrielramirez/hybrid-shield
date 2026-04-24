@@ -11,6 +11,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google.cloud import storage
+from google.auth import default
+from google.auth.transport import requests
 
 # ================================================================
 # Logging Configuration
@@ -35,8 +37,11 @@ SERVICE_ACCOUNT_EMAIL = "679252770153-compute@developer.gserviceaccount.com"
 if not PROJECT_ID:
     logger.warning("GOOGLE_CLOUD_PROJECT is not set.")
 
-# GCS Storage Client
-storage_client = storage.Client()
+# GCS Credentials & Storage Client
+credentials, project_id = default()
+auth_request = requests.Request()
+credentials.refresh(auth_request)  # Obtain token needed for IAM signing
+storage_client = storage.Client(credentials=credentials)
 
 # ================================================================
 # FastAPI App
@@ -105,6 +110,7 @@ async def create_metadata(request: MetadataRequest):
             method="PUT",
             content_type=request.content_type,
             service_account_email=SERVICE_ACCOUNT_EMAIL,
+            access_token=credentials.token,
         )
 
         # --- Step 3: Persist metadata JSON to Cloud Storage ---
