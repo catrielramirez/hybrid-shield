@@ -1,13 +1,15 @@
 import os
 import uuid
+import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import google.cloud.logging
 import logging
 from dotenv import load_dotenv
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from google.cloud import storage
 
 # ================================================================
@@ -58,44 +60,81 @@ async def health_check():
     }
 
 
+# ================================================================
+# Request Model
+# ================================================================
+class MetadataRequest(BaseModel):
+    filename: str
+    content_type: str = "image/jpeg"
+    title: str
+    description: str
+    price: float
 
-@app.get("/generate-upload-url")
-async def generate_upload_url(
-    filename: str = Query(...),
-    content_type: str = Query("image/jpeg")
-):
-    """Generates a V4 signed URL for uploading an image to GCS."""
+
+# ================================================================
+# Unified Ingestion Endpoint
+# ================================================================
+@app.post("/metadata")
+async def create_metadata(request: MetadataRequest):
+    """
+    Single ingestion endpoint that consolidates the entire intake flow:
+    1. Generates a unique job_id (UUID).
+    2. Creates a V4 Signed URL for the client to perform a Direct Binary Upload.
+    3. Persists the received metadata JSON to Cloud Storage.
+    4. Initializes the job record in Firestore with PENDING status.
+
+    Returns the upload_url and job_id so the frontend can proceed
+    with the binary upload immediately.
+    """
     try:
-        thread_id = str(uuid.uuid4())
+        # --- Step 1: Generate unique job_id ---
+        job_id = str(uuid.uuid4())
         now = datetime.now(timezone.utc)
         date_prefix = now.strftime("%Y/%m/%d")
-        
-        blob_name = f"imagenes_ingesta/{date_prefix}/{thread_id}_{filename}"
-        bucket = storage_client.bucket(GCS_BUCKET_NAME)
-        blob = bucket.blob(blob_name)
 
-        # Generate V4 Signed URL for PUT
-        url = blob.generate_signed_url(
+        bucket = storage_client.bucket(GCS_BUCKET_NAME)
+
+        # --- Step 2: Generate V4 Signed URL for image upload ---
+        image_blob_name = f"imagenes_ingesta/{date_prefix}/{job_id}_{request.filename}"
+        image_blob = bucket.blob(image_blob_name)
+
+        upload_url = image_blob.generate_signed_url(
             version="v4",
             expiration=timedelta(minutes=15),
             method="PUT",
-            content_type=content_type,
+            content_type=request.content_type,
         )
 
-        gcs_uri = f"gs://{GCS_BUCKET_NAME}/{blob_name}"
+        # --- Step 3: Persist metadata JSON to Cloud Storage ---
+        metadata_blob_name = f"metadata_ingesta/{date_prefix}/{job_id}.json"
+        metadata_blob = bucket.blob(metadata_blob_name)
 
-        # Initialize job in Firestore
-        update_job_status(thread_id, "PENDING")
-        
+        metadata_content = request.model_dump()
+        metadata_content["job_id"] = job_id
+        metadata_content["gcs_image_uri"] = f"gs://{GCS_BUCKET_NAME}/{image_blob_name}"
+        metadata_content["created_at"] = now.isoformat()
+
+        metadata_blob.upload_from_string(
+            data=json.dumps(metadata_content, indent=2),
+            content_type="application/json",
+        )
+
+        logger.info(f"Metadata persisted to GCS: {metadata_blob_name}")
+
+        # --- Step 4: Initialize job in Firestore ---
+        update_job_status(job_id, "PENDING")
+
+        logger.info(f"Ingestion flow completed for job_id={job_id}")
+
+        # --- Response to Frontend ---
         return {
-            "upload_url": url,
-            "gcs_uri": gcs_uri,
-            "thread_id": thread_id
+            "upload_url": upload_url,
+            "job_id": job_id,
         }
-    except Exception as e:
-        logger.error(f"Error generating signed URL: {e}")
-        raise HTTPException(status_code=500, detail="Failed to generate upload URL")
 
+    except Exception as e:
+        logger.error(f"Ingestion failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to process ingestion request")
 
 
 if __name__ == "__main__":
