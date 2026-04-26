@@ -67,9 +67,14 @@ async def health_check():
 
 
 # ================================================================
-# Request Model
+# Request Models
 # ================================================================
+class UploadUrlRequest(BaseModel):
+    filename: str
+    content_type: str = "image/jpeg"
+
 class MetadataRequest(BaseModel):
+    job_id: str
     filename: str
     content_type: str = "image/jpeg"
     title: str
@@ -78,29 +83,22 @@ class MetadataRequest(BaseModel):
 
 
 # ================================================================
-# Unified Ingestion Endpoint
+# Step 1: Generate Upload URL
 # ================================================================
-@app.post("/metadata")
-async def create_metadata(request: MetadataRequest):
+@app.post("/get-upload-url")
+async def get_upload_url(request: UploadUrlRequest):
     """
-    Single ingestion endpoint that consolidates the entire intake flow:
-    1. Generates a unique job_id (UUID).
-    2. Creates a V4 Signed URL for the client to perform a Direct Binary Upload.
-    3. Persists the received metadata JSON to Cloud Storage.
-    4. Initializes the job record in Firestore with PENDING status.
-
-    Returns the upload_url and job_id so the frontend can proceed
-    with the binary upload immediately.
+    Step 1: Generates a unique job_id and a V4 Signed URL for image upload.
+    No data is persisted in GCS or Firestore at this stage.
     """
     try:
-        # --- Step 1: Generate unique job_id ---
         job_id = str(uuid.uuid4())
         now = datetime.now(timezone.utc)
         date_prefix = now.strftime("%Y/%m/%d")
 
         bucket = storage_client.bucket(GCS_BUCKET_NAME)
-
-        # --- Step 2: Generate V4 Signed URL for image upload ---
+        
+        # Consistent path for image ingestion
         image_blob_name = f"imagenes_ingesta/{date_prefix}/{job_id}_{request.filename}"
         image_blob = bucket.blob(image_blob_name)
 
@@ -113,12 +111,43 @@ async def create_metadata(request: MetadataRequest):
             access_token=credentials.token,
         )
 
-        # --- Step 3: Persist metadata JSON to Cloud Storage ---
+        logger.info(f"Generated upload URL for job_id={job_id}")
+
+        return {
+            "job_id": job_id,
+            "upload_url": upload_url
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to generate upload URL: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate upload URL")
+
+
+# ================================================================
+# Step 2: Persist Metadata
+# ================================================================
+@app.post("/metadata")
+async def create_metadata(request: MetadataRequest):
+    """
+    Step 2: Receives metadata after the image has been uploaded.
+    1. Persists the metadata JSON to Cloud Storage (this triggers the agent).
+    2. Initializes the job record in Firestore with PENDING status.
+    """
+    try:
+        job_id = request.job_id
+        now = datetime.now(timezone.utc)
+        date_prefix = now.strftime("%Y/%m/%d")
+
+        bucket = storage_client.bucket(GCS_BUCKET_NAME)
+
+        # Reconstruct the image URI based on the same logic used in Step 1
+        image_blob_name = f"imagenes_ingesta/{date_prefix}/{job_id}_{request.filename}"
+        
+        # Persist metadata JSON to Cloud Storage
         metadata_blob_name = f"metadata_ingesta/{date_prefix}/{job_id}.json"
         metadata_blob = bucket.blob(metadata_blob_name)
 
         metadata_content = request.model_dump()
-        metadata_content["job_id"] = job_id
         metadata_content["gcs_image_uri"] = f"gs://{GCS_BUCKET_NAME}/{image_blob_name}"
         metadata_content["created_at"] = now.isoformat()
 
@@ -129,20 +158,20 @@ async def create_metadata(request: MetadataRequest):
 
         logger.info(f"Metadata persisted to GCS: {metadata_blob_name}")
 
-        # --- Step 4: Initialize job in Firestore ---
+        # Initialize job in Firestore
         update_job_status(job_id, "PENDING")
 
         logger.info(f"Ingestion flow completed for job_id={job_id}")
 
-        # --- Response to Frontend ---
         return {
-            "upload_url": upload_url,
+            "status": "success",
             "job_id": job_id,
+            "metadata_path": metadata_blob_name
         }
 
     except Exception as e:
-        logger.error(f"Ingestion failed: {e}")
-        raise HTTPException(status_code=500, detail="Failed to process ingestion request")
+        logger.error(f"Metadata persistence failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to process metadata request")
 
 
 if __name__ == "__main__":

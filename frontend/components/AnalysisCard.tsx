@@ -40,25 +40,50 @@ export function AnalysisCard({ onResult }: AnalysisCardProps) {
     if (file) handleFile(file);
   };
 
-  const uploadToGCS = async (file: File): Promise<{ thread_id: string; gcs_uri: string }> => {
+  const uploadToGCS = async (
+    file: File,
+    metadata: { title: string; description: string; price: number }
+  ): Promise<{ job_id: string }> => {
+    // Paso 1: Obtener URL
     setStatus("generating_url");
-    
-    // 1. Get Signed URL
-    const urlRes = await fetch(`/api/generate-upload-url?filename=${encodeURIComponent(file.name)}`);
-    if (!urlRes.ok) throw new Error("Error al generar URL de subida segura.");
-    const { upload_url, gcs_uri, thread_id } = await urlRes.json();
+    const urlRes = await fetch("/api/get-upload-url", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename: file.name,
+        content_type: file.type || "image/jpeg",
+      }),
+    });
+    if (!urlRes.ok) throw new Error("Error al inicializar la sesión de subida.");
+    const { upload_url, job_id } = await urlRes.json();
 
+    // Paso 2: Subida Binaria
     setStatus("uploading");
-    
-    // 2. Upload to GCS
     const uploadRes = await fetch(upload_url, {
       method: "PUT",
-      headers: { "Content-Type": file.type },
+      headers: { "Content-Type": file.type || "image/jpeg" },
       body: file,
     });
     if (!uploadRes.ok) throw new Error("Error al subir la imagen a Google Cloud Storage.");
 
-    return { thread_id, gcs_uri };
+    // Paso 3: Notificar Metadatos
+    // El backend persiste el JSON y dispara al Agente solo después de este paso.
+    setStatus("analyzing");
+    const metaRes = await fetch("/api/metadata", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        job_id,
+        filename: file.name,
+        content_type: file.type || "image/jpeg",
+        title: metadata.title,
+        description: metadata.description,
+        price: metadata.price,
+      }),
+    });
+    if (!metaRes.ok) throw new Error("Error al procesar los metadatos del producto.");
+
+    return { job_id };
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,15 +103,13 @@ export function AnalysisCard({ onResult }: AnalysisCardProps) {
 
     startTransition(async () => {
       try {
-        // Step 1: Upload to GCS
-        const { thread_id, gcs_uri } = await uploadToGCS(imageFile);
+        // Fase de URL, Carga y Confirmación de Metadatos
+        const { job_id } = await uploadToGCS(imageFile, { title, description, price });
 
-        setStatus("analyzing");
-        
-        // Step 2: Trigger Analysis
+        // Fase de Análisis (Trigger)
         const { result, error: err } = await analyzeProduct({
-            thread_id,
-            gcs_uri,
+            thread_id: job_id,
+            gcs_uri: "",  // Backend already knows the GCS path from metadata
             title,
             description,
             price

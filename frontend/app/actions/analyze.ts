@@ -93,8 +93,8 @@ export async function analyzeProduct(
   try {
     const { thread_id, gcs_uri, title, description, price } = params;
 
-    if (!title || !description || !gcs_uri || !thread_id) {
-      return { error: "Missing required product metadata or image URI." };
+    if (!title || !description || !thread_id) {
+      return { error: "Missing required product metadata or thread_id." };
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
