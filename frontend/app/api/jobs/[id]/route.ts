@@ -19,6 +19,8 @@ export async function GET(
     const baseUrl = process.env.BACKEND_SERVICE_URL || "http://localhost:8000";
     const targetUrl = `${baseUrl.replace(/\/$/, "")}/jobs/${id}`;
     
+    console.log("Forwarding to:", targetUrl);
+
     const response = await fetch(targetUrl, {
       method: "GET",
       headers: { "Content-Type": "application/json" },

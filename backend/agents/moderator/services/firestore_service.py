@@ -60,7 +60,7 @@ def get_job_status(thread_id: str):
         thread_id: The identifier for the job (document ID).
     
     Returns:
-        The document data as a dictionary, or None if not found.
+        The document data as a dictionary with serializable values, or None if not found.
     """
     if not thread_id:
         return None
@@ -71,7 +71,13 @@ def get_job_status(thread_id: str):
         doc = doc_ref.get()
         
         if doc.exists:
-            return doc.to_dict()
+            data = doc.to_dict()
+            # Convert Firestore DatetimeWithNanoseconds to ISO strings
+            # so FastAPI can serialize the response to JSON.
+            for key, value in data.items():
+                if isinstance(value, datetime):
+                    data[key] = value.isoformat()
+            return data
         return None
         
     except Exception as e:

@@ -178,17 +178,19 @@ async def create_metadata(request: MetadataRequest):
 # Job Status Tracking
 # ================================================================
 @app.get("/jobs/{job_id}")
-async def get_status(job_id: str):
+async def get_job(job_id: str):
     """
     Endpoint to poll the status of a moderation job.
     """
     try:
+        logger.info(f"Polling job status for job_id={job_id}")
         job_data = get_job_status(job_id)
+        
         if not job_data:
+            logger.warning(f"Job not found in Firestore: {job_id}")
             raise HTTPException(status_code=404, detail="Job not found")
         
-        # Ensure dates are serialized if they exist (though Firestore SDK often handles this)
-        # We just return the dict, FastAPI handles JSON serialization
+        logger.info(f"Job {job_id} status: {job_data.get('status', 'unknown')}")
         return job_data
 
     except HTTPException:
