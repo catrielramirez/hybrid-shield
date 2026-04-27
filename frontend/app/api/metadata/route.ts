@@ -27,11 +27,13 @@ export async function POST(req: Request) {
     }
 
     // 2. Configuración de la URL (Prioridad .env.local)
-    const BACKEND_SERVICE_URL =
-      process.env.BACKEND_SERVICE_URL || "http://127.0.0.1:8000";
+    const baseUrl = process.env.BACKEND_SERVICE_URL || "http://localhost:8000";
+    const targetUrl = `${baseUrl.replace(/\/$/, "")}/metadata`;
+
+    console.log("Forwarding to:", targetUrl);
 
     // 3. Petición al Backend en Cloud Run
-    const response = await fetch(`${BACKEND_SERVICE_URL}/metadata`, {
+    const response = await fetch(targetUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

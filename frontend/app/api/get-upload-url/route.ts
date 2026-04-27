@@ -13,10 +13,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Filename is required" }, { status: 400 });
     }
 
-    const BACKEND_SERVICE_URL =
-      process.env.BACKEND_SERVICE_URL || "http://127.0.0.1:8000";
+    const baseUrl = process.env.BACKEND_SERVICE_URL || "http://localhost:8000";
+    const targetUrl = `${baseUrl.replace(/\/$/, "")}/get-upload-url`;
     
-    const targetUrl = `${BACKEND_SERVICE_URL}/get-upload-url`;
+    console.log("Forwarding to:", targetUrl);
 
     const response = await fetch(targetUrl, {
       method: "POST",

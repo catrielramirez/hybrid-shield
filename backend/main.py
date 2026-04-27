@@ -21,7 +21,7 @@ client = google.cloud.logging.Client()
 client.setup_logging()
 logger = logging.getLogger("moderation_pipeline")
 
-from backend.agents.moderator.services.firestore_service import update_job_status
+from backend.agents.moderator.services.firestore_service import update_job_status, get_job_status
 
 # ================================================================
 # Initialization
@@ -172,6 +172,30 @@ async def create_metadata(request: MetadataRequest):
     except Exception as e:
         logger.error(f"Metadata persistence failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to process metadata request")
+
+
+# ================================================================
+# Job Status Tracking
+# ================================================================
+@app.get("/jobs/{job_id}")
+async def get_status(job_id: str):
+    """
+    Endpoint to poll the status of a moderation job.
+    """
+    try:
+        job_data = get_job_status(job_id)
+        if not job_data:
+            raise HTTPException(status_code=404, detail="Job not found")
+        
+        # Ensure dates are serialized if they exist (though Firestore SDK often handles this)
+        # We just return the dict, FastAPI handles JSON serialization
+        return job_data
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching job {job_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 if __name__ == "__main__":

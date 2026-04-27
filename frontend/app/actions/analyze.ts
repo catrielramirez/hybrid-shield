@@ -55,28 +55,9 @@ export interface AnalysisResult {
     condition_issue?: boolean;
     policy_match: boolean;
   };
-  policy_signals?: {
-    banned_object?: boolean;
-    product_unusable?: boolean;
-    low_quality_image?: boolean;
-    external_contact?: boolean;
-  };
-  model_metadata?: {
-    vision_model: string;
-    reasoning_model: string;
-    rag_index: string;
-  };
-  pipeline_steps?: {
-    node: string;
-    status: "completed" | "skipped";
-    summary?: string;
-  }[];
-  uncertainty: number;
-  risk_breakdown: RiskFactor[];
-  rag_context?: string;
-  policy_citations?: PolicyCitation[];
-  policy_violations?: PolicyViolation[];
   status?: string;
+  final_action?: "Approve" | "Human Review" | "Block";
+  error?: string;
 }
 
 export interface AnalyzeParams {
@@ -87,49 +68,65 @@ export interface AnalyzeParams {
   price: number;
 }
 
+/**
+ * Wait for Analysis (Polling)
+ * This function now polls the backend until the event-driven agent 
+ * finishes processing and writes the results to Firestore.
+ */
 export async function analyzeProduct(
   params: AnalyzeParams
 ): Promise<{ result?: AnalysisResult; error?: string }> {
   try {
-    const { thread_id, gcs_uri, title, description, price } = params;
+    const { thread_id } = params;
 
-    if (!title || !description || !thread_id) {
-      return { error: "Missing required product metadata or thread_id." };
+    if (!thread_id) {
+      return { error: "Missing thread_id for tracking." };
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    
+    let attempts = 0;
+    const maxAttempts = 60; // 60 * 2s = 120s timeout
+    const delay = 2000;
 
-    // Call the proxy Gateway → Python backend
-    const response = await fetch(`${baseUrl}/api/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        thread_id,
-        gcs_uri,
-        title,
-        description,
-        price,
-      }),
-      signal: AbortSignal.timeout(60000),
-    });
+    console.log(`Starting polling for job_id: ${thread_id}`);
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.error ||
-          `Moderation API failed with status ${response.status}`
-      );
+    while (attempts < maxAttempts) {
+      const response = await fetch(`${baseUrl}/api/jobs/${thread_id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: 'no-store'
+      });
+
+      if (response.ok) {
+        const jobData = await response.json();
+        
+        // Check if analysis is complete
+        // The agent sets status to "done" or provides a "final_action"
+        if (jobData.status === "done" || jobData.final_action) {
+          console.log(`Analysis complete for ${thread_id}`);
+          return { result: jobData as AnalysisResult };
+        }
+
+        if (jobData.status === "error") {
+          return { error: jobData.error || "Moderation agent encountered an error." };
+        }
+        
+        console.log(`Job ${thread_id} status: ${jobData.status || "PENDING"} (attempt ${attempts + 1})`);
+      }
+
+      attempts++;
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
 
-    const result = (await response.json()) as AnalysisResult;
-    return { result };
+    return { error: "El análisis está tardando más de lo esperado. Por favor, revisa más tarde." };
+
   } catch (err: unknown) {
-    console.error("Analysis Action Error:", err);
+    console.error("Polling Action Error:", err);
     const message =
       err instanceof Error
         ? err.message
-        : "An unexpected error occurred during analysis";
+        : "An unexpected error occurred during polling";
     return { error: message };
   }
 }
-

@@ -51,3 +51,30 @@ def update_job_status(thread_id: str, status: str, metadata: dict = None):
         
     except Exception as e:
         logger.error(f"Firestore update failed for job_id '{thread_id}': {e}")
+
+def get_job_status(thread_id: str):
+    """
+    Retrieves the current status and results of a moderation job from Firestore.
+    
+    Args:
+        thread_id: The identifier for the job (document ID).
+    
+    Returns:
+        The document data as a dictionary, or None if not found.
+    """
+    if not thread_id:
+        return None
+
+    try:
+        db = get_firestore_client()
+        doc_ref = db.collection("jobs").document(thread_id)
+        doc = doc_ref.get()
+        
+        if doc.exists:
+            return doc.to_dict()
+        return None
+        
+    except Exception as e:
+        logger.error(f"Failed to fetch job status for job_id '{thread_id}': {e}")
+        return None
+
