@@ -7,12 +7,14 @@ import google.cloud.logging
 import logging
 from dotenv import load_dotenv
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google.cloud import storage
 from google.auth import default
 from google.auth.transport import requests
+import vertexai
+from vertexai import agent_engines
 
 # ================================================================
 # Logging Configuration
@@ -31,6 +33,7 @@ project_root = Path(__file__).parent.parent
 load_dotenv(dotenv_path=project_root / ".env")
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
+LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "ecommerce-police-portfolio-buckets")
 SERVICE_ACCOUNT_EMAIL = "679252770153-compute@developer.gserviceaccount.com"
 
@@ -42,6 +45,24 @@ credentials, project_id = default()
 auth_request = requests.Request()
 credentials.refresh(auth_request)  # Obtain token needed for IAM signing
 storage_client = storage.Client(credentials=credentials)
+
+# ================================================================
+# Vertex AI & Agent Engine Initialization
+# ================================================================
+REASONING_ENGINE_ID = os.getenv("REASONING_ENGINE_RESOURCE_ID")
+
+if PROJECT_ID and LOCATION and REASONING_ENGINE_ID:
+    vertexai.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
+    try:
+        # Pre-load the agent to avoid delay during the first request
+        agent = agent_engines.get(REASONING_ENGINE_ID)
+        logger.info(f"Connected to Reasoning Engine: {REASONING_ENGINE_ID}")
+    except Exception as e:
+        logger.error(f"Failed to connect to Reasoning Engine: {e}")
+        agent = None
+else:
+    logger.warning("Vertex AI or Reasoning Engine ID not configured correctly.")
+    agent = None
 
 # ================================================================
 # FastAPI App
@@ -124,10 +145,48 @@ async def get_upload_url(request: UploadUrlRequest):
 
 
 # ================================================================
+# Agent Invocation Helper
+# ================================================================
+async def invoke_agent_task(job_id: str, input_data: dict, gcs_uri: str):
+    """
+    Background task to invoke the Vertex AI Reasoning Engine.
+    """
+    if not agent:
+        logger.error(f"Agent not initialized. Cannot process job {job_id}")
+        update_job_status(job_id, "ERROR", {"error": "Agent not initialized"})
+        return
+
+    try:
+        logger.info(f"Invoking agent for job {job_id}...")
+        
+        # Prepare input state matching AgentState schema
+        input_state = {
+            "input_data": input_data,
+            "gcs_uri": gcs_uri,
+            "thread_id": job_id
+        }
+        
+        # Critical: Pass thread_id in config for LangGraph checkpointer
+        config = {"configurable": {"thread_id": job_id}}
+        
+        # Call the agent
+        response = agent.query(input=input_state, config=config)
+        
+        # The agent nodes ALREADY update Firestore, but we can ensure
+        # the final state is captured if the agent doesn't do it itself
+        # or to mark it as 'done' for the frontend polling.
+        logger.info(f"Agent response received for job {job_id}")
+        
+    except Exception as e:
+        logger.error(f"Agent invocation failed for job {job_id}: {e}")
+        update_job_status(job_id, "ERROR", {"error": str(e)})
+
+
+# ================================================================
 # Step 2: Persist Metadata
 # ================================================================
 @app.post("/metadata")
-async def create_metadata(request: MetadataRequest):
+async def create_metadata(request: MetadataRequest, background_tasks: BackgroundTasks):
     """
     Step 2: Receives metadata after the image has been uploaded.
     1. Persists the metadata JSON to Cloud Storage (this triggers the agent).
@@ -161,7 +220,20 @@ async def create_metadata(request: MetadataRequest):
         # Initialize job in Firestore
         update_job_status(job_id, "PENDING")
 
-        logger.info(f"Ingestion flow completed for job_id={job_id}")
+        # Trigger the Agent as a Background Task
+        background_tasks.add_task(
+            invoke_agent_task,
+            job_id=job_id,
+            input_data={
+                "title": request.title,
+                "description": request.description,
+                "price": request.price,
+                "gcs_image_uri": metadata_content["gcs_image_uri"]
+            },
+            gcs_uri=metadata_content["gcs_image_uri"]
+        )
+
+        logger.info(f"Ingestion flow completed for job_id={job_id}. Agent triggered.")
 
         return {
             "status": "success",

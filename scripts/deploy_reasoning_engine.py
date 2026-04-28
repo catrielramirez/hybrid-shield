@@ -1,46 +1,57 @@
 import os
 import sys
 import vertexai
-from vertexai.preview import reasoning_engines
-from dotenv import load_dotenv
+from vertexai import agent_engines
 
-# 1. Cargar configuración del entorno
-load_dotenv()
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-PROJECT_ID = "ecommerce-police-portfolio"
-LOCATION = "us-central1"
-STAGING_BUCKET = "gs://ecommerce-police-portfolio-buckets"
+from backend.agents.moderator.builder import moderator_runnable_builder
 
 
-REPO_URL = "https://github.com/catrielramirez/hybrid-shield.git"
+def create_agent_instance():
+    return agent_engines.LanggraphAgent(
+        model="gemini-1.5-flash-001",
+        runnable_builder=moderator_runnable_builder,
+    )
 
-# 3. Inicializar Vertex AI
-vertexai.init(project=PROJECT_ID, location=LOCATION, staging_bucket=STAGING_BUCKET)
 
 if __name__ == "__main__":
-    print(f"Iniciando despliegue remoto desde GitHub...")
-    print(f"Repositorio: {REPO_URL}")
-    print(f"Ubicación: {LOCATION}")
-    print("-" * 50)
+    PROJECT_ID = "ecommerce-police-portfolio"
+    LOCATION = "us-central1"
+    STAGING_BUCKET = "gs://ecommerce-police-portfolio-buckets"
+
+    vertexai.init(
+        project=PROJECT_ID,
+        location=LOCATION,
+        staging_bucket=STAGING_BUCKET,
+    )
+
+    print("Iniciando despliegue estándar Agent Runtime 2026 (LangGraphAgent)...")
 
     try:
-        # 4. Creación del Reasoning Engine usando la fuente de GitHub
-        # El primer argumento es el PATH del builder dentro del repo (formato string)
-        remote_engine = reasoning_engines.ReasoningEngine.create(
-            "backend.agents.moderator.builder.moderator_runnable_builder",
-            display_name="SemanticShield_GitHub_Final",
-            requirements="scripts/requirements_reasoning_engine.txt",
+        local_agent = create_agent_instance()
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        requirements_path = os.path.join(script_dir, "requirements_reasoning_engine.txt")
+        print("Requirements:", requirements_path)
+
+        remote_agent = agent_engines.create(
+            agent_engine=local_agent,
+            requirements=requirements_path,
             extra_packages=["backend"],
-            gcs_source_path=REPO_URL,
+            display_name="SemanticShield_LangGraph_AgentRuntime_2026",
+            description="Agente de moderación semántica basado en LangGraph",
+            min_instances=1,
+            max_instances=10,
+            resource_limits={"cpu": "4", "memory": "4Gi"},
+            container_concurrency=9,
         )
 
-        print("\n" + "="*50)
-        print("¡DESPLIEGUE EXITOSO DESDE GITHUB!")
-        print(f"Resource ID: {remote_engine.resource_name}")
-        print("="*50)
-        print("\nCopia el Resource ID arriba y actualiza tu archivo .env")
+        print("\n" + "=" * 60)
+        print("DESPLIEGUE EXITOSO")
+        print(f"Resource Name: {remote_agent.api_resource.name}")
+        print("=" * 60)
 
     except Exception as e:
-        print(f"\nERROR DURANTE EL DESPLIEGUE:")
+        print(f"\nERROR durante el despliegue: {type(e).__name__}")
         print(str(e))
-        sys.exit(1)

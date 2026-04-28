@@ -28,7 +28,10 @@ def create_moderator_graph():
     workflow.add_node("llm_explainer", llm_explainer_node)
     workflow.add_node("confidence_eval", confidence_evaluation_node)
     workflow.add_node("decision", decision_node)
-    workflow.add_node("human_pause", lambda x: x) # Identity node for human breakpoint
+    def human_pause_node(state):
+        return state
+
+    workflow.add_node("human_pause", human_pause_node) # Identity node for human breakpoint
     workflow.add_node("data_flywheel", data_flywheel_node)
 
     # Entry point

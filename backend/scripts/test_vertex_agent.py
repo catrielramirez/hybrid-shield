@@ -3,12 +3,12 @@ import json
 import google.auth
 from google.auth.transport.requests import Request
 import vertexai
-from vertexai.preview import reasoning_engines
+from vertexai import agent_engines
 
 PROJECT_ID = "ecommerce-police-portfolio"
 LOCATION = "us-central1"
 BUCKET = "ecommerce-police-portfolio-buckets"
-AGENT_NAME = "SemanticShield_AgentEngine"
+AGENT_NAME = "SemanticShield_LangGraph_AgentRuntime_2026"
 
 def main():
     print("Iniciando validación del agente en Vertex AI Reasoning Engine...")
@@ -32,27 +32,29 @@ def main():
         staging_bucket=f"gs://{BUCKET}"
     )
 
-    # 3. Buscar el Reasoning Engine por display_name
+    # 3. Buscar el Agent Engine por display_name
     print(f"\nBuscando agente con nombre: {AGENT_NAME}...")
     try:
-        engines = reasoning_engines.ReasoningEngine.list()
-        target_engine = None
+        engines = agent_engines.list()
+        target_engine_name = None
         for engine in engines:
+            # Note: the list returns objects that might need to be checked for display_name
+            # In some SDK versions, we might need to get the full resource first.
             if engine.display_name == AGENT_NAME:
-                target_engine = engine
+                target_engine_name = engine.resource_name
                 break
                 
-        if not target_engine:
+        if not target_engine_name:
             print(f"Error: No se encontró el agente '{AGENT_NAME}'.")
             print("Agentes disponibles:")
             for engine in engines:
                 print(f" - {engine.display_name} ({engine.resource_name})")
             return
 
-        print(f" Agente encontrado: {target_engine.resource_name}")
+        print(f" Agente encontrado: {target_engine_name}")
         
-        # Instanciar explícitamente para cargar los métodos dinámicos como .query()
-        engine = reasoning_engines.ReasoningEngine(target_engine.resource_name)
+        # Instanciar explícitamente
+        engine = agent_engines.get(target_engine_name)
         print(" Motor de razonamiento instanciado correctamente.")
     except Exception as e:
         print(f"Error al buscar agentes: {e}")
@@ -84,10 +86,11 @@ def main():
     print(f"Imagen: {gcs_image_uri}")
     print(f"Input Data: {json.dumps(input_state['input_data'], indent=2)}")
     
-    # 5. Consultar al Reasoning Engine
+    # 5. Consultar al Agent Engine
     try:
-        # Se llama usando kwargs (**) para mapear el diccionario a los argumentos de la función desplegada
-        response = engine.query(input=input_state)
+        # Es CRITICO pasar el thread_id en el config para que el checkpointer de LangGraph funcione
+        config = {"configurable": {"thread_id": job_id}}
+        response = engine.query(input=input_state, config=config)
         
         print("\n" + "="*50)
         print("=== RESPUESTA COMPLETA DEL AGENTE ===")
