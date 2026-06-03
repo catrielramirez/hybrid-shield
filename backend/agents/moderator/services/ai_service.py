@@ -1,120 +1,225 @@
+import os
 import logging
 import json
-from vertexai.generative_models import GenerativeModel, Part
+import urllib.parse
+import asyncio
+from typing import Optional
+from google import genai
+from google.genai import types
+from google.cloud import storage
+from ..utils.prompt_loader import load_prompt
+from ..schemas import MultimodalProductFeatures, SafetyAnalysis
 
+# Configuración de Logging
 logger = logging.getLogger("moderation_pipeline")
 
-# Lazy Global Model cache
-_models = {}
+# 1. Configuración Global (Instancias únicas para eficiencia)
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "ecommerce-police-portfolio")
+LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 
-def get_gemini_model(model_name: str = "gemini-1.5-flash"):
-    """Lazily initializes the GenerativeModel to prevent startup failures."""
-    if model_name not in _models:
-        try:
-            _models[model_name] = GenerativeModel(
-                model_name,
-                generation_config={"response_mime_type": "application/json"}
-            )
-        except Exception as e:
-            logger.error(f"Failed to initialize GenerativeModel ({model_name}): {e}")
-            raise
-    return _models[model_name]
+# 1. Patrón Lazy Loading para Clientes
+_genai_client = None
+_storage_client = None
 
-def _clean_and_parse_json(text: str) -> dict:
-    """Handles Markdown code block prefixes and json parsing with error handling."""
-    try:
-        clean_json = text.strip()
-        if clean_json.startswith("```json"):
-            clean_json = clean_json.removeprefix("```json").removesuffix("```").strip()
-        elif clean_json.startswith("```"):
-            clean_json = clean_json.removeprefix("```").removesuffix("```").strip()
+def get_genai_client() -> genai.Client:
+    global _genai_client
+    if _genai_client is None:
+        _genai_client = genai.Client(vertexai=True, project=PROJECT_ID, location=LOCATION)
+    return _genai_client
+
+def get_storage_client() -> storage.Client:
+    global _storage_client
+    if _storage_client is None:
+        _storage_client = storage.Client(project=PROJECT_ID)
+    return _storage_client
+
+# Caché en memoria para evitar llamadas redundantes a GCS
+_uri_resolution_cache = {}
+
+
+# ================================================================
+# Interfaz del Modelo
+# ================================================================
+
+class GenAIModelInterface:
+    """
+    Abstracción que expone una interfaz limpia a los nodos.
+    """
+    def __init__(self, model_name: str):
+        self.model_name = model_name
+
+    def generate(self, contents: list | str, response_mime_type: str = "application/json") -> types.GenerateContentResponse:
+        config = types.GenerateContentConfig(response_mime_type=response_mime_type)
+        return get_genai_client().models.generate_content(
+            model=self.model_name,
+            contents=contents,
+            config=config
+        )
+
+    async def generate_async(
+        self, 
+        contents: list | str, 
+        response_schema: Optional[type] = None,
+        response_mime_type: str = "application/json"
+    ) -> types.GenerateContentResponse:
+        config = types.GenerateContentConfig(
+            response_mime_type=response_mime_type,
+            response_schema=response_schema,
+            temperature=0.0 if response_schema else None
+        )
+        return await get_genai_client().aio.models.generate_content(
+            model=self.model_name,
+            contents=contents,
+            config=config
+        )
+
+
+# ================================================================
+# Funciones Utilitarias
+# ================================================================
+
+async def resolve_gcs_uri(gcs_uri: str) -> str:
+    """
+    Verifica si el archivo existe en GCS de forma no bloqueante. Si no, prueba extensiones 
+    alternativas (.jpg, .png, .jpeg). Usa caché para optimizar.
+    """
+    # 1. Retornar inmediatamente si ya resolvimos esta URI anteriormente
+    if gcs_uri in _uri_resolution_cache:
+        return _uri_resolution_cache[gcs_uri]
+
+    if not gcs_uri.startswith("gs://"):
+        return gcs_uri
+
+    # Parsear gs://bucket/path/to/file.jpg
+    parts = gcs_uri[5:].split("/", 1)
+    if len(parts) < 2:
+        return gcs_uri
+    
+    bucket_name, blob_path = parts
+    bucket = get_storage_client().bucket(bucket_name)
+    blob = bucket.blob(blob_path)
+
+    # 2. Verificación si el original existe de manera asíncrona delegada
+    exists = await asyncio.to_thread(blob.exists)
+    if exists:
+        _uri_resolution_cache[gcs_uri] = gcs_uri
+        return gcs_uri
+
+    # 3. Intentar variantes si falla
+    base_path = blob_path.rsplit('.', 1)[0]
+    alternatives = [f"{base_path}.jpg", f"{base_path}.png", f"{base_path}.jpeg"]
+
+    for alt_name in alternatives:
+        if alt_name == blob_path:
+            continue
         
-        return json.loads(clean_json)
-    except json.JSONDecodeError as e:
-        logger.error(f"JSON parsing error: {e}. Raw text snippet: {text[:100]}...")
-        return {"error": "parsing_failed", "details": str(e)}
+        alt_blob = bucket.blob(alt_name)
+        alt_exists = await asyncio.to_thread(alt_blob.exists)
+        if alt_exists:
+            new_uri = f"gs://{bucket_name}/{alt_name}"
+            logger.info(f"Ruta corregida: {gcs_uri} -> {new_uri}")
+            _uri_resolution_cache[gcs_uri] = new_uri
+            return new_uri
+            
+    # Si nada funciona, guardamos el original (fallido) para no reintentar
+    _uri_resolution_cache[gcs_uri] = gcs_uri
+    return gcs_uri
 
-def analyze_listing_safety(title: str, description: str) -> dict:
-    """
-    Analyzes an e-commerce listing for critical safety violations using gemini-1.5-flash.
-    Returns a dict with 'is_critical' and 'reason'.
-    """
-    prompt = f"""
-    Analyze this e-commerce listing for critical policy violations: weapons, drugs, or explicit adult content.
-    Title: {title}
-    Description: {description}
 
-    Return ONLY a JSON object:
-    {{
-        "is_critical": boolean,
-        "reason": "short explanation"
-    }}
-    """
+def get_gemini_model(model_name: str = "gemini-2.5-flash-lite") -> GenAIModelInterface:
     try:
-        model = get_gemini_model("gemini-1.5-flash")
-        response = model.generate_content(prompt)
-        return _clean_and_parse_json(response.text)
+        return GenAIModelInterface(model_name)
+    except Exception as e:
+        logger.error(f"Error al configurar la interfaz del modelo {model_name}: {e}")
+        raise
+
+
+def _get_mime_type(gcs_uri: str) -> str:
+    ext = gcs_uri.lower().split("?")[0].rsplit(".", 1)[-1]
+    return {
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "png": "image/png",
+        "webp": "image/webp",
+        "gif": "image/gif",
+    }.get(ext, "image/jpeg")
+
+
+def _encode_gcs_uri(gcs_uri: str) -> str:
+    if gcs_uri.startswith("gs://"):
+        prefix = "gs://"
+        path = gcs_uri[len(prefix):]
+        encoded_path = urllib.parse.quote(path, safe="/")
+        return prefix + encoded_path
+    return gcs_uri
+
+
+# ================================================================
+# Servicios de IA (Análisis y Extracción)
+# ================================================================
+
+async def analyze_safety(title: str, description: str, model_name: str = "gemini-2.5-flash-lite") -> dict:
+    raw_prompt = load_prompt("analyze_safety_prompt")
+    prompt = raw_prompt.format(title=title, description=description)
+    
+    try:
+        model = get_gemini_model(model_name)
+        response = await model.generate_async(contents=prompt, response_schema=SafetyAnalysis)
+        data = json.loads(response.text)
+        
+        usage_metadata = getattr(response, "usage_metadata", None)
+        usage = {
+            "prompt_tokens": getattr(usage_metadata, "prompt_token_count", 0) if usage_metadata else 0,
+            "candidates_tokens": getattr(usage_metadata, "candidates_token_count", 0) if usage_metadata else 0,
+            "model_name": model_name
+        }
+        return {"data": data, "usage": usage}
+        
     except Exception as e:
         logger.error(f"Safety analysis failed: {e}")
-        return {"is_critical": False, "error": str(e)}
+        return {
+            "data": {"is_critical": None, "reason": "API Error", "status": "error", "error_details": str(e)},
+            "usage": {"prompt_tokens": 0, "candidates_tokens": 0, "model_name": model_name}
+        }
 
-def extract_multimodal_features(gcs_uri: str, product_data: dict) -> dict:
-    """
-    Extracts structured features from a product image and metadata using gemini-1.5-pro.
-    Handles Part.from_uri and multimodal prompt execution.
-    """
-    prompt = f"""
-    Analyze this e-commerce listing for marketplace moderation.
 
-    Title: {product_data.get('title', 'N/A')}
-    Description: {product_data.get('description', 'N/A')}
-
-    Carefully inspect the product image and extract the following structured evidence:
-
-    1. **Primary Object & Category**: Identify the main object and classify it into one of:
-       [electronics, clothing, food, furniture, vehicle, animal, person, other].
-
-    2. **Objects Detected**: List all distinct objects found in the image.
-
-    3. **Text Content**: Extract any visible text, brand names, or labels.
-
-    4. **Contact Info Detection**: Detect phone numbers, WhatsApp/social media handles, or external links.
-
-    5. **Visual Dissonance**: Check if the image matches the title and description accurately.
-
-    6. **Product Condition**: Classify as [new, good, used, damaged, rotten, very_poor_quality].
-
-    7. **Usability Assessment (is_sellable)**: 
-       Return `false` if the product appears: rotten, broken/unusable, contaminated, biological waste, or contains animal body parts/human remains.
-
-    8. **Image Quality & Type**: 
-       - Quality: [high, medium, low].
-       - Type: [real_photo, stock_photo, screenshot, ai_generated, unknown].
-
-    9. **Fraud & Risk Signals**: Identify signals like inconsistent backgrounds, watermarks, or screenshots of other apps.
-
-    Return ONLY a valid JSON object with this schema:
-    {{
-      "primary_object": string,
-      "object_category": "electronics" | "clothing" | "food" | "furniture" | "vehicle" | "animal" | "person" | "other",
-      "objects_detected": string[],
-      "text_in_image": string[],
-      "contact_info_detected": boolean,
-      "visual_dissonance": boolean,
-      "product_condition": "new" | "good" | "used" | "damaged" | "rotten" | "very_poor_quality",
-      "condition_issue_detected": boolean,
-      "image_quality": "high" | "medium" | "low",
-      "image_type": "real_photo" | "stock_photo" | "screenshot" | "ai_generated" | "unknown",
-      "fraud_signals": string[],
-      "is_sellable": boolean,
-      "confidence": number
-    }}
-    """
+async def extract_multimodal_features(gcs_uri: str, product_data: dict, model_name: str = "gemini-2.5-flash-lite") -> dict:
+    raw_prompt = load_prompt("extract_multimodal_features_prompt")
+    
+    prompt = raw_prompt.format(
+        title=product_data.get('title', 'N/A'),
+        description=product_data.get('description', 'N/A'),
+        price=product_data.get('price', 'N/A')
+    )
+    
     try:
-        image_part = Part.from_uri(uri=gcs_uri, mime_type="image/jpeg")
-        model = get_gemini_model("gemini-1.5-pro")
-        response = model.generate_content([image_part, prompt])
-        return _clean_and_parse_json(response.text)
+        # Resolver URI y usar caché (ahora de forma no bloqueante)
+        resolved_uri = await resolve_gcs_uri(gcs_uri)
+        
+        safe_uri = _encode_gcs_uri(resolved_uri)
+        mime_type = _get_mime_type(resolved_uri)
+        image_part = types.Part.from_uri(file_uri=safe_uri, mime_type=mime_type)
+        
+        model = get_gemini_model(model_name)
+        
+        response = await model.generate_async(
+            contents=[image_part, prompt], 
+            response_schema=MultimodalProductFeatures
+        )
+        
+        data = json.loads(response.text)
+        
+        usage_metadata = getattr(response, "usage_metadata", None)
+        usage = {
+            "prompt_tokens": getattr(usage_metadata, "prompt_token_count", 0) if usage_metadata else 0,
+            "candidates_tokens": getattr(usage_metadata, "candidates_token_count", 0) if usage_metadata else 0,
+            "model_name": model_name
+        }
+        return {"data": data, "usage": usage}
+
     except Exception as e:
         logger.error(f"Multimodal extraction failed for {gcs_uri}: {e}")
-        return {"error": "multimodal_analysis_failed", "details": str(e)}
+        return {
+            "data": {"is_sellable": None, "status": "error", "error_details": str(e), "error": "multimodal_analysis_failed"},
+            "usage": {"prompt_tokens": 0, "candidates_tokens": 0, "model_name": model_name}
+        }

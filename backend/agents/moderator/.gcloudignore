@@ -1,0 +1,32 @@
+# Git y configuraciones de ignore
+.git/
+.gitignore
+
+# Entornos virtuales y cachés
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+
+# Datos locales de prueba e imágenes
+data/
+balanced/
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.csv
+*.jsonl
+
+# Reportes y Gráficos
+plots/
+*.md
+
+# Credenciales y Secretos Locales (CRÍTICO)
+.env
+*.json
+!schema.json
+*.pem
+*service_account*.json
+credentials/

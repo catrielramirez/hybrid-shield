@@ -1,0 +1,17 @@
+{
+  "id": 61,
+  "category": "calzado",
+  "title": "Zapatillas de cuero con cordones",
+  "description": "Zapatillas color camel con cordones blancos y suela gruesa, de estilo clásico y resistente.",
+  "actual_label": "BLOCKED",
+  "predicted_action": "Approve",
+  "outcome": "FN",
+  "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+  "latency_ms": 8221.57,
+  "cost_usd": 0.001248,
+  "input_data": {
+    "title": "Zapatillas de cuero con cordones",
+    "description": "Zapatillas color camel con cordones blancos y suela gruesa, de estilo clásico y resistente.",
+    "price": 75000
+  }
+}

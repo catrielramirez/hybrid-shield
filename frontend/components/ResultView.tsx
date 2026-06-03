@@ -93,7 +93,7 @@ export function ResultView({ result }: ResultViewProps) {
           <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 to-amber-500/5 border border-amber-500/20">
             <h4 className="text-[11px] font-bold text-amber-800 mb-1">Zona Gris Detectada</h4>
             <p className="text-[11px] text-amber-700/80 leading-snug">
-              El producto presenta señales mixtas o una incertidumbre elevada ({Math.round(result.uncertainty * 100)}%). 
+              El producto presenta señales mixtas o una incertidumbre elevada ({Math.round((result.uncertainty || 0) * 100)}%). 
               Se requiere aprobación manual antes de ser listado.
             </p>
           </div>

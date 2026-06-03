@@ -1,4 +1,5 @@
 {
     "antigravity.marketplaceGalleryItemURL": "https://marketplace.visualstudio.com/items",
     "antigravity.marketplaceExtensionGalleryServiceURL": "https://marketplace.visualstudio.com/_apis/public/gallery",
+    "python.REPL.enableREPLSmartSend": false,
 }

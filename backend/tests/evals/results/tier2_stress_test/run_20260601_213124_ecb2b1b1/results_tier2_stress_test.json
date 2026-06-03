@@ -1,0 +1,838 @@
+{
+  "verdict": "PASS",
+  "summary": {
+    "dataset": "tier2_stress_test",
+    "hash": "ecb2b1b1",
+    "model": "Gemini 3.1 Flash-Lite",
+    "timestamp": "2026-06-01 21:34:08",
+    "total_items": 20,
+    "distribution": {
+      "actual": {
+        "blocked": 20,
+        "passed": 0
+      },
+      "predicted": {
+        "blocked": 17,
+        "passed": 1,
+        "hitl": 2
+      }
+    },
+    "confusion_matrix": {
+      "tp": 17,
+      "fp": 0,
+      "fn": 1,
+      "tn": 0
+    },
+    "metrics": {
+      "precision": 1.0,
+      "recall": 0.9444,
+      "f1_score": 0.9714,
+      "automation_rate": 0.9,
+      "error_rate": 0.0,
+      "p95_latency_ms": 34423.92,
+      "avg_latency_ms": 11427.46
+    },
+    "cost": {
+      "total_usd": 0.0186,
+      "avg_per_item_usd": 0.000928,
+      "by_node": {
+        "pre_filter": {
+          "total_usd": 0.006158,
+          "avg_usd": 0.000308,
+          "prompt_tokens": 7514,
+          "candidate_tokens": 2854
+        },
+        "fly_wheel": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "extractor": {
+          "total_usd": 0.008489,
+          "avg_usd": 0.000424,
+          "prompt_tokens": 19166,
+          "candidate_tokens": 2465
+        },
+        "rag": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "risk_evaluator": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "decision": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "reasoning": {
+          "total_usd": 0.003911,
+          "avg_usd": 0.000196,
+          "prompt_tokens": 7208,
+          "candidate_tokens": 1406
+        }
+      }
+    },
+    "node_latencies": {
+      "pre_filter": {
+        "avg_ms": 2987.5,
+        "p95_ms": 16667.7,
+        "min_ms": 1192.2,
+        "max_ms": 16667.7
+      },
+      "fly_wheel": {
+        "avg_ms": 21.4,
+        "p95_ms": 46.1,
+        "min_ms": 4.0,
+        "max_ms": 46.1
+      },
+      "extractor": {
+        "avg_ms": 5062.7,
+        "p95_ms": 9019.3,
+        "min_ms": 3459.0,
+        "max_ms": 9019.3
+      },
+      "rag": {
+        "avg_ms": 5086.6,
+        "p95_ms": 19837.3,
+        "min_ms": 248.8,
+        "max_ms": 19837.3
+      },
+      "risk_evaluator": {
+        "avg_ms": 38.7,
+        "p95_ms": 131.1,
+        "min_ms": 0.0,
+        "max_ms": 131.1
+      },
+      "decision": {
+        "avg_ms": 443.0,
+        "p95_ms": 942.9,
+        "min_ms": 216.0,
+        "max_ms": 942.9
+      },
+      "reasoning": {
+        "avg_ms": 1978.3,
+        "p95_ms": 2318.4,
+        "min_ms": 1636.3,
+        "max_ms": 2318.4
+      }
+    }
+  },
+  "results": [
+    {
+      "id": 53,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch con una nota solicitando llamar al +228 5518--9155",
+      "description": "Un smartwatch con pantalla oscura sobre una superficie texturada. Delante del reloj hay una nota blanca escrita a mano con un número telefónico visible.",
+      "reasoning": "Bloqueo automático: El título y la descripción contienen un número de teléfono, lo que constituye una violación de la política de evasión de plataforma.",
+      "latency_ms": 20275.04,
+      "cost_usd": 0.000317,
+      "file_path": "balanced/blocked/053.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 387,
+          "candidates_tokens": 147,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 16667.670965194702
+        },
+        "fly_wheel": {
+          "latency_ms": 3.9892196655273438
+        }
+      }
+    },
+    {
+      "id": 51,
+      "category": "calzado",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas retro de lona con franjas azules",
+      "description": "Un par de zapatillas clásicas de lona algo gastadas, color blanco roto, con franjas azules distintivas. Son de caña baja, con cordones, puntera de goma y suela texturada, mostrando una estética deportiva vintage. Ideales para uso casual y para aportar un estilo retro. 15% de descuento si las compras por www.barato.com",
+      "reasoning": "Bloqueo automático: La descripción incluye una instrucción para comprar fuera de la plataforma.",
+      "latency_ms": 21310.73,
+      "cost_usd": 0.000378,
+      "file_path": "balanced/blocked/051.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 426,
+          "candidates_tokens": 181,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6643.795013427734
+        },
+        "fly_wheel": {
+          "latency_ms": 7.9975128173828125
+        }
+      }
+    },
+    {
+      "id": 55,
+      "category": "calulares",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartphone",
+      "description": "WhatsApp +54 9 248 6156-5903",
+      "reasoning": "Bloqueo automático: Contiene información de contacto para evadir la plataforma.",
+      "latency_ms": 3389.2,
+      "cost_usd": 0.00021,
+      "file_path": "balanced/blocked/055.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 356,
+          "candidates_tokens": 81,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1513.1745338439941
+        },
+        "fly_wheel": {
+          "latency_ms": 9.505510330200195
+        }
+      }
+    },
+    {
+      "id": 54,
+      "category": "componentes_pc",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "silla gamer",
+      "description": "Silla gamer con almohadas lumbar y cervical, tapizado negro y base con ruedas. En el entorno aparecen bicicleta, cascos y otros elementos decorativos.",
+      "reasoning": "El producto ha sido rechazado debido a la baja calidad de las imágenes proporcionadas, las cuales presentan ruido y artefactos de compresión que impiden una verificación adecuada del estado del artículo. Esta falta de claridad visual contraviene los estándares de calidad necesarios para garantizar una experiencia de compra segura y transparente para el usuario.",
+      "latency_ms": 34642.74,
+      "cost_usd": 0.001804,
+      "file_path": "balanced/blocked/054.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 369,
+          "candidates_tokens": 166,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2599.609851837158
+        },
+        "extractor": {
+          "prompt_tokens": 2323,
+          "candidates_tokens": 260,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 9019.274711608887
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 19837.327003479004
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.9996166229248047
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 265.2697563171387
+        },
+        "reasoning": {
+          "prompt_tokens": 1001,
+          "candidates_tokens": 161,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1727.186679840088
+        }
+      }
+    },
+    {
+      "id": 58,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch mostrando WhatsApp y números telefónicos",
+      "description": "Primer plano de un smartwatch moderno con información de WhatsApp y números visibles en pantalla.",
+      "reasoning": "El producto fue rechazado debido a la presencia de información de contacto externa visible en la imagen, lo cual infringe las políticas de seguridad y antifraude. Además, el precio listado presenta una anomalía significativa al encontrarse muy por debajo del rango de mercado esperado para este tipo de dispositivos.",
+      "latency_ms": 30266.52,
+      "cost_usd": 0.002089,
+      "file_path": "balanced/blocked/058.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 359,
+          "candidates_tokens": 207,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2005.3675174713135
+        },
+        "extractor": {
+          "prompt_tokens": 2302,
+          "candidates_tokens": 322,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 7180.6581020355225
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 16841.049194335938
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 131.1166286468506
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 216.01080894470215
+        },
+        "reasoning": {
+          "prompt_tokens": 1062,
+          "candidates_tokens": 243,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2002.9761791229248
+        },
+        "fly_wheel": {
+          "latency_ms": 3.999948501586914
+        }
+      }
+    },
+    {
+      "id": 59,
+      "category": "droga",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "cannabis sativa",
+      "description": "flores de alta calidad",
+      "reasoning": "Bloqueo automático: El producto ofrecido es cannabis, una sustancia prohibida por la ley argentina y las políticas de la plataforma.",
+      "latency_ms": 4030.46,
+      "cost_usd": 0.000247,
+      "file_path": "balanced/blocked/059.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 341,
+          "candidates_tokens": 108,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1192.2414302825928
+        },
+        "fly_wheel": {
+          "latency_ms": 3.998994827270508
+        }
+      }
+    },
+    {
+      "id": 61,
+      "category": "calzado",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Approve",
+      "outcome": "FN",
+      "title": "Zapatillas de cuero con cordones",
+      "description": "Zapatillas color camel con cordones blancos y suela gruesa, de estilo clásico y resistente.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 8221.57,
+      "cost_usd": 0.001248,
+      "file_path": "balanced/blocked/061.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 362,
+          "candidates_tokens": 162,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1728.794813156128
+        },
+        "extractor": {
+          "prompt_tokens": 2307,
+          "candidates_tokens": 225,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3458.950996398926
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 530.127763748169
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.0014514923095703
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 372.26176261901855
+        },
+        "fly_wheel": {
+          "latency_ms": 31.996726989746094
+        }
+      }
+    },
+    {
+      "id": 62,
+      "category": "bazar_y_cocina",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Cafetera",
+      "description": "Cafetera estilo vintage ideal para preparar café en casa. Se menciona evitar la plataforma.",
+      "reasoning": "Bloqueo automático: La descripción indica explícitamente instrucciones para evitar la plataforma.",
+      "latency_ms": 4277.36,
+      "cost_usd": 0.000322,
+      "file_path": "balanced/blocked/062.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 354,
+          "candidates_tokens": 156,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1670.8178520202637
+        },
+        "fly_wheel": {
+          "latency_ms": 13.00048828125
+        }
+      }
+    },
+    {
+      "id": 64,
+      "category": "artesanias",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Llámame al +BL 9+177 1446-422 6-6-422",
+      "description": "Cartel manuscrito con información de contacto visible entre artesanías y objetos hechos a mano.",
+      "reasoning": "Bloqueo automático: Contiene información de contacto para evadir la plataforma.",
+      "latency_ms": 3094.54,
+      "cost_usd": 0.000273,
+      "file_path": "balanced/blocked/064.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 383,
+          "candidates_tokens": 118,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1460.1140022277832
+        },
+        "fly_wheel": {
+          "latency_ms": 46.076297760009766
+        }
+      }
+    },
+    {
+      "id": 63,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch",
+      "description": "Reloj inteligente moderno con pantalla circular y correa negra.",
+      "reasoning": "El producto fue rechazado debido a una anomalía significativa en el precio, el cual se encuentra muy por debajo del rango de mercado esperado, y a la baja calidad de la imagen que presenta distorsión digital. Estas características incumplen las normas de calidad visual y generan sospechas de fraude según nuestras políticas de seguridad.",
+      "latency_ms": 10780.97,
+      "cost_usd": 0.002029,
+      "file_path": "balanced/blocked/063.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 348,
+          "candidates_tokens": 165,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1760.0421905517578
+        },
+        "extractor": {
+          "prompt_tokens": 2279,
+          "candidates_tokens": 338,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4364.006519317627
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 248.8110065460205
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 478.6205291748047
+        },
+        "reasoning": {
+          "prompt_tokens": 1032,
+          "candidates_tokens": 240,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2237.837076187134
+        },
+        "fly_wheel": {
+          "latency_ms": 4.998922348022461
+        }
+      }
+    },
+    {
+      "id": 70,
+      "category": "celulares",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartphone",
+      "description": "variedad de celulares, nuevos y usados",
+      "reasoning": "El producto fue rechazado debido a la presencia de información de contacto no permitida en la imagen, específicamente una URL externa superpuesta. Esta práctica infringe la política de seguridad y antifraude que prohíbe el uso de texto superpuesto con datos de contacto o nombres de vendedores en las fotografías.",
+      "latency_ms": 11138.25,
+      "cost_usd": 0.001833,
+      "file_path": "balanced/blocked/070.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 157,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2294.705629348755
+        },
+        "extractor": {
+          "prompt_tokens": 2274,
+          "candidates_tokens": 308,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3982.4979305267334
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 601.5162467956543
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 10.030508041381836
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 456.5105438232422
+        },
+        "reasoning": {
+          "prompt_tokens": 958,
+          "candidates_tokens": 161,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1753.7431716918945
+        },
+        "fly_wheel": {
+          "latency_ms": 15.63715934753418
+        }
+      }
+    },
+    {
+      "id": 74,
+      "category": "alimentos_crudos",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "canes y pescados",
+      "description": "Un encantador puesto callejero repleto de herramientas tradicionales de madera hechas a mano y cestas tejidas. Ideal para artesanos, coleccionistas o quienes buscan decoración única para el hogar. Incluye diversos utensilios, platos de madera y cestas tejidas de distintos tamaños. Un cartel indica información de contacto: WA *BL-90-90 44441-928-9828.",
+      "reasoning": "Bloqueo automático: La publicación incluye información de contacto (número de teléfono) que intenta dirigir a los compradores fuera de la plataforma.",
+      "latency_ms": 3556.45,
+      "cost_usd": 0.000411,
+      "file_path": "balanced/blocked/074.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 428,
+          "candidates_tokens": 203,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1804.7266006469727
+        },
+        "fly_wheel": {
+          "latency_ms": 16.908645629882812
+        }
+      }
+    },
+    {
+      "id": 73,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Apple Watch Series 8 (GPS) 45 mm caja de aluminio color medianoche con correa deportiva color medianoche",
+      "description": "La pantalla más grande vista en un Apple Watch. Además, el cristal frontal más resistente hasta ahora. La pantalla Retina siempre activa es más brillante que nunca, facilitando ver la esfera y las aplicaciones incluso bajo la luz solar directa. Sensores avanzados ofrecen información para comprender mejor tu salud. Las nuevas funciones de seguridad permiten obtener ayuda cuando más la necesitás. Realizá seguimiento de entrenamientos con métricas más avanzadas. El sensor de temperatura brinda información más profunda sobre la salud femenina. La detección de choques y caídas aporta tranquilidad.",
+      "reasoning": "El producto fue rechazado debido a la detección de información de contacto externa dentro de las imágenes del artículo. Esta práctica infringe las políticas de seguridad de la plataforma al intentar desviar la comunicación fuera de los canales oficiales.",
+      "latency_ms": 20402.26,
+      "cost_usd": 0.001816,
+      "file_path": "balanced/blocked/073.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 468,
+          "candidates_tokens": 153,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1649.6756076812744
+        },
+        "extractor": {
+          "prompt_tokens": 2519,
+          "candidates_tokens": 266,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3853.2025814056396
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 719.3865776062012
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 113.48986625671387
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 428.15232276916504
+        },
+        "reasoning": {
+          "prompt_tokens": 917,
+          "candidates_tokens": 141,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1636.3213062286377
+        },
+        "fly_wheel": {
+          "latency_ms": 32.99689292907715
+        }
+      }
+    },
+    {
+      "id": 87,
+      "category": "alimentos_y_bebidas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "cafe",
+      "description": "Contacto: ofertas62@yahoo.com - Reserva y veni a tomarlo al local",
+      "reasoning": "Bloqueo automático: Contiene información de contacto (correo electrónico) para evadir la plataforma.",
+      "latency_ms": 5452.12,
+      "cost_usd": 0.000299,
+      "file_path": "balanced/blocked/087.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 356,
+          "candidates_tokens": 140,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1602.9467582702637
+        },
+        "fly_wheel": {
+          "latency_ms": 44.9984073638916
+        }
+      }
+    },
+    {
+      "id": 78,
+      "category": "drogas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "exatis",
+      "description": "alta calidad de diseño",
+      "reasoning": "El producto fue rechazado debido a que la imagen muestra sustancias ilícitas, lo cual contraviene las políticas de seguridad y artículos prohibidos. Además, existe una clara disonancia visual entre el título del producto y el contenido real de la imagen, lo que constituye un riesgo de fraude.",
+      "latency_ms": 14096.82,
+      "cost_usd": 0.002258,
+      "file_path": "balanced/blocked/078.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 341,
+          "candidates_tokens": 126,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1722.8624820709229
+        },
+        "extractor": {
+          "prompt_tokens": 2785,
+          "candidates_tokens": 435,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4643.248796463013
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1223.1547832489014
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 48.0344295501709
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 942.861795425415
+        },
+        "reasoning": {
+          "prompt_tokens": 1209,
+          "candidates_tokens": 222,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2171.8766689300537
+        },
+        "fly_wheel": {
+          "latency_ms": 36.99779510498047
+        }
+      }
+    },
+    {
+      "id": 88,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch",
+      "description": "Evitamos la plataforma, ¡comprá directamente con nosotros!",
+      "reasoning": "Bloqueo automático: La descripción indica explícitamente que se debe evitar la plataforma para realizar la compra, lo cual va en contra de las políticas.",
+      "latency_ms": 3928.13,
+      "cost_usd": 0.000245,
+      "file_path": "balanced/blocked/088.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 350,
+          "candidates_tokens": 105,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1560.5723857879639
+        },
+        "fly_wheel": {
+          "latency_ms": 15.635013580322266
+        }
+      }
+    },
+    {
+      "id": 90,
+      "category": "animales",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Guacamyos vivos - De misiones",
+      "description": "WA +54 9 67 8843-2413",
+      "reasoning": "Bloqueo automático: Se ofrece la venta de animales vivos y se proporciona información de contacto para evadir la plataforma.",
+      "latency_ms": 3356.07,
+      "cost_usd": 0.000256,
+      "file_path": "balanced/blocked/090.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 363,
+          "candidates_tokens": 110,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1649.9385833740234
+        },
+        "fly_wheel": {
+          "latency_ms": 15.632867813110352
+        }
+      }
+    },
+    {
+      "id": 98,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch con pantalla vibrante y múltiples íconos de aplicaciones, presentado sobre fondo oscuro",
+      "description": "Contactame al 011232323. Un smartwatch moderno con pantalla cuadrada y colorida mostrando distintos íconos de funciones. Posee correa oscura de tela y carcasa metálica con dos botones laterales visibles. La pantalla muestra hora, fecha, pasos e íconos de aplicaciones como teléfono, música y actividad física. El fondo oscuro resalta el diseño y la pantalla.",
+      "reasoning": "Bloqueo automático: La descripción contiene información de contacto (número de teléfono) que intenta dirigir la transacción fuera de la plataforma.",
+      "latency_ms": 3507.98,
+      "cost_usd": 0.000307,
+      "file_path": "balanced/blocked/098.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 434,
+          "candidates_tokens": 132,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1764.4484043121338
+        },
+        "fly_wheel": {
+          "latency_ms": 42.997121810913086
+        }
+      }
+    },
+    {
+      "id": 89,
+      "category": "herramientas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Herramientas de jardinería surtidas y aceitera",
+      "description": "Una colección de herramientas de jardinería vintage, incluyendo tijeras, podadoras y una aceitera, dispuestas sobre una superficie de madera rústica. Las herramientas parecen muy usadas y transmiten una sensación de historia y artesanía.",
+      "reasoning": "El producto fue rechazado debido a una anomalía significativa en el precio, ya que el valor listado de $0.0 se encuentra fuera del rango de mercado esperado para herramientas de jardinería. Además, se detectó una inconsistencia en la condición del producto, lo cual contraviene las normas de transparencia en la publicación.",
+      "latency_ms": 19572.82,
+      "cost_usd": 0.002008,
+      "file_path": "balanced/blocked/089.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 398,
+          "candidates_tokens": 156,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6904.665470123291
+        },
+        "extractor": {
+          "prompt_tokens": 2377,
+          "candidates_tokens": 311,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4000.004291534424
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 691.1084651947021
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.9989013671875
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 384.43970680236816
+        },
+        "reasoning": {
+          "prompt_tokens": 1029,
+          "candidates_tokens": 238,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2318.431615829468
+        }
+      }
+    },
+    {
+      "id": 100,
+      "category": "servicios",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "masajes sexuales - eroticos",
+      "description": "toda la info en el cartel",
+      "reasoning": "Bloqueo automático: Contenido sexual explícito.",
+      "latency_ms": 3249.15,
+      "cost_usd": 0.000208,
+      "file_path": "balanced/blocked/100.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 348,
+          "candidates_tokens": 81,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1554.4862747192383
+        },
+        "fly_wheel": {
+          "latency_ms": 38.04898262023926
+        }
+      }
+    }
+  ]
+}

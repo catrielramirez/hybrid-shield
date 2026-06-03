@@ -246,7 +246,7 @@ function SignalsContent({ result }: { result: AnalysisResult }) {
 function AggregationContent({ result }: { result: AnalysisResult }) {
   return (
     <div className="space-y-2.5">
-      {result.risk_breakdown.map((b) => (
+      {(result.risk_breakdown || []).map((b) => (
         <div key={b.factor} className="space-y-0.5">
           <div className="flex justify-between">
             <span className="text-slate-600">{SIGNAL_LABELS[b.factor] || b.factor}</span>

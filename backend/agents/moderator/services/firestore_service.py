@@ -4,35 +4,32 @@ from google.cloud import firestore
 
 logger = logging.getLogger("moderation_pipeline")
 
-# Lazy Global Client
-_firestore_client = None
+# Lazy Global Async Client
+_firestore_async_client = None
 
-def get_firestore_client():
-    """Lazily initializes the Firestore client to prevent unnecessary overhead."""
-    global _firestore_client
-    if _firestore_client is None:
+def get_firestore_async_client():
+    """Lazily initializes the Firestore Async client to prevent unnecessary overhead."""
+    global _firestore_async_client
+    if _firestore_async_client is None:
         try:
-            _firestore_client = firestore.Client()
+            # Usamos AsyncClient en lugar de Client
+            _firestore_async_client = firestore.AsyncClient(database="firestore-hybrid-shield")
         except Exception as e:
-            logger.error(f"Failed to initialize Firestore client: {e}")
+            logger.error(f"Failed to initialize Firestore Async client: {e}")
             raise
-    return _firestore_client
+    return _firestore_async_client
 
-def update_job_status(thread_id: str, status: str, metadata: dict = None):
+
+async def update_job_status(thread_id: str, status: str, metadata: dict = None):
     """
-    Updates the status and metadata of a moderation job in Firestore.
-    
-    Args:
-        thread_id: The identifier for the job (document ID).
-        status: The current phase or status of the job.
-        metadata: Optional dictionary with extra data to merge into the document.
+    Updates the status and metadata of a moderation job in Firestore asynchronously.
     """
     if not thread_id:
         logger.warning("Job status update skipped: thread_id is missing")
         return
 
     try:
-        db = get_firestore_client()
+        db = get_firestore_async_client()
         doc_ref = db.collection("jobs").document(thread_id)
         
         payload = {
@@ -43,37 +40,30 @@ def update_job_status(thread_id: str, status: str, metadata: dict = None):
         if metadata:
             payload.update(metadata)
         
-        # Using merge=True ensures we don't overwrite other unrelated fields 
-        # and creates the document if it doesn't exist.
-        doc_ref.set(payload, merge=True)
+        # Agregamos 'await' porque doc_ref.set en AsyncClient devuelve una corrutina
+        await doc_ref.set(payload, merge=True)
         
         logger.info(f"Firestore update successful: phase='{status}', job_id='{thread_id}'")
         
     except Exception as e:
         logger.error(f"Firestore update failed for job_id '{thread_id}': {e}")
 
-def get_job_status(thread_id: str):
+
+async def get_job_status(thread_id: str):
     """
-    Retrieves the current status and results of a moderation job from Firestore.
-    
-    Args:
-        thread_id: The identifier for the job (document ID).
-    
-    Returns:
-        The document data as a dictionary with serializable values, or None if not found.
+    Retrieves the current status and results of a moderation job from Firestore asynchronously.
     """
     if not thread_id:
         return None
 
     try:
-        db = get_firestore_client()
+        db = get_firestore_async_client()
         doc_ref = db.collection("jobs").document(thread_id)
-        doc = doc_ref.get()
+        # Agregamos 'await' para obtener el documento de forma asíncrona
+        doc = await doc_ref.get()
         
         if doc.exists:
             data = doc.to_dict()
-            # Convert Firestore DatetimeWithNanoseconds to ISO strings
-            # so FastAPI can serialize the response to JSON.
             for key, value in data.items():
                 if isinstance(value, datetime):
                     data[key] = value.isoformat()
@@ -84,3 +74,40 @@ def get_job_status(thread_id: str):
         logger.error(f"Failed to fetch job status for job_id '{thread_id}': {e}")
         return None
 
+
+async def get_price_thresholds(category_key: str) -> dict | None:
+    """
+    Retrieves market price thresholds for a given product category from Firestore asynchronously.
+    """
+    if not category_key:
+        logger.warning("get_price_thresholds called with empty category_key")
+        return None
+
+    try:
+        db = get_firestore_async_client()
+        doc_ref = db.collection("price_thresholds").document(category_key)
+        doc = await doc_ref.get()
+        
+        if doc.exists:
+            data = doc.to_dict()
+            
+            if "min_price" in data and "max_price" in data:
+                return {
+                    "min_price": int(data["min_price"]),
+                    "max_price": int(data["max_price"])
+                }
+            else:
+                logger.warning(
+                    f"Price thresholds document for category '{category_key}' "
+                    f"is missing required fields (min_price, max_price)"
+                )
+                return None
+        
+        logger.info(f"No price thresholds found for category '{category_key}'")
+        return None
+        
+    except Exception as e:
+        logger.error(
+            f"Failed to fetch price thresholds for category '{category_key}': {e}"
+        )
+        return None

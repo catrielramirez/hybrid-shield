@@ -1,12 +1,20 @@
+# Ignora el historial de Git y archivos locales innecesarios
 .git
 .gitignore
-node_modules/
-frontend/
+.gitattributes
+
+# Ignora entornos locales (esto es obligatorio)
 venv/
 .venv/
-tests/
-scripts/
-archive/
-.vscode/
+env/
 __pycache__/
-*.pyc
+
+# Ignora archivos de configuración local (Solo si NO los necesita el contenedor)
+.env
+.vscode/
+archive/
+data/
+*.log
+
+# IMPORTANTE: NO ignores pyproject.toml, ni Dockerfile, ni requirements.txt
+# Estos son vitales para el despliegue.

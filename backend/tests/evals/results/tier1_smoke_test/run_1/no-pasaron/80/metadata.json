@@ -1,0 +1,17 @@
+{
+  "id": 80,
+  "category": "celulares",
+  "title": "Smartphone",
+  "description": "Un smartphone moderno con diseño elegante, ideal para mantenerse conectado y productivo. Cuenta con una pantalla grande y de alta calidad, además de una cámara avanzada. Incluye un lápiz premium para tomar notas e introducir datos fácilmente.",
+  "actual_label": "BLOCKED",
+  "predicted_action": "Approve",
+  "outcome": "FN",
+  "reasoning": "",
+  "latency_ms": 31459.37,
+  "cost_usd": 0.001741,
+  "input_data": {
+    "title": "Smartphone",
+    "description": "Un smartphone moderno con diseño elegante, ideal para mantenerse conectado y productivo. Cuenta con una pantalla grande y de alta calidad, además de una cámara avanzada. Incluye un lápiz premium para tomar notas e introducir datos fácilmente.",
+    "price": 79000
+  }
+}

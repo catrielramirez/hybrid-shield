@@ -1,0 +1,17 @@
+{
+  "id": 37,
+  "category": "pequeños_electrodomesticos",
+  "title": "conservadora electrica",
+  "description": "bateria con 8 horas de duracion. Especial para bebidas y cualquier alimento que se tenga que conservar en frio.",
+  "actual_label": "PASSED",
+  "predicted_action": "Block",
+  "outcome": "FP",
+  "reasoning": "El producto fue rechazado debido a una clara discrepancia entre la descripción del artículo como 'eléctrica' y la evidencia visual, que muestra una conservadora convencional, lo cual constituye una falta de veracidad. Además, el precio de $150,000 ARS excede significativamente el rango de mercado esperado para este tipo de producto, reforzando la señal de anomalía y posible fraude.",
+  "latency_ms": 36571.08,
+  "cost_usd": 0.003264,
+  "input_data": {
+    "title": "conservadora electrica",
+    "description": "bateria con 8 horas de duracion. Especial para bebidas y cualquier alimento que se tenga que conservar en frio.",
+    "price": 150000
+  }
+}

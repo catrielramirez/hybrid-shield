@@ -1,18 +1,21 @@
-# Credenciales y Secretos
+# Secretos
 .env
 config/*.json
 claves-gcp.json
+credentials.json
 
-# Entornos Virtuales
+# Entornos y Caché
 venv/
 .venv/
 env/
-
-# Python basura
 **/__pycache__/
 *.py[cod]
 
-# Datos y temporales
+# IDE y Configuración local
+.vscode/
+.DS_Store
+
+# Datos y logs
 archive/
 data/
 *.log

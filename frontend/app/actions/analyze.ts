@@ -55,8 +55,12 @@ export interface AnalysisResult {
     condition_issue?: boolean;
     policy_match: boolean;
   };
+  policy_citations?: PolicyCitation[];
+  risk_breakdown?: RiskFactor[];
+  policy_violations?: PolicyViolation[];
+  pipeline_steps?: string[];
+  uncertainty?: number;
   status?: string;
-  final_action?: "Approve" | "Human Review" | "Block";
   error?: string;
 }
 

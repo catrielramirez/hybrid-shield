@@ -1,0 +1,17 @@
+{
+  "id": 48,
+  "category": "accesorios_para_mascotas",
+  "title": "Colchon para gato",
+  "description": "Mayor confort para tus mascotas",
+  "actual_label": "PASSED",
+  "predicted_action": "Block",
+  "outcome": "FP",
+  "reasoning": "El producto ha sido marcado como rechazado debido a la detección de un objeto prohibido según los sistemas de seguridad internos. Aunque el precio se encuentra dentro del rango de mercado esperado, la señal de 'banned_object' activa automáticamente una restricción de seguridad que impide su publicación.",
+  "latency_ms": 34956.38,
+  "cost_usd": 0.002576,
+  "input_data": {
+    "title": "Colchon para gato",
+    "description": "Mayor confort para tus mascotas",
+    "price": 79000
+  }
+}

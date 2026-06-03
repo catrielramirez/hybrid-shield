@@ -1,0 +1,17 @@
+{
+  "id": 19,
+  "category": "lamparas",
+  "title": "Lámparas Ajustables",
+  "description": "Ilumina tu espacio creativo con este set de escritorio que incluye dos lámparas de escritorio negras con brazos ajustables para una iluminación perfecta. El set también viene con un organizador de pinceles de metal lleno de pinceles de artista de alta calidad, un par de tijeras de precisión y un cuaderno de bocetos. Ideal para artistas, estudiantes y cualquier persona que necesite una iluminación de tarea confiable y herramientas de arte esenciales.",
+  "actual_label": "PASSED",
+  "predicted_action": "Block",
+  "outcome": "FP",
+  "reasoning": "El producto fue rechazado debido a un fallo crítico en el análisis multimodal que impide verificar su estado y funcionalidad. Esta inconsistencia técnica, sumada a la imposibilidad de validar la información del artículo, representa un riesgo de seguridad según los protocolos de la plataforma.",
+  "latency_ms": 178150.98,
+  "cost_usd": 0.000805,
+  "input_data": {
+    "title": "Lámparas Ajustables",
+    "description": "Ilumina tu espacio creativo con este set de escritorio que incluye dos lámparas de escritorio negras con brazos ajustables para una iluminación perfecta. El set también viene con un organizador de pinceles de metal lleno de pinceles de artista de alta calidad, un par de tijeras de precisión y un cuaderno de bocetos. Ideal para artistas, estudiantes y cualquier persona que necesite una iluminación de tarea confiable y herramientas de arte esenciales.",
+    "price": 75000
+  }
+}

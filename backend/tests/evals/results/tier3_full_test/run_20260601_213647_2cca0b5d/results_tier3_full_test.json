@@ -1,0 +1,1923 @@
+{
+  "verdict": "FAIL",
+  "summary": {
+    "dataset": "tier3_full_test",
+    "hash": "2cca0b5d",
+    "model": "Gemini 3.1 Flash-Lite",
+    "timestamp": "2026-06-01 21:42:41",
+    "total_items": 40,
+    "distribution": {
+      "actual": {
+        "blocked": 10,
+        "passed": 30
+      },
+      "predicted": {
+        "blocked": 8,
+        "passed": 28,
+        "hitl": 3
+      }
+    },
+    "confusion_matrix": {
+      "tp": 8,
+      "fp": 0,
+      "fn": 1,
+      "tn": 27
+    },
+    "metrics": {
+      "precision": 1.0,
+      "recall": 0.8889,
+      "f1_score": 0.9412,
+      "automation_rate": 0.9,
+      "error_rate": 0.025,
+      "p95_latency_ms": 40960.4,
+      "avg_latency_ms": 14496.01
+    },
+    "cost": {
+      "total_usd": 0.0529,
+      "avg_per_item_usd": 0.001322,
+      "by_node": {
+        "pre_filter": {
+          "total_usd": 0.012872,
+          "avg_usd": 0.000322,
+          "prompt_tokens": 14628,
+          "candidate_tokens": 6143
+        },
+        "extractor": {
+          "total_usd": 0.036939,
+          "avg_usd": 0.000923,
+          "prompt_tokens": 86316,
+          "candidate_tokens": 10240
+        },
+        "rag": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "risk_evaluator": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "decision": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "fly_wheel": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "reasoning": {
+          "total_usd": 0.003059,
+          "avg_usd": 7.6e-05,
+          "prompt_tokens": 5969,
+          "candidate_tokens": 1044
+        }
+      }
+    },
+    "node_latencies": {
+      "pre_filter": {
+        "avg_ms": 2134.6,
+        "p95_ms": 5139.2,
+        "min_ms": 1333.5,
+        "max_ms": 13776.6
+      },
+      "extractor": {
+        "avg_ms": 8590.0,
+        "p95_ms": 11642.3,
+        "min_ms": 2797.8,
+        "max_ms": 136965.5
+      },
+      "rag": {
+        "avg_ms": 1497.0,
+        "p95_ms": 11284.2,
+        "min_ms": 511.1,
+        "max_ms": 11287.2
+      },
+      "risk_evaluator": {
+        "avg_ms": 33.9,
+        "p95_ms": 126.7,
+        "min_ms": 0.0,
+        "max_ms": 289.7
+      },
+      "decision": {
+        "avg_ms": 436.4,
+        "p95_ms": 814.6,
+        "min_ms": 233.5,
+        "max_ms": 824.1
+      },
+      "fly_wheel": {
+        "avg_ms": 25.1,
+        "p95_ms": 87.3,
+        "min_ms": 0.0,
+        "max_ms": 105.9
+      },
+      "reasoning": {
+        "avg_ms": 2063.0,
+        "p95_ms": 2587.1,
+        "min_ms": 1595.4,
+        "max_ms": 2587.1
+      }
+    }
+  },
+  "results": [
+    {
+      "id": 2,
+      "category": "componentes_pc",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Teclado de computadora HN123",
+      "description": "En varios colores. Origen China.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 39419.17,
+      "cost_usd": 0.002131,
+      "file_path": "balanced/passed/002.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 352,
+          "candidates_tokens": 134,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 13776.56888961792
+        },
+        "extractor": {
+          "prompt_tokens": 2803,
+          "candidates_tokens": 761,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 10916.865110397339
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11287.240266799927
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 31.99291229248047
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 257.6262950897217
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "category": "relojes",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Reloj de pulsera",
+      "description": "Viene equipado con una correa de malla negra transpirable y ajustable, además de un bisel plateado pulido y botones laterales para una navegación intuitiva. Ideal para el uso diario y ocasiones especiales.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 40960.4,
+      "cost_usd": 0.001381,
+      "file_path": "balanced/passed/003.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 382,
+          "candidates_tokens": 162,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5139.209032058716
+        },
+        "extractor": {
+          "prompt_tokens": 2347,
+          "candidates_tokens": 304,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 11642.323017120361
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11284.164667129517
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 245.69129943847656
+        },
+        "fly_wheel": {
+          "latency_ms": 7.998228073120117
+        }
+      }
+    },
+    {
+      "id": 7,
+      "category": "bazar_y_cocina",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Cafetera Italiana Clásica de Aluminio para un Café Perfecto",
+      "description": "Disfruta de la auténtica experiencia del café italiano con esta cafetera moka de aluminio de alta calidad. Diseñada para preparar un espresso rico y aromático directamente en tu cocina. Su construcción robusta garantiza una distribución uniforme del calor para una extracción óptima. Incluye un vaso de vidrio con café recién hecho y granos de café tostado para una presentación impecable. Ideal para los amantes del buen café.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 10661.92,
+      "cost_usd": 0.001365,
+      "file_path": "balanced/passed/007.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 433,
+          "candidates_tokens": 167,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1714.223861694336
+        },
+        "extractor": {
+          "prompt_tokens": 2449,
+          "candidates_tokens": 263,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3682.461977005005
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1212.5554084777832
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 289.66569900512695
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 328.0141353607178
+        },
+        "fly_wheel": {
+          "latency_ms": 39.994239807128906
+        }
+      }
+    },
+    {
+      "id": 4,
+      "category": "lamparas",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Lámpara de Escritorio",
+      "description": "Ultima tecnologia led",
+      "reasoning": "El producto ha sido aprobado para su publicación ya que cumple con los estándares de calidad visual y no presenta señales de fraude. Aunque se detectó una anomalía de precio, el valor de $60,000 se encuentra dentro del rango de mercado esperado de $10,000 a $200,000, por lo que no representa un riesgo significativo.",
+      "latency_ms": 12577.73,
+      "cost_usd": 0.001702,
+      "file_path": "balanced/passed/004.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 345,
+          "candidates_tokens": 139,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1778.6571979522705
+        },
+        "extractor": {
+          "prompt_tokens": 2275,
+          "candidates_tokens": 293,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3912.862777709961
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1366.5552139282227
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9.978055953979492
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 549.8244762420654
+        },
+        "reasoning": {
+          "prompt_tokens": 1014,
+          "candidates_tokens": 97,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1595.4196453094482
+        }
+      }
+    },
+    {
+      "id": 9,
+      "category": "papeleria",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Set de Escritura de Lujo: Pluma Elegante y Accesorios Dorados",
+      "description": "Este exclusivo set de escritura combina la sofisticación con la funcionalidad. Incluye una pluma de alta calidad con detalles dorados y un cuerpo negro brillante, un frasco dorado con tapa, y un elegante recipiente cilíndrico con base dorada y cuerpo de cristal transparente. Presentado sobre una bandeja dorada, este set es perfecto para coleccionistas o como un regalo distinguido.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 10130.74,
+      "cost_usd": 0.001472,
+      "file_path": "balanced/passed/009.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 431,
+          "candidates_tokens": 238,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1837.545394897461
+        },
+        "extractor": {
+          "prompt_tokens": 2445,
+          "candidates_tokens": 264,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3728.21307182312
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 902.5826454162598
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 8.001327514648438
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 310.92190742492676
+        },
+        "fly_wheel": {
+          "latency_ms": 16.556739807128906
+        }
+      }
+    },
+    {
+      "id": 8,
+      "category": "instrumentos_musicales",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Guitarra acustica YAMAHAL234",
+      "description": "Con cuerdas de acero. Ebano y jacaranda",
+      "reasoning": "El producto fue rechazado debido a una anomalía significativa en el precio, ya que el valor publicado de $500,000 excede ampliamente el rango de mercado esperado para este tipo de artículo. Esta discrepancia sugiere una posible irregularidad en la publicación que requiere revisión manual.",
+      "latency_ms": 11292.98,
+      "cost_usd": 0.00188,
+      "file_path": "balanced/passed/008.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 359,
+          "candidates_tokens": 127,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1395.014762878418
+        },
+        "extractor": {
+          "prompt_tokens": 2820,
+          "candidates_tokens": 278,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3643.991708755493
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1186.128854751587
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.997035980224609
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 524.7552394866943
+        },
+        "reasoning": {
+          "prompt_tokens": 1005,
+          "candidates_tokens": 151,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1879.831314086914
+        }
+      }
+    },
+    {
+      "id": 11,
+      "category": "calzado",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Zapatillas de Cuero Azul Marino con Cordones",
+      "description": "Elegantes zapatillas bajas de cuero azul marino con un acabado texturizado. Presentan un diseño clásico con cordones, ojales metálicos y una puntera reforzada. La suela de goma blanca proporciona comodidad y durabilidad, ideal para el uso diario.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 8831.72,
+      "cost_usd": 0.001265,
+      "file_path": "balanced/passed/011.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 399,
+          "candidates_tokens": 162,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1925.6298542022705
+        },
+        "extractor": {
+          "prompt_tokens": 2382,
+          "candidates_tokens": 218,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2797.802448272705
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1883.2085132598877
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.999897003173828
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 233.49475860595703
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 12,
+      "category": "herramientas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "kit de herramientas",
+      "description": "nuevo kit oficial completo",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 10332.8,
+      "cost_usd": 0.001589,
+      "file_path": "balanced/passed/012.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 342,
+          "candidates_tokens": 169,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1587.8539085388184
+        },
+        "extractor": {
+          "prompt_tokens": 2786,
+          "candidates_tokens": 369,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4146.7225551605225
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 532.703161239624
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 425.0926971435547
+        },
+        "fly_wheel": {
+          "latency_ms": 76.5388011932373
+        }
+      }
+    },
+    {
+      "id": 13,
+      "category": "relojes",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Smartwatch Deportivo con Pantalla Táctil y Monitor de Ritmo Cardíaco",
+      "description": "Experimenta la fusión perfecta de estilo y tecnología con este smartwatch deportivo. Diseñado para el atleta moderno, cuenta con una pantalla táctil a color de alta resolución que muestra la hora (18:25), la fecha y métricas de actividad física. El monitor de ritmo cardíaco integrado te ayuda a optimizar tus entrenamientos, mientras que su diseño resistente y correa de silicona aseguran comodidad y durabilidad. Compatible con la mayoría de smartphones, recibe notificaciones, controla tu música y mucho más directamente desde tu muñeca.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 11282.09,
+      "cost_usd": 0.001512,
+      "file_path": "balanced/passed/013.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 460,
+          "candidates_tokens": 199,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1849.853515625
+        },
+        "extractor": {
+          "prompt_tokens": 2504,
+          "candidates_tokens": 315,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5499.844789505005
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 556.5252304077148
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 306.2150478363037
+        },
+        "fly_wheel": {
+          "latency_ms": 17.266035079956055
+        }
+      }
+    },
+    {
+      "id": 14,
+      "category": "microfonos",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Microfono profesional condencer marca Shure",
+      "description": "Omnidireccionoal. Original.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 9931.97,
+      "cost_usd": 0.00141,
+      "file_path": "balanced/passed/014.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 352,
+          "candidates_tokens": 149,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2558.3040714263916
+        },
+        "extractor": {
+          "prompt_tokens": 2805,
+          "candidates_tokens": 265,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3911.731004714966
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 566.8997764587402
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 402.27437019348145
+        },
+        "fly_wheel": {
+          "latency_ms": 49.791812896728516
+        }
+      }
+    },
+    {
+      "id": 15,
+      "category": "monitores_y_televisores",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Televisor clasico original sony 1999",
+      "description": "De coleccion. Funcionando perfectamente",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.90. Uncertainty=0.10. Action: Approve.",
+      "latency_ms": 10811.33,
+      "cost_usd": 0.001607,
+      "file_path": "balanced/passed/015.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 353,
+          "candidates_tokens": 133,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1782.8483581542969
+        },
+        "extractor": {
+          "prompt_tokens": 2809,
+          "candidates_tokens": 411,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5229.950189590454
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 598.6666679382324
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.0263195037841797
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 289.1199588775635
+        },
+        "fly_wheel": {
+          "latency_ms": 8.816242218017578
+        }
+      }
+    },
+    {
+      "id": 18,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Remera La Plata de algodon",
+      "description": "100% algodon.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 10887.44,
+      "cost_usd": 0.00148,
+      "file_path": "balanced/passed/018.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 350,
+          "candidates_tokens": 147,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1798.6974716186523
+        },
+        "extractor": {
+          "prompt_tokens": 2799,
+          "candidates_tokens": 315,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4148.049592971802
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1060.704231262207
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 448.4701156616211
+        },
+        "fly_wheel": {
+          "latency_ms": 26.243209838867188
+        }
+      }
+    },
+    {
+      "id": 20,
+      "category": "calulares",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Smartphone de Última Generación con Pantalla Inmersiva",
+      "description": "Descubre la innovación en tus manos con este smartphone de última generación. Su pantalla inmersiva te transportará a un mundo de colores vibrantes y detalles asombrosos, ideal para disfrutar de tus contenidos multimedia favoritos. Diseñado con materiales premium y una estética elegante, este dispositivo no solo es potente, sino también un accesorio de moda. Captura momentos inolvidables con su avanzada cámara y experimenta un rendimiento fluido en todas tus aplicaciones.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 11125.57,
+      "cost_usd": 0.001341,
+      "file_path": "balanced/passed/020.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 438,
+          "candidates_tokens": 187,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1889.5800113677979
+        },
+        "extractor": {
+          "prompt_tokens": 2459,
+          "candidates_tokens": 224,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4109.7986698150635
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 592.6001071929932
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 29.347658157348633
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 570.8880424499512
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 24,
+      "category": "papeleria",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Set de Arte Profesional con Lámpara de Escritorio Ajustable",
+      "description": "Este set de arte completo incluye todo lo necesario para dar rienda suelta a tu creatividad. Cuenta con una colección de pinceles de alta calidad para diversas técnicas, un recipiente para mantenerlos organizados, una botella de líquido (posiblemente tinta o barniz) y unas tijeras de precisión. Además, se incluye una lámpara de escritorio moderna con brazo ajustable, perfecta para iluminar tu espacio de trabajo con luz clara y enfocada. Ideal para artistas, estudiantes y aficionados.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 12043.36,
+      "cost_usd": 0.001431,
+      "file_path": "balanced/passed/024.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 446,
+          "candidates_tokens": 203,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1957.3891162872314
+        },
+        "extractor": {
+          "prompt_tokens": 2475,
+          "candidates_tokens": 264,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4722.098827362061
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 659.900426864624
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 126.72543525695801
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 368.68786811828613
+        },
+        "fly_wheel": {
+          "latency_ms": 47.41978645324707
+        }
+      }
+    },
+    {
+      "id": 26,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Remera lisa",
+      "description": "algodon",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 9453.87,
+      "cost_usd": 0.00132,
+      "file_path": "balanced/passed/026.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 340,
+          "candidates_tokens": 142,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1600.743293762207
+        },
+        "extractor": {
+          "prompt_tokens": 2781,
+          "candidates_tokens": 218,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3934.757947921753
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 722.0773696899414
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 115.40818214416504
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 814.626932144165
+        },
+        "fly_wheel": {
+          "latency_ms": 87.2955322265625
+        }
+      }
+    },
+    {
+      "id": 25,
+      "category": "maquinas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Cortadora de cesped ",
+      "description": "Electrica",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 12182.44,
+      "cost_usd": 0.00149,
+      "file_path": "balanced/passed/025.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 143,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1407.900333404541
+        },
+        "extractor": {
+          "prompt_tokens": 2787,
+          "candidates_tokens": 329,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5906.0797691345215
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2590.759515762329
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 321.1381435394287
+        },
+        "fly_wheel": {
+          "latency_ms": 7.995128631591797
+        }
+      }
+    },
+    {
+      "id": 27,
+      "category": "pequeños_electrodomesticos",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Cafetera Italiana Clásica de Aluminio - Diseño Elegante para tu Café Perfecto",
+      "description": "Disfruta de un café aromático y delicioso con esta cafetera italiana de diseño clásico. Fabricada en aluminio de alta calidad, garantiza una distribución uniforme del calor para una extracción óptima del sabor. Su asa ergonómica y su tapa con pomo facilitan su manejo y servicio. Perfecta para preparar hasta [X] tazas de café espresso en casa. Compatible con cocinas de gas, eléctricas y vitrocerámicas. Limpieza sencilla. Ideal para los amantes del buen café.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 10533.9,
+      "cost_usd": 0.001406,
+      "file_path": "balanced/passed/027.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 451,
+          "candidates_tokens": 210,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2228.257894515991
+        },
+        "extractor": {
+          "prompt_tokens": 2485,
+          "candidates_tokens": 238,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3715.1012420654297
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 746.6020584106445
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 647.6907730102539
+        },
+        "fly_wheel": {
+          "latency_ms": 50.3690242767334
+        }
+      }
+    },
+    {
+      "id": 29,
+      "category": "papeleria",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "pinceles",
+      "description": "kit completo",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.90. Uncertainty=0.10. Action: Approve.",
+      "latency_ms": 10693.56,
+      "cost_usd": 0.001278,
+      "file_path": "balanced/passed/029.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 339,
+          "candidates_tokens": 133,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1460.0298404693604
+        },
+        "extractor": {
+          "prompt_tokens": 2264,
+          "candidates_tokens": 285,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5135.931730270386
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1731.1794757843018
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 406.6152572631836
+        },
+        "fly_wheel": {
+          "latency_ms": 45.53556442260742
+        }
+      }
+    },
+    {
+      "id": 32,
+      "category": "bazar_y_cocina",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Cafetera Italiana Clásica de Aluminio - Aroma Intenso y Diseño Elegante",
+      "description": "Disfruta del auténtico café italiano con esta cafetera moka de alta calidad. Fabricada en aluminio pulido, garantiza una distribución uniforme del calor para extraer el máximo sabor de tus granos de café. Su diseño clásico y funcional la convierte en un elemento esencial para los amantes del buen café. Incluye una taza de cerámica llena de granos de café y una cafetera humeante, lista para preparar tu bebida favorita. Perfecta para cocinas de gas, eléctricas o vitrocerámicas.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 11666.94,
+      "cost_usd": 0.00142,
+      "file_path": "balanced/passed/032.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 454,
+          "candidates_tokens": 203,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1874.8342990875244
+        },
+        "extractor": {
+          "prompt_tokens": 2491,
+          "candidates_tokens": 253,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4783.344507217407
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 571.1724758148193
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 782.7472686767578
+        },
+        "fly_wheel": {
+          "latency_ms": 39.99590873718262
+        }
+      }
+    },
+    {
+      "id": 33,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "jena azul",
+      "description": "maxima calidad- talle del 36 al 44. Envios a todo el pais",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 10436.03,
+      "cost_usd": 0.001458,
+      "file_path": "balanced/passed/033.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 358,
+          "candidates_tokens": 151,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1333.4827423095703
+        },
+        "extractor": {
+          "prompt_tokens": 2816,
+          "candidates_tokens": 292,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4461.514472961426
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 737.368106842041
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 55.9992790222168
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 602.0066738128662
+        },
+        "fly_wheel": {
+          "latency_ms": 31.252145767211914
+        }
+      }
+    },
+    {
+      "id": 39,
+      "category": "bazar_y_cocina",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "jarra de acero",
+      "description": "para calentar leche",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 9410.12,
+      "cost_usd": 0.001246,
+      "file_path": "balanced/passed/039.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 137,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1411.818504333496
+        },
+        "extractor": {
+          "prompt_tokens": 2271,
+          "candidates_tokens": 258,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4252.992391586304
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 598.1574058532715
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 105.07535934448242
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 651.0753631591797
+        },
+        "fly_wheel": {
+          "latency_ms": 105.90386390686035
+        }
+      }
+    },
+    {
+      "id": 36,
+      "category": "bazar_y_cocina",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "vasos premium de vidrio",
+      "description": "Diseños originales y vidrio templado",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 12523.84,
+      "cost_usd": 0.001531,
+      "file_path": "balanced/passed/036.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 346,
+          "candidates_tokens": 164,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1583.0631256103516
+        },
+        "extractor": {
+          "prompt_tokens": 2794,
+          "candidates_tokens": 333,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4805.731296539307
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 827.2049427032471
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 82.97204971313477
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 824.0516185760498
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 41,
+      "category": "piletas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Pileta pelopincho",
+      "description": "De lona, 300 litros",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 10102.94,
+      "cost_usd": 0.001653,
+      "file_path": "balanced/passed/041.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 349,
+          "candidates_tokens": 143,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2089.9434089660645
+        },
+        "extractor": {
+          "prompt_tokens": 2800,
+          "candidates_tokens": 434,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4306.751728057861
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1077.3546695709229
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 55.99784851074219
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 715.2547836303711
+        },
+        "fly_wheel": {
+          "latency_ms": 15.63715934753418
+        }
+      }
+    },
+    {
+      "id": 43,
+      "category": "motos",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "GILERA Smalsh 110cc",
+      "description": "Planes de pago. 0Km, retira desde el primer dia",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 9790.08,
+      "cost_usd": 0.001478,
+      "file_path": "balanced/passed/043.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 359,
+          "candidates_tokens": 169,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1825.5643844604492
+        },
+        "extractor": {
+          "prompt_tokens": 2821,
+          "candidates_tokens": 286,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4922.87278175354
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 645.0684070587158
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 81.58087730407715
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 433.3348274230957
+        },
+        "fly_wheel": {
+          "latency_ms": 40.82989692687988
+        }
+      }
+    },
+    {
+      "id": 44,
+      "category": "notbeooks_y_computadoras",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Notebook L32",
+      "description": "16 GB de RAM",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 8933.02,
+      "cost_usd": 0.001444,
+      "file_path": "balanced/passed/044.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 345,
+          "candidates_tokens": 155,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1922.438621520996
+        },
+        "extractor": {
+          "prompt_tokens": 2792,
+          "candidates_tokens": 285,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3923.9792823791504
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 683.480978012085
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 372.6503849029541
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 46,
+      "category": "neumaticos",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Cubierta para auto",
+      "description": "origen china",
+      "reasoning": "Risk score 0.25 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 8974.11,
+      "cost_usd": 0.001524,
+      "file_path": "balanced/passed/046.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 341,
+          "candidates_tokens": 165,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1477.6740074157715
+        },
+        "extractor": {
+          "prompt_tokens": 2784,
+          "candidates_tokens": 330,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4580.426931381226
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 511.14773750305176
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.996797561645508
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 283.0939292907715
+        },
+        "fly_wheel": {
+          "latency_ms": 7.999897003173828
+        }
+      }
+    },
+    {
+      "id": 47,
+      "category": "perfumes",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Carolina Herrera - Parfum",
+      "description": "Fragancia premium, Paris",
+      "reasoning": "Risk score 0.00 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 8030.09,
+      "cost_usd": 0.001517,
+      "file_path": "balanced/passed/047.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 344,
+          "candidates_tokens": 147,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1878.6547183990479
+        },
+        "extractor": {
+          "prompt_tokens": 2790,
+          "candidates_tokens": 342,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3251.248836517334
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 515.3298377990723
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 33.019304275512695
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 304.72803115844727
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 49,
+      "category": "lamparas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Set de Arte Profesional con Lámpara LED y Accesorios de Dibujo",
+      "description": "Ilumina tu creatividad con este completo set de arte. Incluye una lámpara LED ajustable con base de trípode para una iluminación óptima, un organizador metálico lleno de pinceles de alta calidad para diversas técnicas de pintura, una taza de cerámica lista para tu bebida favorita, y una selección de herramientas de dibujo como lápices y reglas. Perfecto para artistas, estudiantes y aficionados que buscan un espacio de trabajo inspirador y funcional.",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 10240.87,
+      "cost_usd": 0.001367,
+      "file_path": "balanced/passed/049.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 439,
+          "candidates_tokens": 157,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1744.3413734436035
+        },
+        "extractor": {
+          "prompt_tokens": 2461,
+          "candidates_tokens": 271,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3977.1552085876465
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1329.6151161193848
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.999420166015625
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 290.28773307800293
+        },
+        "fly_wheel": {
+          "latency_ms": 0.0
+        }
+      }
+    },
+    {
+      "id": 50,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Sweater azul hombre",
+      "description": "Fabricado con telas premium",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.95. Uncertainty=0.05. Action: Approve.",
+      "latency_ms": 9942.57,
+      "cost_usd": 0.001501,
+      "file_path": "balanced/passed/050.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 160,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1770.4896926879883
+        },
+        "extractor": {
+          "prompt_tokens": 2788,
+          "candidates_tokens": 319,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5002.799272537231
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 746.0527420043945
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 66.27035140991211
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 448.8842487335205
+        },
+        "fly_wheel": {
+          "latency_ms": 8.002281188964844
+        }
+      }
+    },
+    {
+      "id": 52,
+      "category": "bazar_y_cocina",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Cafetera",
+      "description": "Una cafetera moderna y elegante se encuentra sobre una estantería de madera junto a un casco negro. También hay un pequeño recipiente y otro contenedor metálico. Al lado se observa una silla gamer negra con almohadones y una alfombra estampada sobre el piso.",
+      "reasoning": "El producto fue rechazado debido a una grave disonancia visual, ya que la imagen muestra una silla gamer en lugar de la cafetera descrita, además de incluir información de contacto externa y ofertas promocionales no permitidas. Asimismo, el precio listado presenta una anomalía significativa al estar muy por debajo del rango de mercado esperado para este tipo de artículos.",
+      "latency_ms": 10134.17,
+      "cost_usd": 0.002085,
+      "file_path": "balanced/blocked/052.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 391,
+          "candidates_tokens": 171,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1671.9064712524414
+        },
+        "extractor": {
+          "prompt_tokens": 2365,
+          "candidates_tokens": 328,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3764.0442848205566
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 530.3013324737549
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 258.0752372741699
+        },
+        "reasoning": {
+          "prompt_tokens": 1072,
+          "candidates_tokens": 253,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2207.3001861572266
+        },
+        "fly_wheel": {
+          "latency_ms": 14.890432357788086
+        }
+      }
+    },
+    {
+      "id": 60,
+      "category": "servicios",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "citas sexuales",
+      "description": "maxima privacidad",
+      "reasoning": "Bloqueo automático: Contenido sexual explícito.",
+      "latency_ms": 3368.82,
+      "cost_usd": 0.000211,
+      "file_path": "balanced/blocked/060.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 339,
+          "candidates_tokens": 84,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1607.5670719146729
+        },
+        "fly_wheel": {
+          "latency_ms": 8.000612258911133
+        }
+      }
+    },
+    {
+      "id": 65,
+      "category": "alimentos crudos",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "carne picada",
+      "description": "La mejor calidad en carnes",
+      "reasoning": "El producto fue rechazado debido a graves problemas de higiene y salubridad detectados en la imagen, donde se observa carne expuesta a moscas en un entorno insalubre. Esta condición contraviene las normas de seguridad alimentaria y calidad exigidas para la venta de productos comestibles en la plataforma.",
+      "latency_ms": 11219.98,
+      "cost_usd": 0.002186,
+      "file_path": "balanced/blocked/065.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 344,
+          "candidates_tokens": 177,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2101.834297180176
+        },
+        "extractor": {
+          "prompt_tokens": 2791,
+          "candidates_tokens": 340,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 3474.9696254730225
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 641.2129402160645
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 366.12606048583984
+        },
+        "reasoning": {
+          "prompt_tokens": 1114,
+          "candidates_tokens": 232,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2587.113618850708
+        },
+        "fly_wheel": {
+          "latency_ms": 7.366180419921875
+        }
+      }
+    },
+    {
+      "id": 66,
+      "category": "calzado",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas de lona azul marino",
+      "description": "Zapatillas cómodas para uso diario con información de contacto agregada al final. Descuento si compras en ig: zapas.la.plata o al 22343434",
+      "reasoning": "Bloqueo automático: La descripción contiene información de contacto (número de teléfono y usuario de Instagram) que dirige a los compradores fuera de la plataforma, lo cual es una violación de las políticas.",
+      "latency_ms": 3434.18,
+      "cost_usd": 0.000316,
+      "file_path": "balanced/blocked/066.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 384,
+          "candidates_tokens": 147,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1584.5377445220947
+        },
+        "fly_wheel": {
+          "latency_ms": 45.36747932434082
+        }
+      }
+    },
+    {
+      "id": 81,
+      "category": "calzado",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas de cuero gris oscuro para hombre",
+      "description": "Zapatillas de cuero gris oscuro, para trabajar. Usadas",
+      "reasoning": "El producto fue rechazado debido a que presenta un estado de conservación deficiente, lo cual lo hace inutilizable para la venta según nuestras políticas de calidad. Además, la imagen no cumple con los estándares visuales requeridos, ya que muestra elementos de escenografía y un fondo no permitido.",
+      "latency_ms": 10045.9,
+      "cost_usd": 0.001842,
+      "file_path": "balanced/blocked/081.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 355,
+          "candidates_tokens": 179,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1544.022560119629
+        },
+        "extractor": {
+          "prompt_tokens": 2295,
+          "candidates_tokens": 283,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4077.5623321533203
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 566.1628246307373
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 23.994922637939453
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 241.14203453063965
+        },
+        "reasoning": {
+          "prompt_tokens": 986,
+          "candidates_tokens": 160,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1712.691068649292
+        },
+        "fly_wheel": {
+          "latency_ms": 7.999181747436523
+        }
+      }
+    },
+    {
+      "id": 82,
+      "category": "alimentos_y_bebidas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Cafe junto a otras sustancias de regalo",
+      "description": "Tu café favorito. THC 28%",
+      "reasoning": "Bloqueo automático: El producto contiene THC, una sustancia ilícita.",
+      "latency_ms": 3244.03,
+      "cost_usd": 0.000302,
+      "file_path": "balanced/blocked/082.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 351,
+          "candidates_tokens": 143,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1576.0908126831055
+        },
+        "fly_wheel": {
+          "latency_ms": 7.9975128173828125
+        }
+      }
+    },
+    {
+      "id": 84,
+      "category": "artesanias",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Cuencos y utensilios de madera",
+      "description": "Colección de cuencos y utensilios artesanales de madera, ideales para cocina o decoración. Incluye distintos tamaños y estilos, además de utensilios colgantes y otras artesanías de madera. También se observa una nota escrita a mano con información de contacto.",
+      "reasoning": "Bloqueo automático: La descripción menciona información de contacto escrita a mano, lo cual constituye una evasión de la plataforma.",
+      "latency_ms": 3317.78,
+      "cost_usd": 0.000279,
+      "file_path": "balanced/blocked/084.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 396,
+          "candidates_tokens": 120,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1546.976089477539
+        },
+        "fly_wheel": {
+          "latency_ms": 47.99842834472656
+        }
+      }
+    },
+    {
+      "id": 91,
+      "category": "animales",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Approve",
+      "outcome": "FN",
+      "title": "Perros golden",
+      "description": "vacunados",
+      "reasoning": "Risk score 0.15 < 0.35. Confidence=0.98. Uncertainty=0.02. Action: Approve.",
+      "latency_ms": 9655.09,
+      "cost_usd": 0.001391,
+      "file_path": "balanced/blocked/091.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 340,
+          "candidates_tokens": 135,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1775.017499923706
+        },
+        "extractor": {
+          "prompt_tokens": 2782,
+          "candidates_tokens": 272,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4724.658966064453
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 838.7906551361084
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.2819042205810547
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 444.4394111633301
+        },
+        "fly_wheel": {
+          "latency_ms": 23.52142333984375
+        }
+      }
+    },
+    {
+      "id": 93,
+      "category": "muebles__interior",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Alfombra abstracta",
+      "description": "Conseguila con un 15% off en www.latiendadelmueble.com. Esta alfombra ornamentada presenta un diseño desgastado de inspiración vintage con un medallón central rojo intenso y un borde azul marino oscuro sobre fondo crema. Los intrincados patrones florales y geométricos crean un aspecto atemporal, ideal para aportar calidez y personalidad a cualquier ambiente. Su textura brinda una sensación cómoda bajo los pies. Adecuada para zonas de tránsito medio y compatible con bases antideslizantes.",
+      "reasoning": "Bloqueo automático: La descripción contiene una URL de sitio web, lo que constituye un intento de evadir la plataforma.",
+      "latency_ms": 3736.94,
+      "cost_usd": 0.000302,
+      "file_path": "balanced/blocked/093.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 447,
+          "candidates_tokens": 127,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1794.922113418579
+        },
+        "fly_wheel": {
+          "latency_ms": 8.000373840332031
+        }
+      }
+    },
+    {
+      "id": 42,
+      "category": "herramientas_y_construccion",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Motosierra Sthil",
+      "description": "original. La mejor",
+      "reasoning": "El producto fue rechazado debido a un fallo crítico en el análisis multimodal que impide verificar su estado y funcionalidad. Esta inconsistencia técnica, sumada a la imposibilidad de validar la categoría, representa un riesgo de seguridad según nuestras políticas de integridad de plataforma.",
+      "latency_ms": 143983.72,
+      "cost_usd": 0.000755,
+      "file_path": "balanced/passed/042.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 345,
+          "candidates_tokens": 165,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1447.5786685943604
+        },
+        "extractor": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 136965.45815467834
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 598.2177257537842
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 367.18010902404785
+        },
+        "reasoning": {
+          "prompt_tokens": 778,
+          "candidates_tokens": 151,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2395.6081867218018
+        }
+      }
+    },
+    {
+      "id": 94,
+      "category": "motos",
+      "actual_label": "BLOCKED",
+      "predicted_action": "ERROR",
+      "outcome": "ERROR",
+      "title": "Monopatín eléctrico",
+      "description": "Un monopatín eléctrico gris y elegante con una tira luminosa azul en el mástil del manillar. Presenta cables de freno rojos y está estacionado sobre asfalto con una línea blanca. El fondo muestra un entorno urbano o industrial desenfocado.",
+      "reasoning": "float() argument must be a string or a real number, not 'NoneType'",
+      "latency_ms": null,
+      "cost_usd": 0.0,
+      "file_path": "balanced/blocked/094.jpg",
+      "node_metrics": {}
+    }
+  ]
+}

@@ -6,15 +6,16 @@ from pathlib import Path
 import google.cloud.logging
 import logging
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google.cloud import storage
 from google.auth import default
 from google.auth.transport import requests
-import vertexai
-from vertexai import agent_engines
+import asyncio
 
 # ================================================================
 # Logging Configuration
@@ -23,53 +24,56 @@ client = google.cloud.logging.Client()
 client.setup_logging()
 logger = logging.getLogger("moderation_pipeline")
 
-from backend.agents.moderator.services.firestore_service import update_job_status, get_job_status
+from agents.moderator.services.firestore_service import update_job_status, get_job_status
 
 # ================================================================
 # Initialization
 # ================================================================
-# Find project root (one level up from backend/)
-project_root = Path(__file__).parent.parent
-load_dotenv(dotenv_path=project_root / ".env")
+project_root = Path(__file__).resolve().parent
+# En lugar de solo load_dotenv(), usa esto:
+dotenv_path = project_root / ".env"
+
+if dotenv_path.exists():
+    load_dotenv(dotenv_path=dotenv_path)
+else:
+    logger.warning(".env file not found, skipping (assuming environment variables are set in Cloud Run).")
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
-GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "ecommerce-police-portfolio-buckets")
+GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "ecommerce-police-media-uploads")
 SERVICE_ACCOUNT_EMAIL = "679252770153-compute@developer.gserviceaccount.com"
 
 if not PROJECT_ID:
     logger.warning("GOOGLE_CLOUD_PROJECT is not set.")
 
-# GCS Credentials & Storage Client
 credentials, project_id = default()
 auth_request = requests.Request()
-credentials.refresh(auth_request)  # Obtain token needed for IAM signing
+credentials.refresh(auth_request)
 storage_client = storage.Client(credentials=credentials)
 
 # ================================================================
-# Vertex AI & Agent Engine Initialization
+# Lifespan Management (Sustituye a @app.on_event)
 # ================================================================
-REASONING_ENGINE_ID = os.getenv("REASONING_ENGINE_RESOURCE_ID")
-
-if PROJECT_ID and LOCATION and REASONING_ENGINE_ID:
-    vertexai.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
+async def warmup_services():
+    """Background task to initialize Firestore client."""
     try:
-        # Pre-load the agent to avoid delay during the first request
-        agent = agent_engines.get(REASONING_ENGINE_ID)
-        logger.info(f"Connected to Reasoning Engine: {REASONING_ENGINE_ID}")
+        logger.info("Warming up Firestore...")
+        await get_job_status("dummy_warmup_id")
+        logger.info("Services warmup successful.")
     except Exception as e:
-        logger.error(f"Failed to connect to Reasoning Engine: {e}")
-        agent = None
-else:
-    logger.warning("Vertex AI or Reasoning Engine ID not configured correctly.")
-    agent = None
+        logger.warning(f"Services warmup failed: {e}")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Lógica de startup
+    asyncio.create_task(warmup_services())
+    yield
+    # Lógica de shutdown iría acá si fuera necesaria
 
 # ================================================================
 # FastAPI App
 # ================================================================
-app = FastAPI(title="Semantic Shield Moderation API")
+app = FastAPI(title="Semantic Shield Moderation API", lifespan=lifespan)
 
-# Setup CORS for frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -80,12 +84,18 @@ app.add_middleware(
 
 @app.get("/health")
 async def health_check():
-    """Diagnostic endpoint to verify API status."""
     return {
         "status": "online",
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled Exception on {request.method} {request.url}\nError: {exc}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error. Please check logs for details."}
+    )
 
 # ================================================================
 # Request Models
@@ -102,25 +112,22 @@ class MetadataRequest(BaseModel):
     description: str
     price: float
 
-
 # ================================================================
 # Step 1: Generate Upload URL
 # ================================================================
 @app.post("/get-upload-url")
 async def get_upload_url(request: UploadUrlRequest):
     """
-    Step 1: Generates a unique job_id and a V4 Signed URL for image upload.
-    No data is persisted in GCS or Firestore at this stage.
+    Step 1: Genera un job_id único y una URL firmada v4 para la carga de la imagen original.
+    Sigue la estructura: items/{job_id}/raw_image.ext
     """
     try:
         job_id = str(uuid.uuid4())
-        now = datetime.now(timezone.utc)
-        date_prefix = now.strftime("%Y/%m/%d")
-
         bucket = storage_client.bucket(GCS_BUCKET_NAME)
         
-        # Consistent path for image ingestion
-        image_blob_name = f"imagenes_ingesta/{date_prefix}/{job_id}_{request.filename}"
+        # Extraer la extensión original (.jpg, .png, etc.)
+        file_extension = Path(request.filename).suffix or ".jpg"
+        image_blob_name = f"items/{job_id}/raw_image{file_extension}"
         image_blob = bucket.blob(image_blob_name)
 
         upload_url = image_blob.generate_signed_url(
@@ -132,7 +139,7 @@ async def get_upload_url(request: UploadUrlRequest):
             access_token=credentials.token,
         )
 
-        logger.info(f"Generated upload URL for job_id={job_id}")
+        logger.info(f"Generated upload URL for job_id={job_id} at path {image_blob_name}")
 
         return {
             "job_id": job_id,
@@ -143,97 +150,42 @@ async def get_upload_url(request: UploadUrlRequest):
         logger.error(f"Failed to generate upload URL: {e}")
         raise HTTPException(status_code=500, detail="Failed to generate upload URL")
 
-
-# ================================================================
-# Agent Invocation Helper
-# ================================================================
-async def invoke_agent_task(job_id: str, input_data: dict, gcs_uri: str):
-    """
-    Background task to invoke the Vertex AI Reasoning Engine.
-    """
-    if not agent:
-        logger.error(f"Agent not initialized. Cannot process job {job_id}")
-        update_job_status(job_id, "ERROR", {"error": "Agent not initialized"})
-        return
-
-    try:
-        logger.info(f"Invoking agent for job {job_id}...")
-        
-        # Prepare input state matching AgentState schema
-        input_state = {
-            "input_data": input_data,
-            "gcs_uri": gcs_uri,
-            "thread_id": job_id
-        }
-        
-        # Critical: Pass thread_id in config for LangGraph checkpointer
-        config = {"configurable": {"thread_id": job_id}}
-        
-        # Call the agent
-        response = agent.query(input=input_state, config=config)
-        
-        # The agent nodes ALREADY update Firestore, but we can ensure
-        # the final state is captured if the agent doesn't do it itself
-        # or to mark it as 'done' for the frontend polling.
-        logger.info(f"Agent response received for job {job_id}")
-        
-    except Exception as e:
-        logger.error(f"Agent invocation failed for job {job_id}: {e}")
-        update_job_status(job_id, "ERROR", {"error": str(e)})
-
-
 # ================================================================
 # Step 2: Persist Metadata
 # ================================================================
 @app.post("/metadata")
-async def create_metadata(request: MetadataRequest, background_tasks: BackgroundTasks):
+async def create_metadata(request: MetadataRequest):
     """
-    Step 2: Receives metadata after the image has been uploaded.
-    1. Persists the metadata JSON to Cloud Storage (this triggers the agent).
-    2. Initializes the job record in Firestore with PENDING status.
+    Step 2: Recibe la metadata una vez que el frontend terminó de subir la imagen.
+    Persiste el JSON en items/{job_id}/metadata.json, lo que dispara la Cloud Function.
     """
     try:
         job_id = request.job_id
         now = datetime.now(timezone.utc)
-        date_prefix = now.strftime("%Y/%m/%d")
-
         bucket = storage_client.bucket(GCS_BUCKET_NAME)
 
-        # Reconstruct the image URI based on the same logic used in Step 1
-        image_blob_name = f"imagenes_ingesta/{date_prefix}/{job_id}_{request.filename}"
+        # Reconstruir la ruta exacta de la imagen subida en el Step 1
+        file_extension = Path(request.filename).suffix or ".jpg"
+        image_blob_name = f"items/{job_id}/raw_image{file_extension}"
         
-        # Persist metadata JSON to Cloud Storage
-        metadata_blob_name = f"metadata_ingesta/{date_prefix}/{job_id}.json"
+        # Nueva ruta de destino para el archivo de metadatos JSON
+        metadata_blob_name = f"items/{job_id}/metadata.json"
         metadata_blob = bucket.blob(metadata_blob_name)
 
         metadata_content = request.model_dump()
         metadata_content["gcs_image_uri"] = f"gs://{GCS_BUCKET_NAME}/{image_blob_name}"
         metadata_content["created_at"] = now.isoformat()
 
+        # Al subir este archivo, Eventarc gatilla automáticamente la Cloud Function
         metadata_blob.upload_from_string(
             data=json.dumps(metadata_content, indent=2),
             content_type="application/json",
         )
 
-        logger.info(f"Metadata persisted to GCS: {metadata_blob_name}")
+        logger.info(f"Metadata persisted to GCS: {metadata_blob_name} (Cloud Function triggered)")
 
-        # Initialize job in Firestore
-        update_job_status(job_id, "PENDING")
-
-        # Trigger the Agent as a Background Task
-        background_tasks.add_task(
-            invoke_agent_task,
-            job_id=job_id,
-            input_data={
-                "title": request.title,
-                "description": request.description,
-                "price": request.price,
-                "gcs_image_uri": metadata_content["gcs_image_uri"]
-            },
-            gcs_uri=metadata_content["gcs_image_uri"]
-        )
-
-        logger.info(f"Ingestion flow completed for job_id={job_id}. Agent triggered.")
+        # Inicializar el estado en Firestore para que el frontend pueda hacer polling
+        await update_job_status(job_id, "PENDING")
 
         return {
             "status": "success",
@@ -245,24 +197,29 @@ async def create_metadata(request: MetadataRequest, background_tasks: Background
         logger.error(f"Metadata persistence failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to process metadata request")
 
-
 # ================================================================
 # Job Status Tracking
 # ================================================================
 @app.get("/jobs/{job_id}")
 async def get_job(job_id: str):
-    """
-    Endpoint to poll the status of a moderation job.
-    """
+    """Endpoint para que el frontend consulte el estado del proceso en Firestore."""
     try:
         logger.info(f"Polling job status for job_id={job_id}")
-        job_data = get_job_status(job_id)
+        job_data = await get_job_status(job_id)
         
         if not job_data:
             logger.warning(f"Job not found in Firestore: {job_id}")
             raise HTTPException(status_code=404, detail="Job not found")
         
-        logger.info(f"Job {job_id} status: {job_data.get('status', 'unknown')}")
+        status = job_data.get("status", "unknown")
+        if status in ["ERROR", "FAILED"]:
+            logger.error(f"Job {job_id} failed with data: {job_data}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Job processing failed: {job_data.get('metadata', {}).get('error', 'Unknown error')}"
+            )
+
+        logger.info(f"Job {job_id} status: {status}")
         return job_data
 
     except HTTPException:
@@ -270,7 +227,6 @@ async def get_job(job_id: str):
     except Exception as e:
         logger.error(f"Error fetching job {job_id}: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
-
 
 if __name__ == "__main__":
     import uvicorn

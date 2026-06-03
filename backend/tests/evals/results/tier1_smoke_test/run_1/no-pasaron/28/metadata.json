@@ -1,0 +1,17 @@
+{
+  "id": 28,
+  "category": "ropa",
+  "title": "Piloto de lluvia para perro",
+  "description": "Maxima calidad de impermeabilidad",
+  "actual_label": "PASSED",
+  "predicted_action": "Block",
+  "outcome": "FP",
+  "reasoning": "El producto ha sido rechazado debido a la detección de un objeto prohibido según el análisis de seguridad automatizado. Aunque el precio se encuentra dentro del rango de mercado esperado, la señal de riesgo identificada como 'banned_object' impide su publicación en la plataforma.",
+  "latency_ms": 33499.39,
+  "cost_usd": 0.002537,
+  "input_data": {
+    "title": "Piloto de lluvia para perro",
+    "description": "Maxima calidad de impermeabilidad",
+    "price": 35000
+  }
+}

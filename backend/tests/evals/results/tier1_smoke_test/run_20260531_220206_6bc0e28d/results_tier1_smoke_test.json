@@ -1,0 +1,1855 @@
+{
+  "verdict": "FAIL",
+  "summary": {
+    "dataset": "tier1_smoke_test",
+    "hash": "6bc0e28d",
+    "model": "Gemini 3.1 Flash-Lite",
+    "timestamp": "2026-05-31 22:24:21",
+    "total_items": 40,
+    "distribution": {
+      "actual": {
+        "blocked": 20,
+        "passed": 20
+      },
+      "predicted": {
+        "blocked": 20,
+        "passed": 15,
+        "hitl": 5
+      }
+    },
+    "confusion_matrix": {
+      "tp": 19,
+      "fp": 1,
+      "fn": 1,
+      "tn": 14
+    },
+    "metrics": {
+      "precision": 0.95,
+      "recall": 0.95,
+      "f1_score": 0.95,
+      "automation_rate": 0.875,
+      "error_rate": 0.0,
+      "p95_latency_ms": 82132.89,
+      "avg_latency_ms": 32583.47
+    },
+    "cost": {
+      "total_usd": 0.0707,
+      "avg_per_item_usd": 0.001767,
+      "by_node": {
+        "pre_filter": {
+          "total_usd": 0.012693,
+          "avg_usd": 0.000317,
+          "prompt_tokens": 15121,
+          "candidate_tokens": 5941
+        },
+        "extractor": {
+          "total_usd": 0.050732,
+          "avg_usd": 0.001268,
+          "prompt_tokens": 82288,
+          "candidate_tokens": 20108
+        },
+        "rag": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "risk_evaluator": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "decision": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "fly_wheel": {
+          "total_usd": 0.0,
+          "avg_usd": 0.0,
+          "prompt_tokens": 0,
+          "candidate_tokens": 0
+        },
+        "reasoning": {
+          "total_usd": 0.00725,
+          "avg_usd": 0.000181,
+          "prompt_tokens": 15599,
+          "candidate_tokens": 2234
+        }
+      }
+    },
+    "node_latencies": {
+      "pre_filter": {
+        "avg_ms": 1900.6,
+        "p95_ms": 2351.9,
+        "min_ms": 1173.7,
+        "max_ms": 10968.1
+      },
+      "extractor": {
+        "avg_ms": 11085.1,
+        "p95_ms": 21561.2,
+        "min_ms": 4392.1,
+        "max_ms": 125503.9
+      },
+      "rag": {
+        "avg_ms": 11881.8,
+        "p95_ms": 14462.6,
+        "min_ms": 9255.4,
+        "max_ms": 26404.1
+      },
+      "risk_evaluator": {
+        "avg_ms": 2.8,
+        "p95_ms": 10.0,
+        "min_ms": 0.0,
+        "max_ms": 15.0
+      },
+      "decision": {
+        "avg_ms": 9.7,
+        "p95_ms": 22.0,
+        "min_ms": 3.0,
+        "max_ms": 23.4
+      },
+      "fly_wheel": {
+        "avg_ms": 13763.0,
+        "p95_ms": 19968.2,
+        "min_ms": 10787.0,
+        "max_ms": 22796.5
+      },
+      "reasoning": {
+        "avg_ms": 1800.4,
+        "p95_ms": 2453.4,
+        "min_ms": 681.7,
+        "max_ms": 2453.4
+      }
+    }
+  },
+  "results": [
+    {
+      "id": 1,
+      "category": "Zapatillas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Zapatillas Casuales de Lona Unisex - Color Beige",
+      "description": "Descubre la comodidad y el estilo con estas zapatillas casuales de lona en un versátil color beige. Diseñadas para ofrecer un ajuste perfecto y durabilidad, son ideales para el uso diario. Su suela de goma proporciona tracción y soporte, mientras que el diseño atemporal las convierte en un básico para cualquier guardarropa.",
+      "reasoning": "",
+      "latency_ms": 84089.92,
+      "cost_usd": 0.002005,
+      "file_path": "balanced/passed/001.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 415,
+          "candidates_tokens": 175,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 10968.058347702026
+        },
+        "extractor": {
+          "prompt_tokens": 2786,
+          "candidates_tokens": 628,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 21561.166763305664
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 26404.05797958374
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.9993057250976562
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 18.00060272216797
+        },
+        "fly_wheel": {
+          "latency_ms": 22796.520471572876
+        }
+      }
+    },
+    {
+      "id": 5,
+      "category": "celulares",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "iPhone 15 Pro Max - Pantalla Super Retina XDR, Chip A17 Bionic, Cámara Pro",
+      "description": "Descubre el nuevo iPhone 15 Pro Max, diseñado con titanio de calidad aeroespacial para una resistencia y ligereza excepcionales. Su pantalla Super Retina XDR de 6.7 pulgadas con ProMotion ofrece una experiencia visual inmersiva y fluida. Equipado con el revolucionario chip A17 Bionic, este iPhone redefine la velocidad y la eficiencia. Captura fotos y videos asombrosos con el sistema de cámara Pro avanzado, que incluye un teleobjetivo de 5x y un sensor principal de 48MP. Con un diseño elegante y duradero, el iPhone 15 Pro Max es el compañero perfecto para tu día a día.",
+      "reasoning": "El producto ha sido marcado debido a una anomalía significativa en el precio, el cual excede ampliamente el rango de mercado esperado para esta categoría. Adicionalmente, se detectó el uso de imágenes de baja calidad que no cumplen con los estándares de presentación requeridos para artículos de alto valor.",
+      "latency_ms": 26041.87,
+      "cost_usd": 0.002672,
+      "file_path": "balanced/passed/005.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 497,
+          "candidates_tokens": 157,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1904.3123722076416
+        },
+        "extractor": {
+          "prompt_tokens": 2869,
+          "candidates_tokens": 610,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6183.3367347717285
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 12074.653625488281
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 6.001710891723633
+        },
+        "reasoning": {
+          "prompt_tokens": 1353,
+          "candidates_tokens": 228,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2453.4220695495605
+        }
+      }
+    },
+    {
+      "id": 6,
+      "category": "Zapatillas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Zapatillas de Lona Blanca Clásicas para Hombre y Mujer",
+      "description": "Descubre el estilo atemporal con estas zapatillas de lona blanca, perfectas para cualquier ocasión. Diseñadas con un corte clásico y cordones para un ajuste seguro y cómodo. La suela de goma vulcanizada ofrece durabilidad y tracción, mientras que el material de lona transpirable garantiza frescura durante todo el día. Ideales para un look casual y versátil.",
+      "reasoning": "",
+      "latency_ms": 29798.23,
+      "cost_usd": 0.002202,
+      "file_path": "balanced/passed/006.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 428,
+          "candidates_tokens": 214,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2003.7894248962402
+        },
+        "extractor": {
+          "prompt_tokens": 2799,
+          "candidates_tokens": 716,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4500.86784362793
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11298.891544342041
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.001119613647461
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 19.997358322143555
+        },
+        "fly_wheel": {
+          "latency_ms": 10827.626705169678
+        }
+      }
+    },
+    {
+      "id": 10,
+      "category": "celulares",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "iPhone 14 Pro Max - Pantalla Inmersiva y Cámara Profesional",
+      "description": "Descubre el iPhone 14 Pro Max, diseñado para ofrecerte una experiencia visual sin precedentes con su pantalla Super Retina XDR y una cámara revolucionaria que captura cada detalle con asombrosa claridad. Su potente chip A16 Bionic garantiza un rendimiento fluido para todas tus aplicaciones y juegos. Presentado en un elegante acabado y con iluminación de estudio profesional para resaltar su diseño.",
+      "reasoning": "El producto fue rechazado debido a una anomalía significativa en el precio, el cual excede ampliamente el rango de mercado esperado para este modelo. Además, se detectó una baja calidad en la imagen que no cumple con los estándares visuales requeridos para publicaciones profesionales.",
+      "latency_ms": 21230.43,
+      "cost_usd": 0.003023,
+      "file_path": "balanced/passed/010.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 428,
+          "candidates_tokens": 183,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2101.7370223999023
+        },
+        "extractor": {
+          "prompt_tokens": 2801,
+          "candidates_tokens": 810,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6427.1886348724365
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9606.540203094482
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.001689910888672
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 4.995107650756836
+        },
+        "reasoning": {
+          "prompt_tokens": 1560,
+          "candidates_tokens": 224,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1903.782606124878
+        }
+      }
+    },
+    {
+      "id": 16,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Piloto de lluvia dama",
+      "description": "Varios colores",
+      "reasoning": "",
+      "latency_ms": 33234.95,
+      "cost_usd": 0.002029,
+      "file_path": "balanced/passed/016.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 158,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1554.8112392425537
+        },
+        "extractor": {
+          "prompt_tokens": 2714,
+          "candidates_tokens": 685,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 7751.83892250061
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9942.843675613403
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.0004043579101562
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 14.018535614013672
+        },
+        "fly_wheel": {
+          "latency_ms": 12798.20466041565
+        }
+      }
+    },
+    {
+      "id": 17,
+      "category": "grandes_electrodomesticos",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Heladera RTX32. 90 litros",
+      "description": "Ultima generacion",
+      "reasoning": "El producto fue rechazado debido a un fallo crítico en el análisis multimodal que impide verificar su estado y condiciones de venta. La señal detectada de producto no utilizable, sumada a la imposibilidad de procesar la información visual, contraviene los estándares de calidad y seguridad de la plataforma.",
+      "latency_ms": 144667.69,
+      "cost_usd": 0.000706,
+      "file_path": "balanced/passed/017.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 349,
+          "candidates_tokens": 125,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1634.347915649414
+        },
+        "extractor": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 125503.92842292786
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 13070.39189338684
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.0013580322265625
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.998228073120117
+        },
+        "reasoning": {
+          "prompt_tokens": 783,
+          "candidates_tokens": 157,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1717.4043655395508
+        }
+      }
+    },
+    {
+      "id": 19,
+      "category": "lamparas",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Lámparas Ajustables",
+      "description": "Ilumina tu espacio creativo con este set de escritorio que incluye dos lámparas de escritorio negras con brazos ajustables para una iluminación perfecta. El set también viene con un organizador de pinceles de metal lleno de pinceles de artista de alta calidad, un par de tijeras de precisión y un cuaderno de bocetos. Ideal para artistas, estudiantes y cualquier persona que necesite una iluminación de tarea confiable y herramientas de arte esenciales.",
+      "reasoning": "El producto ha sido aprobado para su publicación ya que, a pesar de la alerta inicial por calidad de imagen, el análisis técnico confirma que la fotografía es clara y profesional. El precio de $75,000 se encuentra dentro del rango de mercado esperado, por lo que no se detectaron infracciones a las políticas de precios o calidad visual.",
+      "latency_ms": 24335.87,
+      "cost_usd": 0.002431,
+      "file_path": "balanced/passed/019.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 427,
+          "candidates_tokens": 176,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1507.5035095214844
+        },
+        "extractor": {
+          "prompt_tokens": 2798,
+          "candidates_tokens": 599,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5837.07332611084
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 14462.576866149902
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.9970664978027344
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 4.9991607666015625
+        },
+        "reasoning": {
+          "prompt_tokens": 1316,
+          "candidates_tokens": 89,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1395.6172466278076
+        }
+      }
+    },
+    {
+      "id": 21,
+      "category": "calzado",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Zapatillas Deportivas Azules de Gamuza con Cordones Blancos",
+      "description": "Descubre el estilo y la comodidad con estas zapatillas deportivas de gamuza en un vibrante color azul. Diseñadas para el día a día, cuentan con cordones blancos que contrastan elegantemente y una suela de goma resistente para un agarre óptimo. Su acabado de gamuza le da un toque moderno y sofisticado, ideal para combinar con cualquier atuendo casual.",
+      "reasoning": "",
+      "latency_ms": 32715.89,
+      "cost_usd": 0.001652,
+      "file_path": "balanced/passed/021.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 427,
+          "candidates_tokens": 190,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1459.9213600158691
+        },
+        "extractor": {
+          "prompt_tokens": 2798,
+          "candidates_tokens": 374,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 7872.915506362915
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9885.617733001709
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.0
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 4.9991607666015625
+        },
+        "fly_wheel": {
+          "latency_ms": 12340.693473815918
+        }
+      }
+    },
+    {
+      "id": 22,
+      "category": "alimentos_y_bebidas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Pastel de Tiramisú Clásico con Granos de Café",
+      "description": "Disfruta de nuestro exquisito pastel de tiramisú, elaborado con capas alternas de bizcocho de chocolate esponjoso y crema de mascarpone sedosa. Decorado con cacao en polvo y granos de café tostados, este postre es la combinación perfecta de sabor y elegancia. Ideal para cualquier ocasión especial o para darte un capricho.",
+      "reasoning": "",
+      "latency_ms": 33806.38,
+      "cost_usd": 0.001958,
+      "file_path": "balanced/passed/022.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 424,
+          "candidates_tokens": 166,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2074.56636428833
+        },
+        "extractor": {
+          "prompt_tokens": 2795,
+          "candidates_tokens": 603,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4392.096042633057
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 10794.806241989136
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.99945068359375
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 6.999015808105469
+        },
+        "fly_wheel": {
+          "latency_ms": 15379.785299301147
+        }
+      }
+    },
+    {
+      "id": 23,
+      "category": "relojes",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Reloj elegante con Pantalla Táctil y Monitor de Actividad",
+      "description": "Descubre el Smartwatch definitivo, diseñado para complementar tu estilo de vida activo y moderno. Su elegante caja de metal y correa de cuero gris ofrecen comodidad y durabilidad. La vibrante pantalla táctil a color muestra claramente tu actividad física, incluyendo un indicador de 'SCAP' con un valor de 011, rodeado por un anillo de progreso multicolor. Perfecto para monitorizar tus entrenamientos y mantenerte conectado.",
+      "reasoning": "",
+      "latency_ms": 33459.41,
+      "cost_usd": 0.002142,
+      "file_path": "balanced/passed/023.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 435,
+          "candidates_tokens": 157,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1619.5509433746338
+        },
+        "extractor": {
+          "prompt_tokens": 2807,
+          "candidates_tokens": 731,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6886.472702026367
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11277.589797973633
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.9989738464355469
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 23.43440055847168
+        },
+        "fly_wheel": {
+          "latency_ms": 12504.582643508911
+        }
+      }
+    },
+    {
+      "id": 28,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Piloto de lluvia para perro",
+      "description": "Maxima calidad de impermeabilidad",
+      "reasoning": "",
+      "latency_ms": 37456.9,
+      "cost_usd": 0.002091,
+      "file_path": "balanced/passed/028.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 347,
+          "candidates_tokens": 156,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1789.7775173187256
+        },
+        "extractor": {
+          "prompt_tokens": 3234,
+          "candidates_tokens": 641,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 7688.845634460449
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11471.65584564209
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 8.998870849609375
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 4.998445510864258
+        },
+        "fly_wheel": {
+          "latency_ms": 15198.588848114014
+        }
+      }
+    },
+    {
+      "id": 30,
+      "category": "autos_y_camionetas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Auto ford azul",
+      "description": "titular al dia",
+      "reasoning": "",
+      "latency_ms": 35514.02,
+      "cost_usd": 0.001672,
+      "file_path": "balanced/passed/030.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 341,
+          "candidates_tokens": 117,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1927.8230667114258
+        },
+        "extractor": {
+          "prompt_tokens": 3231,
+          "candidates_tokens": 402,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5201.923131942749
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 12199.607610702515
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.001596450805664
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 10.447502136230469
+        },
+        "fly_wheel": {
+          "latency_ms": 14646.280288696289
+        }
+      }
+    },
+    {
+      "id": 31,
+      "category": "bazar_y_cocina",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Equipo de mate",
+      "description": "Kit completo: industria argentina",
+      "reasoning": "",
+      "latency_ms": 40900.63,
+      "cost_usd": 0.00263,
+      "file_path": "balanced/passed/031.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 185,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1932.0502281188965
+        },
+        "extractor": {
+          "prompt_tokens": 3230,
+          "candidates_tokens": 973,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 9353.997707366943
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 12750.51999092102
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.0027885437011719
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 8.000612258911133
+        },
+        "fly_wheel": {
+          "latency_ms": 15734.941244125366
+        }
+      }
+    },
+    {
+      "id": 34,
+      "category": "bazar_y_cocina",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Juego de Vasos de Vidrio y Cerámica con Tabla de Madera",
+      "description": "Este set incluye un vaso de vidrio con detalles en blanco y un botón central, ideal para bebidas frías o calientes. Complementado con una taza de cerámica de diseño minimalista y una tabla de madera robusta con un acabado natural, perfecta para servir o como elemento decorativo. El conjunto aporta un toque moderno y elegante a cualquier cocina o mesa.",
+      "reasoning": "",
+      "latency_ms": 35812.83,
+      "cost_usd": 0.001631,
+      "file_path": "balanced/passed/034.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 420,
+          "candidates_tokens": 181,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1901.4062881469727
+        },
+        "extractor": {
+          "prompt_tokens": 2791,
+          "candidates_tokens": 371,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 4592.9553508758545
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 12733.692646026611
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 4.996538162231445
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 6.993293762207031
+        },
+        "fly_wheel": {
+          "latency_ms": 15208.274126052856
+        }
+      }
+    },
+    {
+      "id": 35,
+      "category": "ropa",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Camiseta de river 2026",
+      "description": "original - varios talles",
+      "reasoning": "",
+      "latency_ms": 33970.87,
+      "cost_usd": 0.002228,
+      "file_path": "balanced/passed/035.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 349,
+          "candidates_tokens": 162,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2104.534387588501
+        },
+        "extractor": {
+          "prompt_tokens": 3236,
+          "candidates_tokens": 726,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 8436.710596084595
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 10162.127494812012
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.9968280792236328
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.998994827270508
+        },
+        "fly_wheel": {
+          "latency_ms": 12157.349348068237
+        }
+      }
+    },
+    {
+      "id": 37,
+      "category": "pequeños_electrodomesticos",
+      "actual_label": "PASSED",
+      "predicted_action": "Block",
+      "outcome": "FP",
+      "title": "conservadora electrica",
+      "description": "bateria con 8 horas de duracion. Especial para bebidas y cualquier alimento que se tenga que conservar en frio.",
+      "reasoning": "El producto fue rechazado debido a una clara disonancia visual, ya que se promociona como una conservadora eléctrica con batería, mientras que la imagen muestra un modelo pasivo convencional. Además, el precio de 150.000 ARS excede significativamente el rango de mercado esperado, lo que refuerza la sospecha de una posible irregularidad en la publicación.",
+      "latency_ms": 34033.16,
+      "cost_usd": 0.003366,
+      "file_path": "balanced/passed/037.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 362,
+          "candidates_tokens": 177,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1820.1861381530762
+        },
+        "extractor": {
+          "prompt_tokens": 3250,
+          "candidates_tokens": 922,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6991.954565048218
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 10599.455833435059
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.9982585906982422
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 22.00007438659668
+        },
+        "reasoning": {
+          "prompt_tokens": 1628,
+          "candidates_tokens": 272,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2176.7821311950684
+        },
+        "fly_wheel": {
+          "latency_ms": 11256.04271888733
+        }
+      }
+    },
+    {
+      "id": 38,
+      "category": "alimentos_y_bebidas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "miel ",
+      "description": "maxima calidad",
+      "reasoning": "",
+      "latency_ms": 28161.57,
+      "cost_usd": 0.002099,
+      "file_path": "balanced/passed/038.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 339,
+          "candidates_tokens": 98,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1344.832181930542
+        },
+        "extractor": {
+          "prompt_tokens": 3226,
+          "candidates_tokens": 707,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5579.472780227661
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9255.423069000244
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.000093460083008
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 5.988597869873047
+        },
+        "fly_wheel": {
+          "latency_ms": 10787.032842636108
+        }
+      }
+    },
+    {
+      "id": 40,
+      "category": "muebles_interior",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Juego de mesa con cuatro sillas",
+      "description": "Materiales de primera calidad. Garantia por un año",
+      "reasoning": "",
+      "latency_ms": 35051.15,
+      "cost_usd": 0.002204,
+      "file_path": "balanced/passed/040.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 352,
+          "candidates_tokens": 179,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1862.1821403503418
+        },
+        "extractor": {
+          "prompt_tokens": 3240,
+          "candidates_tokens": 692,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6286.18049621582
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9406.30316734314
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 10.001659393310547
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 15.853166580200195
+        },
+        "fly_wheel": {
+          "latency_ms": 16239.944219589233
+        }
+      }
+    },
+    {
+      "id": 45,
+      "category": "celulares",
+      "actual_label": "PASSED",
+      "predicted_action": "Human Review",
+      "outcome": "HITL",
+      "title": "Smartphone Negro Brillante con Cámara Dual y Diseño Premium",
+      "description": "Descubre este elegante smartphone en acabado negro brillante, diseñado para ofrecer una experiencia visual inmersiva. Equipado con un sistema de cámara dual de alta resolución en la parte trasera, captura tus momentos con una calidad excepcional. Su marco metálico dorado complementa su diseño moderno y sofisticado, mientras que la pantalla ocupa casi todo el frontal, brindando una estética vanguardista. Ideal para quienes buscan estilo y rendimiento.",
+      "reasoning": "Risk score 0.35 computed.",
+      "latency_ms": 21717.7,
+      "cost_usd": 0.002367,
+      "file_path": "balanced/passed/045.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 428,
+          "candidates_tokens": 159,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2084.174394607544
+        },
+        "extractor": {
+          "prompt_tokens": 2800,
+          "candidates_tokens": 881,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5456.6991329193115
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11105.156660079956
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.0030269622802734
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 6.999969482421875
+        },
+        "reasoning": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "error",
+          "latency_ms": 1897.2032070159912
+        }
+      }
+    },
+    {
+      "id": 48,
+      "category": "accesorios_para_mascotas",
+      "actual_label": "PASSED",
+      "predicted_action": "Approve",
+      "outcome": "TN",
+      "title": "Colchon para gato",
+      "description": "Mayor confort para tus mascotas",
+      "reasoning": "",
+      "latency_ms": 34306.07,
+      "cost_usd": 0.00216,
+      "file_path": "balanced/passed/048.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 344,
+          "candidates_tokens": 170,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1400.4583358764648
+        },
+        "extractor": {
+          "prompt_tokens": 3231,
+          "candidates_tokens": 674,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5100.555181503296
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11859.656810760498
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.994537353515625
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.002166748046875
+        },
+        "fly_wheel": {
+          "latency_ms": 14451.187133789062
+        }
+      }
+    },
+    {
+      "id": 56,
+      "category": "calzado",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas",
+      "description": "WhatsApp +54 9 202 8580-6514",
+      "reasoning": "Bloqueo automático: Contiene información de contacto (número de WhatsApp) para evadir la plataforma.",
+      "latency_ms": 15030.59,
+      "cost_usd": 0.00022,
+      "file_path": "balanced/blocked/056.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 357,
+          "candidates_tokens": 87,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1422.1091270446777
+        },
+        "fly_wheel": {
+          "latency_ms": 12524.553060531616
+        }
+      }
+    },
+    {
+      "id": 57,
+      "category": "drogas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Fl0res de cannabis y mas",
+      "description": "whatsapp 022333232",
+      "reasoning": "Bloqueo automático: La publicación contiene información de contacto (número de WhatsApp) para evadir la plataforma y menciona un producto prohibido (cannabis).",
+      "latency_ms": 15037.38,
+      "cost_usd": 0.000321,
+      "file_path": "balanced/blocked/057.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 353,
+          "candidates_tokens": 155,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1467.8561687469482
+        },
+        "fly_wheel": {
+          "latency_ms": 12469.123840332031
+        }
+      }
+    },
+    {
+      "id": 67,
+      "category": "bazar_y_cocina",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Cafetera express italiana",
+      "description": "solo podes comprar en calle alsina 3232, san marcos",
+      "reasoning": "Bloqueo automático: La descripción contiene una dirección física para realizar la compra, lo que constituye un intento de evadir la plataforma.",
+      "latency_ms": 15647.51,
+      "cost_usd": 0.000251,
+      "file_path": "balanced/blocked/067.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 355,
+          "candidates_tokens": 108,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1340.0135040283203
+        },
+        "fly_wheel": {
+          "latency_ms": 13213.649034500122
+        }
+      }
+    },
+    {
+      "id": 68,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch con nota adhesiva amarilla. ig:relojes.baratos.caba",
+      "description": "Reloj inteligente apoyado sobre un cuaderno con una nota amarilla visible.",
+      "reasoning": "Bloqueo automático: Se encontró información de contacto (Instagram) que intenta dirigir al comprador fuera de la plataforma.",
+      "latency_ms": 16695.46,
+      "cost_usd": 0.0003,
+      "file_path": "balanced/blocked/068.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 368,
+          "candidates_tokens": 139,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1621.6151714324951
+        },
+        "fly_wheel": {
+          "latency_ms": 13793.441772460938
+        }
+      }
+    },
+    {
+      "id": 69,
+      "category": "caballo",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "caballo joven",
+      "description": "tambien permuto",
+      "reasoning": "El producto fue rechazado debido a que el animal presenta un estado de salud visiblemente precario, lo cual contraviene las políticas de bienestar animal y seguridad de la plataforma. Además, la imagen presenta elementos de escenografía y condiciones visuales que incumplen las normas de publicación establecidas.",
+      "latency_ms": 36178.59,
+      "cost_usd": 0.002769,
+      "file_path": "balanced/blocked/069.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 340,
+          "candidates_tokens": 107,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1490.309238433838
+        },
+        "extractor": {
+          "prompt_tokens": 3229,
+          "candidates_tokens": 696,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6551.753044128418
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11718.966007232666
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.0020732879638672
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 15.998363494873047
+        },
+        "reasoning": {
+          "prompt_tokens": 1387,
+          "candidates_tokens": 217,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2354.8636436462402
+        },
+        "fly_wheel": {
+          "latency_ms": 12747.114658355713
+        }
+      }
+    },
+    {
+      "id": 71,
+      "category": "Zapatillas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas clásicas de lona",
+      "description": "Estas zapatillas clásicas de lona son perfectas para el uso diario. Cuentan con una suela de goma resistente y una parte superior de lona cómoda. Su diseño atemporal las convierte en una incorporación versátil para cualquier guardarropa.",
+      "reasoning": "El producto fue rechazado debido a que presenta un estado de deterioro severo que lo hace inutilizable, contraviniendo las normas de calidad para la venta. Adicionalmente, el precio listado presenta una anomalía significativa al encontrarse fuera del rango de mercado esperado para este tipo de artículo.",
+      "latency_ms": 34131.03,
+      "cost_usd": 0.00277,
+      "file_path": "balanced/blocked/071.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 393,
+          "candidates_tokens": 157,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1660.8221530914307
+        },
+        "extractor": {
+          "prompt_tokens": 2764,
+          "candidates_tokens": 692,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 5770.814418792725
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11009.40728187561
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 6.9980621337890625
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 19.001007080078125
+        },
+        "reasoning": {
+          "prompt_tokens": 1414,
+          "candidates_tokens": 236,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1904.5946598052979
+        },
+        "fly_wheel": {
+          "latency_ms": 12614.985704421997
+        }
+      }
+    },
+    {
+      "id": 72,
+      "category": "sexual",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "masajista",
+      "description": "de jueves a sabados",
+      "reasoning": "El producto fue rechazado debido a una clara disonancia visual entre el título y la imagen, la cual muestra contenido sugestivo no apto para la plataforma. Además, la publicación no representa un producto físico vendible, incumpliendo las normas de calidad visual y seguridad del marketplace.",
+      "latency_ms": 37147.77,
+      "cost_usd": 0.003088,
+      "file_path": "balanced/blocked/072.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 343,
+          "candidates_tokens": 154,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1741.0342693328857
+        },
+        "extractor": {
+          "prompt_tokens": 2716,
+          "candidates_tokens": 901,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6003.496408462524
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11868.22772026062
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.995729446411133
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.114938735961914
+        },
+        "reasoning": {
+          "prompt_tokens": 1600,
+          "candidates_tokens": 227,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2278.76615524292
+        },
+        "fly_wheel": {
+          "latency_ms": 13715.859174728394
+        }
+      }
+    },
+    {
+      "id": 75,
+      "category": "celulares",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "iPhone 13 Pro",
+      "description": "El iPhone 13 Pro cuenta con una impresionante pantalla Super Retina XDR con tecnología ProMotion, ofreciendo una experiencia fluida y receptiva. Su avanzado sistema de cámaras Pro captura fotos y videos increíbles en cualquier condición de luz, mientras que el chip A15 Bionic brinda un rendimiento excepcional para tareas exigentes y videojuegos. Con diseño resistente, batería de larga duración y conectividad 5G, es el smartphone ideal para profesionales y creadores. Este modelo específico también incluye un número de contacto personalizado mostrado en pantalla para acceso rápido.",
+      "reasoning": "Bloqueo automático: La descripción incluye una referencia a un número de contacto para acceso rápido, lo cual constituye una evasión de la plataforma.",
+      "latency_ms": 16941.88,
+      "cost_usd": 0.000402,
+      "file_path": "balanced/blocked/075.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 450,
+          "candidates_tokens": 193,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1631.3989162445068
+        },
+        "fly_wheel": {
+          "latency_ms": 14133.039474487305
+        }
+      }
+    },
+    {
+      "id": 76,
+      "category": "Zapatillas",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas marrones de cuero con cordones",
+      "description": "Zapatillas marrones de cuero, elegantes y versátiles, perfectas para uso casual. Presentan un diseño clásico con suela de goma resistente y ajuste cómodo. El cuero marrón aporta un toque de sofisticación a cualquier conjunto.",
+      "reasoning": "El producto fue rechazado debido a una anomalía crítica en el precio, el cual se encuentra significativamente por debajo del rango de mercado esperado, sugiriendo un posible fraude o error de publicación. Adicionalmente, la imagen incumple la política de reglas visuales al presentar un fondo oscuro en lugar del fondo blanco requerido.",
+      "latency_ms": 44949.33,
+      "cost_usd": 0.003034,
+      "file_path": "balanced/blocked/076.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 390,
+          "candidates_tokens": 172,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1627.3059844970703
+        },
+        "extractor": {
+          "prompt_tokens": 2759,
+          "candidates_tokens": 843,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6526.525974273682
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 13294.87156867981
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.9992122650146484
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9.996652603149414
+        },
+        "reasoning": {
+          "prompt_tokens": 1612,
+          "candidates_tokens": 214,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2153.2156467437744
+        },
+        "fly_wheel": {
+          "latency_ms": 19968.174934387207
+        }
+      }
+    },
+    {
+      "id": 77,
+      "category": "alimentos_crudos",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Pan y pastelería recién horneados",
+      "description": "Una selección de deliciosos productos horneados, incluyendo pan artesanal y pasteles dulces. Perfectos para el desayuno o una merienda.",
+      "reasoning": "Risk score 1.00 computed.",
+      "latency_ms": 34902.01,
+      "cost_usd": 0.002399,
+      "file_path": "balanced/blocked/077.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 373,
+          "candidates_tokens": 160,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 2351.9186973571777
+        },
+        "extractor": {
+          "prompt_tokens": 2744,
+          "candidates_tokens": 920,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6430.104494094849
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11267.987251281738
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.0028820037841797
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 9.00411605834961
+        },
+        "reasoning": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "error",
+          "latency_ms": 719.926118850708
+        },
+        "fly_wheel": {
+          "latency_ms": 12601.255178451538
+        }
+      }
+    },
+    {
+      "id": 79,
+      "category": "sexual",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Hombre - servicios de masajes intimos",
+      "description": "",
+      "reasoning": "Bloqueo automático: El título indica servicios de contenido para adultos, lo cual está prohibido.",
+      "latency_ms": 15194.21,
+      "cost_usd": 0.000232,
+      "file_path": "balanced/blocked/079.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 344,
+          "candidates_tokens": 97,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1229.055404663086
+        },
+        "fly_wheel": {
+          "latency_ms": 12856.695413589478
+        }
+      }
+    },
+    {
+      "id": 80,
+      "category": "celulares",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Approve",
+      "outcome": "FN",
+      "title": "Smartphone",
+      "description": "Un smartphone moderno con diseño elegante, ideal para mantenerse conectado y productivo. Cuenta con una pantalla grande y de alta calidad, además de una cámara avanzada. Incluye un lápiz premium para tomar notas e introducir datos fácilmente.",
+      "reasoning": "",
+      "latency_ms": 34223.79,
+      "cost_usd": 0.001949,
+      "file_path": "balanced/blocked/080.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 381,
+          "candidates_tokens": 151,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1479.6068668365479
+        },
+        "extractor": {
+          "prompt_tokens": 2752,
+          "candidates_tokens": 626,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 7282.959938049316
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11689.46623802185
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 14.993429183959961
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 6.995201110839844
+        },
+        "fly_wheel": {
+          "latency_ms": 12589.324712753296
+        }
+      }
+    },
+    {
+      "id": 83,
+      "category": "relojes",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartwatch",
+      "description": "Un smartwatch moderno y elegante con pantalla vibrante mostrando distintos íconos de aplicaciones. Tiene una cómoda correa negra y carcasa plateada, ideal para uso diario y seguimiento físico.",
+      "reasoning": "El producto fue rechazado debido a que la imagen muestra un dispositivo con la pantalla severamente dañada, lo cual contradice la descripción del artículo y lo hace inutilizable. Esta discrepancia entre el estado real del producto y la expectativa de venta infringe las normas de calidad y veracidad de la plataforma.",
+      "latency_ms": 34668.51,
+      "cost_usd": 0.002606,
+      "file_path": "balanced/blocked/083.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 373,
+          "candidates_tokens": 177,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1645.36452293396
+        },
+        "extractor": {
+          "prompt_tokens": 2745,
+          "candidates_tokens": 666,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6509.240627288818
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11059.064865112305
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 1.0027885437011719
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 3.9985179901123047
+        },
+        "reasoning": {
+          "prompt_tokens": 1364,
+          "candidates_tokens": 147,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 1558.2880973815918
+        },
+        "fly_wheel": {
+          "latency_ms": 12743.985891342163
+        }
+      }
+    },
+    {
+      "id": 85,
+      "category": "celulares",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Smartphone",
+      "description": "Smartphone, evitamos la plataforma",
+      "reasoning": "Bloqueo automático: La descripción indica explícitamente una intención de evadir la plataforma para la transacción.",
+      "latency_ms": 14785.32,
+      "cost_usd": 0.000229,
+      "file_path": "balanced/blocked/085.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 342,
+          "candidates_tokens": 96,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1173.68745803833
+        },
+        "fly_wheel": {
+          "latency_ms": 12502.821922302246
+        }
+      }
+    },
+    {
+      "id": 86,
+      "category": "calzado",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Zapatillas altas de gamuza gris para hombre con cordones azules",
+      "description": "Presentando unas elegantes zapatillas altas para hombre elaboradas en gamuza gris de calidad premium. Incluyen cierre clásico con cordones azul oscuro, suela negra resistente y revestimiento interior cómodo. Perfectas para uso casual, combinan diseño moderno y estilo atemporal. Compralas en alsina 123 o en www.zapascancheras.com",
+      "reasoning": "Bloqueo automático: La descripción contiene información de contacto y una URL que dirigen al comprador fuera de la plataforma para completar la transacción.",
+      "latency_ms": 16459.14,
+      "cost_usd": 0.000329,
+      "file_path": "balanced/blocked/086.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 422,
+          "candidates_tokens": 149,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1461.5471363067627
+        },
+        "fly_wheel": {
+          "latency_ms": 13877.837657928467
+        }
+      }
+    },
+    {
+      "id": 92,
+      "category": "animales",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "Perro dalmata",
+      "description": "Cachorro. contactá a consultas84@gmail.com.",
+      "reasoning": "Bloqueo automático: La descripción contiene una dirección de correo electrónico, lo que constituye una violación de la política de evasión de plataforma.",
+      "latency_ms": 15151.4,
+      "cost_usd": 0.00028,
+      "file_path": "balanced/blocked/092.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 353,
+          "candidates_tokens": 128,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1582.8652381896973
+        },
+        "fly_wheel": {
+          "latency_ms": 12487.434148788452
+        }
+      }
+    },
+    {
+      "id": 95,
+      "category": "alimentos crudos",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "milanesas para hornear",
+      "description": "WA +54 9 49 6354-8285",
+      "reasoning": "Bloqueo automático: Información de contacto proporcionada para evadir la plataforma.",
+      "latency_ms": 15587.47,
+      "cost_usd": 0.000224,
+      "file_path": "balanced/blocked/095.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 360,
+          "candidates_tokens": 89,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1771.4531421661377
+        },
+        "fly_wheel": {
+          "latency_ms": 12693.633556365967
+        }
+      }
+    },
+    {
+      "id": 96,
+      "category": "celulares",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "todos los mejores celus",
+      "description": "instagram en la foto",
+      "reasoning": "Risk score 1.00 computed.",
+      "latency_ms": 37596.18,
+      "cost_usd": 0.002712,
+      "file_path": "balanced/blocked/096.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 344,
+          "candidates_tokens": 112,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1555.6819438934326
+        },
+        "extractor": {
+          "prompt_tokens": 2715,
+          "candidates_tokens": 1186,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 8325.962781906128
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11178.76410484314
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 2.9973983764648438
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.003068923950195
+        },
+        "reasoning": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "error",
+          "latency_ms": 681.7302703857422
+        },
+        "fly_wheel": {
+          "latency_ms": 14394.153118133545
+        }
+      }
+    },
+    {
+      "id": 97,
+      "category": "animales",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "pollitos vivos",
+      "description": "recien nacidos",
+      "reasoning": "Bloqueo automático: Se prohíbe la venta de animales vivos.",
+      "latency_ms": 17287.45,
+      "cost_usd": 0.000238,
+      "file_path": "balanced/blocked/097.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 342,
+          "candidates_tokens": 102,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1420.1560020446777
+        },
+        "fly_wheel": {
+          "latency_ms": 14291.861057281494
+        }
+      }
+    },
+    {
+      "id": 99,
+      "category": "ropa",
+      "actual_label": "BLOCKED",
+      "predicted_action": "Block",
+      "outcome": "TP",
+      "title": "remera nueva",
+      "description": "poco uso",
+      "reasoning": "El producto fue rechazado debido a una discrepancia significativa entre la descripción de 'nuevo' y el estado real del artículo, el cual presenta daños visibles y desgaste. Además, el precio publicado se encuentra fuera del rango de mercado esperado y la calidad de la imagen es insuficiente para una evaluación adecuada, incumpliendo las normas de calidad visual.",
+      "latency_ms": 35418.21,
+      "cost_usd": 0.003056,
+      "file_path": "balanced/blocked/099.jpg",
+      "node_metrics": {
+        "pre_filter": {
+          "prompt_tokens": 340,
+          "candidates_tokens": 123,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 1354.2940616607666
+        },
+        "extractor": {
+          "prompt_tokens": 3228,
+          "candidates_tokens": 833,
+          "model_name": "gemini-2.5-flash-lite",
+          "latency_ms": 6460.477352142334
+        },
+        "rag": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 11124.044179916382
+        },
+        "risk_evaluator": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 0.9975433349609375
+        },
+        "decision": {
+          "prompt_tokens": 0,
+          "candidates_tokens": 0,
+          "model_name": "none",
+          "latency_ms": 7.005453109741211
+        },
+        "reasoning": {
+          "prompt_tokens": 1582,
+          "candidates_tokens": 223,
+          "model_name": "gemini-3.1-flash-lite-preview",
+          "latency_ms": 2010.6253623962402
+        },
+        "fly_wheel": {
+          "latency_ms": 13158.292770385742
+        }
+      }
+    }
+  ]
+}
