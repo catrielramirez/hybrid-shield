@@ -105,13 +105,14 @@ export default function Home() {
       if (process.env.NEXT_PUBLIC_DATA_SOURCE === 'mock') {
         const steps = [
           "Iniciando análisis de riesgo...",
-          "Extrayendo características visuales...",
-          "Consultando base de conocimientos (RAG)...",
-          "Evaluando políticas de e-commerce...",
+          "Analizando imagen del producto...",
+          "Consultando políticas de la plataforma...",
+          "Generando decisión final...",
         ];
 
-        // Variable delays between 2000-3000ms for more realistic feel
-        const delays = [2100, 2700, 2300, 2500]; // Each step has different duration
+        // Variable delays between 2000-2700ms for more realistic feel
+        // Last step is shorter to avoid feeling stuck
+        const delays = [2100, 2400, 2300, 1800]; // Each step has different duration
 
         // Progress through steps with variable delays
         const progressSteps = async () => {
