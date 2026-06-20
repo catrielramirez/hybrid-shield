@@ -15,7 +15,7 @@ class TestAIService:
         result = await analyze_safety(
             "Venta de explosivos",
             "Producto peligroso",
-            model_name="gemini-2.5-flash-lite"
+            model_name="gemini-2.5-flash"
         )
         assert result["data"].get("is_critical") is True
         assert "usage" in result
@@ -39,7 +39,7 @@ class TestAIService:
         result = await extract_multimodal_features(
             real_gcs_uri,
             product_sample,
-            model_name="gemini-2.5-flash-lite"
+            model_name="gemini-2.5-flash"
         )
         assert "is_sellable" in result["data"]
         assert "usage" in result

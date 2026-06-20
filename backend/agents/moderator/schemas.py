@@ -51,9 +51,6 @@ class MultimodalProductFeatures(BaseModel):
     Modelo estricto para la extracción de características multimedia.
     Garantiza que la salida sea un JSON válido y tipado por el LLM Multimodal.
     """
-    thought_process: str = Field(
-        description="Detailed step-by-step evaluation of the listing text and image metadata."
-    )
     primary_object: str = Field(
         description="The main commercial item identified in the image."
     )

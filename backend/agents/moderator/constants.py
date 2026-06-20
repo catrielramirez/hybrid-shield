@@ -15,6 +15,7 @@ RISK_WEIGHTS = {
 
     # Señales débiles
     "low_quality_image": 0.10,
+    "stock_photo_detected": 0.05,
 
     # Evidencia contextual
     "policy_match": 0.15,

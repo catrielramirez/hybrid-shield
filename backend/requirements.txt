@@ -18,7 +18,10 @@ anyio==4.13.0
     #   httpx
     #   starlette
 asyncpg==0.31.0
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   cloud-sql-python-connector
+    #   langchain-postgres
 attrs==26.1.0
     # via aiohttp
 certifi==2026.5.20
@@ -33,7 +36,9 @@ charset-normalizer==3.4.7
 click==8.4.1
     # via uvicorn
 cloud-sql-python-connector==1.20.2
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   langchain-google-cloud-sql-pg
 colorama==0.4.6
     # via click
 cryptography==48.0.0
@@ -147,27 +152,75 @@ h11==0.16.0
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
-    # via google-genai
+    # via
+    #   google-genai
+    #   langgraph-sdk
+    #   langsmith
 idna==3.18
     # via
     #   anyio
     #   httpx
     #   requests
     #   yarl
+jsonpatch==1.33
+    # via langchain-core
+jsonpointer==3.1.1
+    # via jsonpatch
+langchain-core==1.4.0
+    # via
+    #   langchain-postgres
+    #   langgraph
+    #   langgraph-checkpoint
+    #   langgraph-prebuilt
+langchain-google-cloud-sql-pg==0.15.0
+    # via hybrid-shield-backend (pyproject.toml)
+langchain-postgres==0.0.17
+    # via langchain-google-cloud-sql-pg
+langchain-protocol==0.0.16
+    # via langchain-core
+langgraph==1.0.1
+    # via hybrid-shield-backend (pyproject.toml)
+langgraph-checkpoint==3.0.1
+    # via
+    #   langgraph
+    #   langgraph-checkpoint-postgres
+    #   langgraph-prebuilt
+langgraph-checkpoint-postgres==3.0.5
+    # via hybrid-shield-backend (pyproject.toml)
+langgraph-prebuilt==1.0.13
+    # via langgraph
+langgraph-sdk==0.2.15
+    # via langgraph
+langsmith==0.8.8
+    # via langchain-core
 multidict==6.7.1
     # via
     #   aiohttp
     #   yarl
 numpy==2.4.6
-    # via pgvector
+    # via
+    #   langchain-google-cloud-sql-pg
+    #   langchain-postgres
+    #   pgvector
 opentelemetry-api==1.42.1
     # via google-cloud-logging
+orjson==3.11.9
+    # via
+    #   langgraph-checkpoint-postgres
+    #   langgraph-sdk
+    #   langsmith
+ormsgpack==1.12.2
+    # via langgraph-checkpoint
 packaging==26.2
     # via
     #   google-cloud-aiplatform
     #   google-cloud-bigquery
+    #   langchain-core
+    #   langsmith
 pgvector==0.3.6
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   langchain-postgres
 propcache==0.5.2
     # via
     #   aiohttp
@@ -196,11 +249,19 @@ protobuf==6.33.6
     #   grpcio-status
     #   proto-plus
 psycopg==3.3.4
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   langchain-postgres
+    #   langgraph-checkpoint-postgres
 psycopg-binary==3.3.4
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   psycopg
 psycopg-pool==3.3.1
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   langchain-postgres
+    #   langgraph-checkpoint-postgres
 pyasn1==0.6.3
     # via pyasn1-modules
 pyasn1-modules==0.4.2
@@ -213,6 +274,9 @@ pydantic==2.13.4
     #   fastapi
     #   google-cloud-aiplatform
     #   google-genai
+    #   langchain-core
+    #   langgraph
+    #   langsmith
     #   pydantic-settings
 pydantic-core==2.46.4
     # via pydantic
@@ -224,6 +288,10 @@ python-dotenv==1.2.2
     # via
     #   hybrid-shield-backend (pyproject.toml)
     #   pydantic-settings
+python-multipart==0.0.32
+    # via hybrid-shield-backend (pyproject.toml)
+pyyaml==6.0.3
+    # via langchain-core
 requests==2.34.2
     # via
     #   cloud-sql-python-connector
@@ -232,16 +300,24 @@ requests==2.34.2
     #   google-cloud-bigquery
     #   google-cloud-storage
     #   google-genai
+    #   langsmith
+    #   requests-toolbelt
+requests-toolbelt==1.0.0
+    # via langsmith
 six==1.17.0
     # via python-dateutil
 sniffio==1.3.1
     # via google-genai
 sqlalchemy==2.0.49
-    # via hybrid-shield-backend (pyproject.toml)
+    # via
+    #   hybrid-shield-backend (pyproject.toml)
+    #   langchain-postgres
 starlette==1.2.1
     # via fastapi
 tenacity==9.1.4
-    # via google-genai
+    # via
+    #   google-genai
+    #   langchain-core
 typing-extensions==4.15.0
     # via
     #   aiohttp
@@ -251,6 +327,8 @@ typing-extensions==4.15.0
     #   google-cloud-aiplatform
     #   google-genai
     #   grpcio
+    #   langchain-core
+    #   langchain-protocol
     #   opentelemetry-api
     #   psycopg
     #   psycopg-pool
@@ -268,9 +346,21 @@ tzdata==2026.2
     # via psycopg
 urllib3==2.7.0
     # via requests
+uuid-utils==0.16.0
+    # via
+    #   langchain-core
+    #   langsmith
 uvicorn==0.47.0
     # via hybrid-shield-backend (pyproject.toml)
 websockets==16.0
-    # via google-genai
+    # via
+    #   google-genai
+    #   langsmith
+xxhash==3.7.0
+    # via
+    #   langgraph
+    #   langsmith
 yarl==1.24.2
     # via aiohttp
+zstandard==0.25.0
+    # via langsmith

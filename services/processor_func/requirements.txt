@@ -1,4 +1,4 @@
 functions-framework==3.*
 google-cloud-storage==2.*
-google-cloud-aiplatform==1.*
+google-cloud-aiplatform[reasoningengine]>=1.50.0
 Pillow==10.*

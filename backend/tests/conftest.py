@@ -16,9 +16,15 @@ from backend.agents.moderator.graph import HybridShieldAgent
 
 @pytest_asyncio.fixture(scope="session")
 async def app():
-    """Inicializa el grafo del agente una vez para toda la sesión (más eficiente)."""
-    return await HybridShieldAgent()._build_graph()
+    """Inicializa el grafo del agente una vez para toda la sesión usando MemorySaver."""
+    from unittest.mock import AsyncMock, patch
+    from langgraph.checkpoint.memory import MemorySaver
 
+    agent = HybridShieldAgent()
+    mock_cp = AsyncMock(return_value=MemorySaver())
+    with patch.object(agent, '_initialize_checkpointer', mock_cp):
+        return await agent._build_graph()
+        
 @pytest.fixture
 def unique_id():
     """

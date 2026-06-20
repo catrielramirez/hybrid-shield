@@ -14,7 +14,8 @@ from backend.agents.moderator.nodes import decision_node, data_flywheel_node
     (0.9, "Block", False)         # score >= 0.85
 ])
 @patch("backend.agents.moderator.nodes.firestore_service.update_job_status", new_callable=AsyncMock)
-async def test_decision_logic(mock_update, risk_score, expected_action, requires_human, unique_id):
+@patch("backend.agents.moderator.nodes.firestore_service.update_ui_state", new_callable=AsyncMock)
+async def test_decision_logic(mock_ui, mock_update, risk_score, expected_action, requires_human, unique_id):
     """Valida los umbrales de decisión."""
     state = {
         "thread_id": unique_id,
@@ -39,7 +40,8 @@ async def test_decision_logic(mock_update, risk_score, expected_action, requires
 # ================================================================
 @pytest.mark.asyncio
 @patch("backend.agents.moderator.nodes.firestore_service.update_job_status", new_callable=AsyncMock)
-async def test_human_review_full_integration(mock_update, app, unique_id, real_gcs_uri):
+@patch("backend.agents.moderator.nodes.firestore_service.update_ui_state", new_callable=AsyncMock)
+async def test_human_review_full_integration(mock_ui, mock_update, app, unique_id, real_gcs_uri):
     """Test de integración del flujo de intervención humana."""
     config = {"configurable": {"thread_id": unique_id}}
     
@@ -73,7 +75,7 @@ async def test_human_review_full_integration(mock_update, app, unique_id, real_g
 
     # 4. Reanudación final con inyección de feedback manual
     # LangGraph reanuda el nodo devolviendo este valor desde la llamada a interrupt()
-    await app.ainvoke(Command(resume={"decision": "Approve"}), config=config)
+    await app.ainvoke(Command(resume={"decision": "Approve", "justification": "Looks good"}), config=config)
     
     final_state = app.get_state(config).values
     

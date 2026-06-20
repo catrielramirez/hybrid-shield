@@ -22,24 +22,34 @@ from .nodes import (
 class HybridShieldAgent:
     """
     Agente de Moderación Empaquetado para Vertex AI Reasoning Engine.
-    Implementa Lazy Initialization para la capa de persistencia y el compilado
-    del grafo para evitar fallos de serialización con cloudpickle.
+    Implementa Lazy Initialization absoluta a nivel de Runtime para asegurar
+    un despliegue exitoso libre de colisiones de red en el arranque.
     """
     def __init__(self):
         self.app = None
         self.checkpointer = None
         self.engine = None
 
+    def _check_loop_and_reset(self):
+        try:
+            current_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            current_loop = None
+
+        if getattr(self, "_cached_loop", None) != current_loop:
+            self.app = None
+            self.checkpointer = None
+            self.engine = None
+            self._cached_loop = current_loop
+
     async def _initialize_checkpointer(self):
-        """Inicializa el checkpointer y la base de datos de manera perezosa."""
+        """Inicializa el checkpointer y la base de datos de manera perezosa en ejecución."""
+        self._check_loop_and_reset()
         if self.checkpointer is not None:
             return self.checkpointer
 
-        # CAPTURA CLAVE: Buscamos el diccionario inyectado dinámicamente.
-        # Si no existe (ej. corriendo en local), devuelve un diccionario vacío {}
         config_env = getattr(self, "env_vars", {})
 
-        # Buscamos primero en el diccionario inyectado; si no está, usamos os.getenv
         conn_name = config_env.get("DB_CONNECTION_NAME") or os.getenv("DB_CONNECTION_NAME", "")
         
         parts = conn_name.split(":")
@@ -74,11 +84,11 @@ class HybridShieldAgent:
         
 
     async def _build_graph(self):
-        """Construye y compila el flujo de trabajo de manera perezosa."""
+        """Construye y compila el flujo de trabajo bajo demanda."""
+        self._check_loop_and_reset()
         if self.app is not None:
             return self.app
 
-        # pyrefly: ignore [bad-specialization]
         workflow = StateGraph(AgentState)
 
         # Definición de Nodos
@@ -105,7 +115,7 @@ class HybridShieldAgent:
             {"fly_wheel": "fly_wheel", "extractor": "extractor"}
         )
 
-        # Condicional desde extractor: derivar directo a HITL si es ambiguo o poca confianza
+        # Condicional desde extractor
         def route_after_extractor(state: AgentState):
             features = state.get("features") or {}
             try:
@@ -122,20 +132,17 @@ class HybridShieldAgent:
             {"human_in_the_loop": "human_in_the_loop", "risk_evaluator": "risk_evaluator", "rag": "rag"}
         )
 
-        # Fan-in: Ambos convergen en decision
+        # Fan-in
         workflow.add_edge("risk_evaluator", "decision")
         workflow.add_edge("rag", "decision")
 
         def route_post_decision(state: AgentState):
-            # Primero verificamos si se requiere intervención, sin importar la acción final
             if state.get("requires_human_intervention"):
                 return "reasoning"
-            
             action = state.get("final_action")
-            
             if action == "Approve":
                 return "fly_wheel"
-            else:  # Block o Human Review
+            else:
                 return "reasoning"
 
         workflow.add_conditional_edges(
@@ -143,7 +150,6 @@ class HybridShieldAgent:
             {"fly_wheel": "fly_wheel", "reasoning": "reasoning"}
         )
 
-        # Nuevo enrutamiento condicional desde reasoning
         def route_post_explainer(state: AgentState):
             if state.get("requires_human_intervention"):
                 return "human_in_the_loop"
@@ -155,7 +161,6 @@ class HybridShieldAgent:
             {"human_in_the_loop": "human_in_the_loop", "fly_wheel": "fly_wheel"}
         )
 
-        # Enrutamiento condicional seguro para el feedback humano
         def route_post_human(state: AgentState):
             if state.get("requires_human_intervention"):
                 return "human_in_the_loop"
@@ -166,13 +171,11 @@ class HybridShieldAgent:
             {"human_in_the_loop": "human_in_the_loop", "fly_wheel": "fly_wheel"}
         )
 
-        # Cierre de estados finales
         workflow.add_edge("fly_wheel", END)
 
-        # Inicialización de la capa de persistencia perezosa
+        # Inicialización de persistencia asincrónica segura
         checkpointer = await self._initialize_checkpointer()
 
-        # Compilación final
         self.app = workflow.compile(
             checkpointer=checkpointer,
             interrupt_before=["human_in_the_loop"]
@@ -180,23 +183,15 @@ class HybridShieldAgent:
         return self.app
 
     def set_up(self):
-        """Inicialización diferida: se ejecuta en el entorno remoto al arrancar."""
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # El loop ya está corriendo (ej. Uvicorn), programamos la tarea
-                loop.create_task(self._build_graph())
-            else:
-                loop.run_until_complete(self._build_graph())
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(self._build_graph())
+        """Inicialización segura: SOLO inyecta variables. Cero llamadas de red."""
+        config_env = getattr(self, "env_vars", {})
+        for key, value in config_env.items():
+            os.environ[key] = value
 
     def query(self, input_data: dict) -> dict:
         """
-        Punto de entrada sincrónico esperado por Vertex AI Agent Engine.
-        Envuelve la llamada asincrónica de LangGraph para evitar bloqueos del loop de eventos.
+        Punto de entrada sincrónico de Vertex AI.
+        Construye el ambiente asincrónico y ejecuta el grafo bajo demanda.
         """
         gcs_uri = input_data.get("gcs_uri")
         thread_id = input_data.get("thread_id", "default-thread")
@@ -208,17 +203,33 @@ class HybridShieldAgent:
             "thread_id": thread_id
         }
 
+        def safe_json_clean(obj):
+            if isinstance(obj, dict):
+                return {k: safe_json_clean(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [safe_json_clean(v) for v in obj]
+            elif isinstance(obj, float):
+                if obj == float('inf'):
+                    return 999999.0
+                if obj == float('-inf'):
+                    return -999999.0
+                if obj != obj:
+                    return 0.0
+                return obj
+            return obj
+
         async def _run_graph():
+            # El grafo y la conexión a Cloud SQL se crean aquí, compartiendo el loop de la consulta
             app = await self._build_graph()
-            return await app.ainvoke(initial_state, config=config)
+            raw_result = await app.ainvoke(initial_state, config=config)
+            return safe_json_clean(raw_result)
 
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
             loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            asyncio.set_event_loop(loop) # Corrección del typo 'set_up_loop'
 
-        # Si ya hay un loop corriendo, corremos en un thread separado de forma síncrona
         if loop.is_running():
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor() as pool:

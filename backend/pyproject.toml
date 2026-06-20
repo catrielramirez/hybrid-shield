@@ -23,6 +23,10 @@ dependencies = [
     "google-cloud-bigquery==3.41.0",
     "google-cloud-discoveryengine==0.19.0",
     "google-cloud-logging>=3.15.0",
+    "langgraph==1.0.1",
+    "langchain-google-cloud-sql-pg>=0.15.0",
+    "python-multipart>=0.0.32",
+    "langgraph-checkpoint-postgres>=3.0.5",
 ]
 
 [dependency-groups]

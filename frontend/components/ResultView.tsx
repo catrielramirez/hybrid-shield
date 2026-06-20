@@ -132,12 +132,12 @@ export function ResultView({ result }: ResultViewProps) {
         <div className="pt-2">
           <Separator />
           <div className="mt-4 flex flex-wrap gap-2">
-            {result.pipeline_steps.map((step, i) => (
+            {result.pipeline_steps.map((step: any, i) => (
               <span key={i} className={cn(
                 "text-[9px] px-2 py-1 rounded-md border font-bold tracking-tight uppercase transition-all",
                 step.status === "completed" ? "bg-emerald-50 border-emerald-100 text-emerald-600" : "bg-slate-50 border-slate-200 text-slate-400 opacity-50"
               )}>
-                {step.node.replace(/_/g, " ")}
+                {step.node ? step.node.replace(/_/g, " ") : String(step).replace(/_/g, " ")}
               </span>
             ))}
           </div>

@@ -12,42 +12,48 @@ export function LiveVerdictCard({ job, onReviewClick }: { job: Job, onReviewClic
   const isBlocked = job.status === 'Done' && (job.flow === 1 || job.flow === 3);
   const isProcessing = !isApproved && !isHitl && !isBlocked && job.status !== 'ERROR';
 
-  // Determine colors based on pure light philosophy
-  let bgColor = 'var(--color-pure-bg)';
-  let borderColor = 'var(--color-border-subtle)';
+  // Determine colors using Tailwind for glassmorphism
+  let bgColorClass = 'bg-white/60';
+  let borderColorClass = 'border-slate-200/50';
   let Icon = Eye;
   let iconColor = 'text-slate-400';
 
   if (isApproved) {
-    bgColor = 'var(--color-accent-success)';
+    bgColorClass = 'bg-emerald-50/80';
+    borderColorClass = 'border-emerald-200';
     Icon = CheckCircle2;
-    iconColor = 'var(--color-text-success)';
+    iconColor = 'text-emerald-600';
   } else if (isHitl) {
-    bgColor = 'var(--color-accent-hitl)';
+    bgColorClass = 'bg-amber-50/80';
+    borderColorClass = 'border-amber-200';
     Icon = AlertTriangle;
-    iconColor = 'var(--color-text-hitl)';
+    iconColor = 'text-amber-600';
   } else if (isBlocked) {
-    bgColor = 'var(--color-accent-blocked)';
+    bgColorClass = 'bg-rose-50/80';
+    borderColorClass = 'border-rose-200';
     Icon = ShieldAlert;
-    iconColor = 'var(--color-text-blocked)';
+    iconColor = 'text-rose-600';
   } else if (isProcessing) {
-    bgColor = 'var(--color-pure-bg)';
+    bgColorClass = 'bg-white/60';
   }
 
   return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
-      animate={{ 
-        opacity: 1, 
-        y: 0,
-        backgroundColor: bgColor,
-        borderColor: borderColor
-      }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`glass-panel rounded-2xl overflow-hidden mb-4 ${isProcessing ? 'liquid-progress' : ''}`}
+      className={`relative backdrop-blur-xl border rounded-2xl overflow-hidden mb-4 transition-colors duration-500 ${bgColorClass} ${borderColorClass} ${isProcessing ? 'shadow-sm shadow-indigo-500/5' : 'shadow-md'}`}
     >
+      {isProcessing && (
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12"
+          initial={{ x: '-100%' }}
+          animate={{ x: '200%' }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        />
+      )}
       <div 
         className="p-5 flex items-center justify-between cursor-pointer"
         onClick={() => setExpanded(!expanded)}
@@ -56,11 +62,16 @@ export function LiveVerdictCard({ job, onReviewClick }: { job: Job, onReviewClic
           {job.gcs_image_uri ? (
             // In a real app we'd convert GCS URI to a signed URL or public URL
             // For now, placeholder for the image thumbnail
-            <div className="w-12 h-12 rounded-xl bg-white/50 border border-white/20 flex items-center justify-center overflow-hidden">
-               <img src={"https://placehold.co/100x100/e2e8f0/64748b?text=IMG"} alt="Product" className="w-full h-full object-cover mix-blend-multiply" />
+            <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
+               <img 
+                src={job.gcs_image_uri.replace("gs://", "https://storage.googleapis.com/")} 
+                alt="Product" 
+                className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.src = "https://placehold.co/100x100/e2e8f0/64748b?text=IMG" }}
+               />
             </div>
           ) : (
-            <div className="w-12 h-12 rounded-xl bg-white/50 border border-white/20 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
               <Icon className={`w-5 h-5 ${iconColor}`} />
             </div>
           )}

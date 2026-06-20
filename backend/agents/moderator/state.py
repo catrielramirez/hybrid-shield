@@ -1,4 +1,4 @@
-from typing import TypedDict, Optional, Annotated
+from typing import TypedDict, Optional, Annotated, Literal
 import operator
 from .schemas import ViolationCategory
 
@@ -34,6 +34,8 @@ class AgentState(TypedDict):
     unverifiable_image: bool      # imagen no verificable visualmente → HITL
     routing_reason: Optional[str] # "early_block" | "low_confidence" | "extraction_failed"
                                   # | "unverifiable_image" | "high_risk" | "approved" | "human_review"
+    status: Optional[str]         # ej. "FAILED" — seteado por rag_node en fallos críticos
+    last_error: Optional[dict]    # error técnico estructurado (no de negocio) de cualquier nodo
 
     # ── Extractor output ───────────────────────────────────
     features: dict
@@ -53,9 +55,10 @@ class AgentState(TypedDict):
 
     # ── Decision ───────────────────────────────────────────
     reasoning: str
-    final_action: str             # "Approve" | "Human Review" | "Block"
+    final_action: Optional[Literal["Approve", "Human Review", "Block"]]
     violation_category: Optional[ViolationCategory]
     policy_violations: list[dict]
+    usage_stats: Optional[dict]    # token usage del nodo reasoning, además de execution_metrics
 
     # ── Pricing ────────────────────────────────────────────
     min_market_price: float

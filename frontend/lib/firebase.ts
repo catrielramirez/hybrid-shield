@@ -17,4 +17,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 // Connect to the specific database 'firestore-hybrid-shield' as used in the backend
 const db = getFirestore(app, "firestore-hybrid-shield");
 
+// Mock mode detection flag
+export const isMockMode = process.env.NEXT_PUBLIC_DATA_SOURCE === 'mock';
+
 export { app, db };

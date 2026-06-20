@@ -65,7 +65,8 @@ class GenAIModelInterface:
         config = types.GenerateContentConfig(
             response_mime_type=response_mime_type,
             response_schema=response_schema,
-            temperature=0.0 if response_schema else None
+            temperature=0.0 if response_schema else None,
+            thinking_config=types.ThinkingConfig(thinking_budget=0) if response_schema is not None else None
         )
         return await get_genai_client().aio.models.generate_content(
             model=self.model_name,
@@ -165,7 +166,16 @@ async def analyze_safety(title: str, description: str, model_name: str = "gemini
     try:
         model = get_gemini_model(model_name)
         response = await model.generate_async(contents=prompt, response_schema=SafetyAnalysis)
-        data = json.loads(response.text)
+        response_text = getattr(response, "text", "") or ""
+        if not response_text.strip():
+            logger.warning("Empty response received from Gemini for safety analysis.")
+            data = {"error": "empty_response", "status": "error"}
+        else:
+            try:
+                data = json.loads(response_text)
+            except json.JSONDecodeError as json_err:
+                logger.error(f"JSONDecodeError: {json_err} - Raw response: {response_text}")
+                data = {"error": "invalid_json", "status": "error"}
         
         usage_metadata = getattr(response, "usage_metadata", None)
         usage = {
@@ -207,7 +217,17 @@ async def extract_multimodal_features(gcs_uri: str, product_data: dict, model_na
             response_schema=MultimodalProductFeatures
         )
         
-        data = json.loads(response.text)
+        response_text = getattr(response, "text", "") or ""
+        if not response_text.strip():
+            logger.warning("Empty response received from Gemini for multimodal extraction.")
+            data = {"error": "empty_response", "status": "error"}
+        else:
+            try:
+                data = json.loads(response_text)
+            except json.JSONDecodeError as json_err:
+                logger.error(f"JSONDecodeError: {json_err} - Raw response: {response_text}")
+                data = {"error": "invalid_json", "status": "error", "raw_content": response_text}
+
         
         usage_metadata = getattr(response, "usage_metadata", None)
         usage = {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db, isMockMode } from '../firebase';
+import { useMockLiveJobs } from '../mock/useMockLiveJobs';
 
 export interface Job {
   id: string;
@@ -20,6 +21,9 @@ export interface Job {
 }
 
 export function useLiveJobs() {
+  // Redirect to mock in mock mode
+  if (isMockMode) return useMockLiveJobs();
+  
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
