@@ -49,7 +49,7 @@ export interface MockJob {
     condition_issue_detected?: boolean;
     image_quality?: string;
     image_type?: string;
-    is_sellable?: boolean;
+    is_sellable?: boolean | null;
     fraud_signals?: string[];
     confidence?: number;
     error?: string;
@@ -137,7 +137,64 @@ export const MOCK_JOBS: MockJob[] = [
   // APPROVE CASES (8 productos legítimos)
   // ══════════════════════════════════════════════════════
   {
-    id: "job-approve-001",
+    id: "job-approve-0012",
+    thread_id: "job-approve-012",
+    status: "APPROVE",
+    final_action: "Approve",
+    title: "Tractor Pampa",
+    description:
+      "Motor RX700. Modelo 2026. Industria Argentina",
+    price: 70000000,
+    image_url: "/mock/tractor.png",
+    risk_score: 0.11,
+    uncertainty: 0.08,
+    min_price: 30000000,
+    max_price: 300000000,
+    routing_reason: "auto_approved",
+    reasoning:
+      "Consistente con el mercado argentino para este modelo. No se detectaron señales de fraude ni violaciones de política. Se aprueba la publicación.",
+    signals: {
+      visual_dissonance: false,
+      contact_info_detected: false,
+      price_anomaly: false,
+      condition_issue: false,
+      policy_match: false,
+    },
+    policy_citations: [
+      {
+        policy_id: "POL-0032",
+        policy_title: "Maquinaria agricola",
+        snippet: "Para exportacion de maquinaria una vez aprobado el producto cargar la documentacion en la seccion exportar",
+        reason: "Trámite de exportación",
+        relevance_score: 0.91,
+      },
+    ],
+    risk_breakdown: [
+      { factor: "visual_dissonance", weight: 0.02 },
+      { factor: "price_anomaly", weight: 0.05 },
+      { factor: "policy_match", weight: 0.04 },
+    ],
+    features: {
+      primary_object: "tractor",
+      object_category: "Maquinaria agricola",
+      objects_detected: ["tractor", "cosechadora", "maquinaria_agricola"],
+      text_in_image: [],
+      contact_info_detected: false,
+      visual_dissonance: false,
+      product_condition: "nuevo",
+      condition_issue_detected: false,
+      image_quality: "Alta",
+      image_type: "Foto real del producto",
+      is_sellable: true,
+      fraud_signals: [],
+      confidence: 0.95,
+    },
+    created_at: hoursAgo(18),
+    last_update: hoursAgo(17.5),
+    trace: buildTrace("job-approve-0012", "Approve", 0.11),
+  },
+  {
+    id: "job-approve-011",
     thread_id: "job-approve-001",
     status: "APPROVE",
     final_action: "Approve",
@@ -195,7 +252,7 @@ export const MOCK_JOBS: MockJob[] = [
   },
 
   {
-    id: "job-approve-002",
+    id: "job-approve-010",
     thread_id: "job-approve-002",
     status: "APPROVE",
     final_action: "Approve",
@@ -253,7 +310,7 @@ export const MOCK_JOBS: MockJob[] = [
   },
 
   {
-    id: "job-approve-003",
+    id: "job-approve-009",
     thread_id: "job-approve-003",
     status: "APPROVE",
     final_action: "Approve",
@@ -310,7 +367,7 @@ export const MOCK_JOBS: MockJob[] = [
   },
 
   {
-    id: "job-approve-004",
+    id: "job-approve-008",
     thread_id: "job-approve-004",
     status: "APPROVE",
     final_action: "Approve",
@@ -582,84 +639,72 @@ export const MOCK_JOBS: MockJob[] = [
   // BLOCK CASES (7 productos con violaciones claras)
   // ══════════════════════════════════════════════════════
   {
-    id: "job-block-001",
-    thread_id: "job-block-001",
+    id: "job-block-006",
+    thread_id: "job-block-006",
     status: "BLOCK",
     final_action: "Block",
-    title: "Zapatillas Nike Air Jordan 1 High OG \"Originales\" – Talle 42",
+    title: "Cigarrillo Electrónico VUSE",
     description:
-      "Nike Air Jordan 1 High OG originales, sin uso. Talle 42. Caja original incluida. WhatsApp al 11-5544-3322 para consultas. Acepto Mercado Pago.",
-    price: 28000,
-    image_url: "/mock/nike_replica.png",
-    risk_score: 0.94,
-    uncertainty: 0.06,
-    min_price: 280000,
-    max_price: 420000,
+      "Envío discreto sin declarar contenido.",
+    price: 22000,
+    image_url: "/mock/cigarrillos.png",
+    risk_score: 0.92,
+    uncertainty: 0.05,
+    min_price: 0,
+    max_price: 0,
     routing_reason: "auto_blocked",
     reasoning:
-      "Múltiples señales de fraude detectadas: (1) El precio de $28.000 ARS representa apenas el 7-10% del valor de mercado para este modelo ($280.000–$420.000), señal típica de réplicas o fraude. (2) Se detectó información de contacto externo (número de WhatsApp) en la descripción, práctica prohibida por política. (3) Análisis visual sugiere inconsistencias en el logo y costuras del calzado.",
+      "La venta de cigarrillos electrónicos con nicotina está prohibida en Argentina por Resolución 731/2019 del Ministerio de Salud y confirmada por el Código Alimentario Argentino. Adicionalmente, la descripción menciona 'envío sin declarar contenido', lo que configura una intención explícita de evasión de controles aduaneros, agravando la violación.",
     signals: {
-      visual_dissonance: true,
-      contact_info_detected: true,
-      price_anomaly: true,
+      visual_dissonance: false,
+      contact_info_detected: false,
+      price_anomaly: false,
       policy_match: true,
     },
     policy_violations: [
       {
-        policy_id: "POL-001",
-        factor: "contact_info_detected",
-        explanation: "La descripción contiene un número de WhatsApp (11-5544-3322), lo que viola la política de comunicación exclusiva dentro de la plataforma.",
+        policy_id: "POL-017",
+        factor: "policy_match",
+        explanation: "La venta de cigarrillos electrónicos con nicotina está prohibida en Argentina por Resolución MSN 731/2019.",
       },
       {
-        policy_id: "POL-005",
-        factor: "price_anomaly",
-        explanation: "El precio ($28.000 ARS) es un 90% inferior al rango de mercado documentado ($280.000–$420.000 ARS), indicador de posible réplica o fraude.",
-      },
-      {
-        policy_id: "POL-008",
-        factor: "visual_dissonance",
-        explanation: "El análisis visual detectó inconsistencias en el logo Nike y calidad de materiales inconsistentes con producto original.",
+        policy_id: "POL-018",
+        factor: "policy_match",
+        explanation: "La mención de 'envío sin declarar contenido' implica evasión aduanera, lo que configura un agravante legal.",
       },
     ],
     policy_citations: [
       {
-        policy_id: "POL-001",
-        policy_title: "Prohibición de contacto externo",
-        snippet: "Está prohibido incluir información de contacto externo (teléfonos, emails, redes sociales) en descripciones de productos.",
-        reason: "Número de WhatsApp detectado",
-        relevance_score: 0.99,
-      },
-      {
-        policy_id: "POL-005",
-        policy_title: "Anomalías de precio en calzado de marca",
-        snippet: "Calzado de marca premium con precio inferior al 30% del valor de mercado verificado es considerado de alto riesgo de falsificación.",
-        reason: "Precio 90% por debajo del mercado",
-        relevance_score: 0.97,
+        policy_id: "POL-017",
+        policy_title: "Productos de tabaco y nicotina electrónica",
+        snippet: "La comercialización de dispositivos de vapeo y cigarrillos electrónicos está prohibida en Argentina según normativa del Ministerio de Salud.",
+        reason: "Producto prohibido por resolución ministerial",
+        relevance_score: 1.0,
       },
     ],
     risk_breakdown: [
-      { factor: "contact_info_detected", weight: 0.40 },
-      { factor: "price_anomaly", weight: 0.35 },
-      { factor: "visual_dissonance", weight: 0.19 },
+      { factor: "policy_match", weight: 0.88 },
+      { factor: "visual_dissonance", weight: 0.02 },
+      { factor: "price_anomaly", weight: 0.02 },
     ],
     features: {
-      primary_object: "Zapatillas deportivas",
-      object_category: "Calzado",
-      objects_detected: ["zapatillas Nike", "caja de calzado"],
-      text_in_image: ["NIKE", "AIR JORDAN"],
-      contact_info_detected: true,
-      visual_dissonance: true,
-      product_condition: "Sin uso (declarado)",
+      primary_object: "Cigarrillo electrónico",
+      object_category: "Tabaco / Nicotina",
+      objects_detected: ["pods de vapeo", "empaque VUSE"],
+      text_in_image: ["VUSE", "NICOTINE 18mg"],
+      contact_info_detected: false,
+      visual_dissonance: false,
+      product_condition: "Nuevo",
       condition_issue_detected: false,
-      image_quality: "Media-baja",
+      image_quality: "Media",
       image_type: "Foto de producto",
       is_sellable: false,
-      fraud_signals: ["possible_replica", "external_contact", "price_manipulation"],
-      confidence: 0.91,
+      fraud_signals: ["banned_object", "customs_evasion"],
+      confidence: 0.97,
     },
-    created_at: hoursAgo(36),
-    last_update: hoursAgo(35.5),
-    trace: buildTrace("job-block-001", "Block", 0.94),
+    created_at: hoursAgo(5),
+    last_update: hoursAgo(4.5),
+    trace: buildTrace("job-block-006", "Block", 0.92),
   },
 
   {
@@ -937,76 +982,6 @@ export const MOCK_JOBS: MockJob[] = [
     last_update: hoursAgo(11.5),
     trace: buildTrace("job-block-005", "Block", 0.89),
   },
-
-  {
-    id: "job-block-006",
-    thread_id: "job-block-006",
-    status: "BLOCK",
-    final_action: "Block",
-    title: "Cigarrillo Electrónico VUSE Alto – Pod con Nicotina 18mg – x3",
-    description:
-      "Pack de 3 pods VUSE Alto con nicotina 18mg. Compatibles con device VUSE original. Sabores: menta, tabaco, mango. Importados de USA. Envío discreto sin declarar contenido.",
-    price: 22000,
-    image_url: "https://images.unsplash.com/photo-1560472355-536de3962603?w=800&q=80",
-    risk_score: 0.92,
-    uncertainty: 0.05,
-    min_price: 0,
-    max_price: 0,
-    routing_reason: "auto_blocked",
-    reasoning:
-      "La venta de cigarrillos electrónicos con nicotina está prohibida en Argentina por Resolución 731/2019 del Ministerio de Salud y confirmada por el Código Alimentario Argentino. Adicionalmente, la descripción menciona 'envío sin declarar contenido', lo que configura una intención explícita de evasión de controles aduaneros, agravando la violación.",
-    signals: {
-      visual_dissonance: false,
-      contact_info_detected: false,
-      price_anomaly: false,
-      policy_match: true,
-    },
-    policy_violations: [
-      {
-        policy_id: "POL-017",
-        factor: "policy_match",
-        explanation: "La venta de cigarrillos electrónicos con nicotina está prohibida en Argentina por Resolución MSN 731/2019.",
-      },
-      {
-        policy_id: "POL-018",
-        factor: "policy_match",
-        explanation: "La mención de 'envío sin declarar contenido' implica evasión aduanera, lo que configura un agravante legal.",
-      },
-    ],
-    policy_citations: [
-      {
-        policy_id: "POL-017",
-        policy_title: "Productos de tabaco y nicotina electrónica",
-        snippet: "La comercialización de dispositivos de vapeo y cigarrillos electrónicos está prohibida en Argentina según normativa del Ministerio de Salud.",
-        reason: "Producto prohibido por resolución ministerial",
-        relevance_score: 1.0,
-      },
-    ],
-    risk_breakdown: [
-      { factor: "policy_match", weight: 0.88 },
-      { factor: "visual_dissonance", weight: 0.02 },
-      { factor: "price_anomaly", weight: 0.02 },
-    ],
-    features: {
-      primary_object: "Cigarrillo electrónico",
-      object_category: "Tabaco / Nicotina",
-      objects_detected: ["pods de vapeo", "empaque VUSE"],
-      text_in_image: ["VUSE", "NICOTINE 18mg"],
-      contact_info_detected: false,
-      visual_dissonance: false,
-      product_condition: "Nuevo",
-      condition_issue_detected: false,
-      image_quality: "Media",
-      image_type: "Foto de producto",
-      is_sellable: false,
-      fraud_signals: ["banned_object", "customs_evasion"],
-      confidence: 0.97,
-    },
-    created_at: hoursAgo(5),
-    last_update: hoursAgo(4.5),
-    trace: buildTrace("job-block-006", "Block", 0.92),
-  },
-
   {
     id: "job-block-007",
     thread_id: "job-block-007",
@@ -1084,18 +1059,18 @@ export const MOCK_JOBS: MockJob[] = [
     thread_id: "job-review-001",
     status: "PENDING_HUMAN_REVIEW",
     final_action: "Human Review",
-    title: "Pistola Airsoft Glock 17 Réplica – 6mm – Competición",
+    title: "kit de playa",
     description:
-      "Réplica de pistola Glock 17 para airsoft, calibre 6mm BBs. Uso exclusivo para partidas de airsoft y competición. Material plástico reforzado y metal en partes internas. NO es arma de fuego real. FPS: 280. Envío a domicilio con embalaje discreto.",
+      "Consultar",
     price: 95000,
-    image_url: "https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=800&q=80",
+    image_url: "/mock/kit_playa.png",
     risk_score: 0.61,
     uncertainty: 0.38,
     min_price: 70000,
     max_price: 130000,
     routing_reason: "uncertainty_high",
     reasoning:
-      "El artículo es una réplica de airsoft declarada explícitamente como no-arma. En Argentina el airsoft es legal y regulado, sin embargo las réplicas de armas de fuego reales requieren marcación obligatoria (color naranja en caño) según disposición 72/2015. La descripción no menciona si cumple con este requisito. La frase 'embalaje discreto' genera señal adicional de ambigüedad. Se deriva a revisión humana.",
+      "Se identifica ambiguedad en la imagen con un fondo que puede no ser el adecuado para la plataforma. La descripcion tambien resulta sospechosa. Se deriva a revisión humana.",
     signals: {
       visual_dissonance: false,
       contact_info_detected: false,
@@ -1104,10 +1079,10 @@ export const MOCK_JOBS: MockJob[] = [
     },
     policy_citations: [
       {
-        policy_id: "POL-013",
-        policy_title: "Armas y réplicas",
-        snippet: "Las réplicas de armas requieren marcación de seguridad (punta naranja). Su venta está condicionada al cumplimiento de la disposición 72/2015.",
-        reason: "Réplica de arma sin mención de marcación",
+        policy_id: "POL-018",
+        policy_title: "Presentacion de la imagen",
+        snippet: "El producto se debe ver de forma clara y los fondos deben ser neutros",
+        reason: "Fondo ambiguo",
         relevance_score: 0.82,
       },
     ],
@@ -1117,9 +1092,9 @@ export const MOCK_JOBS: MockJob[] = [
       { factor: "price_anomaly", weight: 0.06 },
     ],
     features: {
-      primary_object: "Réplica de pistola (airsoft)",
-      object_category: "Deportes / Airsoft",
-      objects_detected: ["réplica de pistola", "cargador plástico"],
+      primary_object: "kit-.playa",
+      object_category: "varios",
+      objects_detected: ["reposera", "manta"],
       text_in_image: [],
       contact_info_detected: false,
       visual_dissonance: false,

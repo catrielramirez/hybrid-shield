@@ -146,7 +146,7 @@ export default function Home() {
         setPhase("RESULT");
       } else {
         // Production mode - simple loading message
-        setLoadingStep("Evaluando políticas de e-commerce...");
+        setLoadingStep("Evaluando políticas...");
 
         const { result, error: err } = await analyzeProduct({
           thread_id: job_id,
@@ -244,7 +244,7 @@ export default function Home() {
                       >
                         <h2 className="text-4xl font-bold tracking-tight text-slate-900 mb-3">Carga un producto</h2>
                         <p className="text-slate-700 font-semibold bg-white/50 backdrop-blur-md px-5 py-2 rounded-full inline-block border border-white/60 shadow-sm">
-                          Nuestro sistema evaluará las políticas en tiempo real.
+                          Nuestro sistema evaluará el contenido en tiempo real
                         </p>
                       </motion.div>
                     )}

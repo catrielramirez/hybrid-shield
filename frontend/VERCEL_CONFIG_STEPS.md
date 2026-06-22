@@ -1,13 +1,5 @@
 # 🚀 Pasos para Configurar y Desplegar en Vercel (Modo Mock)
 
-## ✅ Estado Actual
-
-- ✔️ Código modificado en `app/page.tsx` (delays variables 2.1s, 2.7s, 2.3s, 2.5s)
-- ✔️ Cambios commiteados y pusheados a GitHub (commit: 3b9a951)
-- ⏳ **Siguiente paso**: Configurar variables de entorno en Vercel
-
----
-
 ## 📋 Paso 1: Acceder al Dashboard de Vercel
 
 1. Ve a https://vercel.com/dashboard

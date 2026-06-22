@@ -30,28 +30,38 @@ export async function mockAnalyze(
 ): Promise<{ result?: AnalysisResult; error?: string }> {
   console.log('[MOCK] Analyze called for thread_id:', params.thread_id);
   
-  // Rotate through the 3 states: Human Review → Block → Approve
+  // 1. Mantenemos la rotación de estados: Human Review → Block → Approve
   const states = ['Human Review', 'Block', 'Approve'] as const;
   const currentState = states[mockAnalyzeCounter % 3];
   mockAnalyzeCounter++;
 
   console.log('[MOCK] Returning state:', currentState, `(call #${mockAnalyzeCounter})`);
 
-  // Filter jobs by the current state
-  const jobsForState = MOCK_JOBS.filter(j => j.final_action === currentState);
-  
-  if (jobsForState.length === 0) {
-    console.warn('[MOCK] No jobs found for state:', currentState);
-    // Fallback to any job
-    const randomJob = MOCK_JOBS[Math.floor(Math.random() * MOCK_JOBS.length)];
-    return { result: mockJobToAnalysisResult(randomJob) };
+  let selectedJob;
+
+  // 2. Si el estado actual es 'Block', forzamos el ejemplo del cigarrillo electrónico
+  if (currentState === 'Block') {
+    selectedJob = MOCK_JOBS.find(j => j.id === "job-block-006");
+    if (!selectedJob) {
+      console.warn('[MOCK] No se encontró el job-block-006 para el bloqueo. Usando fallback.');
+    }
   }
 
-  // Return a random job from the filtered list
-  const randomJob = jobsForState[Math.floor(Math.random() * jobsForState.length)];
-  const finalResult = mockJobToAnalysisResult(randomJob);
-  
-  console.log('[MOCK] Selected job:', randomJob.id, '-', randomJob.final_action);
+  // 3. Si es 'Approve', 'Human Review' o si falló el paso anterior, buscamos en los otros mocks
+  if (!selectedJob) {
+    const jobsForState = MOCK_JOBS.filter(j => j.final_action === currentState);
+    
+    if (jobsForState.length === 0) {
+      console.warn('[MOCK] No jobs found for state:', currentState);
+      selectedJob = MOCK_JOBS[Math.floor(Math.random() * MOCK_JOBS.length)];
+    } else {
+      // Elige uno al azar de los que correspondan a ese estado (Aprobado o HITL)
+      selectedJob = jobsForState[Math.floor(Math.random() * jobsForState.length)];
+    }
+  }
+
+  const finalResult = mockJobToAnalysisResult(selectedJob);
+  console.log('[MOCK] Selected job:', selectedJob.id, '-', selectedJob.final_action);
 
   // Initialize the job state for polling
   mockJobStates.set(params.thread_id, {

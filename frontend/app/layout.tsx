@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Semantic Shield — E-commerce Fraud Detector",
+  title: "Hybrid Shield — E-commerce Fraud Detector",
   description: "AI-powered moderation dashboard for e-commerce content fraud detection.",
 };
 
