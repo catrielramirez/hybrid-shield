@@ -13,9 +13,9 @@ Production-grade content moderation pipeline for Argentine e-commerce marketplac
 
 ## Demo
 
-[COMPLETAR: Screenshot del dashboard de moderación o GIF del flujo end-to-end]
+End-to-end infrastructure flow, from image upload to the LangGraph agent runtime and its downstream sinks (BigQuery, Cloud SQL, Vertex AI Search):
 
-*(Add screenshot from `docs/` or `assets/` if available)*
+![Hybrid Shield end-to-end architecture](docs/hybrid-shield-architecture_design.png)
 
 ---
 
@@ -70,6 +70,10 @@ The moderation pipeline is a **LangGraph state machine** deployed as a Vertex AI
 ```
 
 **Why hybrid?** Deterministic rules (regex for banned keywords, price anomaly detection, image quality checks) handle obvious cases with zero latency and cost. The LLM is invoked only when visual analysis or policy matching is needed. This keeps precision high while avoiding unnecessary inference costs.
+
+The HITL auditor dashboard talks to this pipeline over the same Cloud Run API, with Firestore providing live state sync:
+
+![Auditor request flow](docs/auditor_hybrid_shield.png)
 
 **Key architectural decisions:**
 - **Stateful checkpointing** via Cloud SQL (Postgres) for crash recovery and HITL resumption
@@ -165,7 +169,56 @@ asyncio.create_task(safe_status_update())
 
 ## Environment configuration
 
-[IMPORTANTE: PEGÁ AQUÍ EL CONTENIDO COMPLETO DE ENV_CONFIG QUE MENCIONASTE EN EL PROMPT, INCLUYENDO LA TABLA DE MODOS (MOCK, DESARROLLO LOCAL, PRODUCCIÓN) Y LOS DETALLES DE VARIABLES DE ENTORNO, COMANDOS Y CHECKLISTS]
+Both apps ship a `.env.example` with every variable the code actually reads (verified against the source, not aspirational). Copy it and fill in real values — never commit the resulting `.env*` files (already gitignored).
+
+```bash
+# Backend
+cd backend && cp .env.example .env
+
+# Frontend
+cd frontend && cp .env.example .env.local
+```
+
+### Modes
+
+| Mode | How to run | What it needs |
+|------|-----------|----------------|
+| **Mock** | `npm run dev:mock` (frontend only) | Nothing — no GCP project, no backend, no credentials. Uses static data in `lib/mock/`. |
+| **Local dev** | `uvicorn main:app --reload` (backend) + `npm run dev` (frontend) | Full `backend/.env`, a running Cloud SQL Proxy, `gcloud auth application-default login`, and `LOCAL_DEV=true` so the backend impersonates a service account to sign GCS URLs. |
+| **Production** | Cloud Run (backend) + Vercel (frontend) | Same variables as local dev, minus `LOCAL_DEV` (the Cloud Run service account is used natively) and impersonation. |
+
+### Key variables (backend)
+
+All env reads are centralized in [`backend/config.py`](backend/config.py) — plain functions (not a class/singleton, see the module docstring for why: the Vertex AI Reasoning Engine deployment injects credentials at runtime, after import, which rules out anything eagerly evaluated at import time).
+
+| Variable | Required | Notes |
+|---|---|---|
+| `GOOGLE_CLOUD_PROJECT` | ✅ | GCP project ID |
+| `GOOGLE_CLOUD_LOCATION` | ✅ | Vertex AI region for Gemini/Search (e.g. `us-central1`, can be `global`) |
+| `DB_CONNECTION_NAME` | ✅ | `project:region:instance` — single source of truth for the Cloud SQL checkpointer, used by both `graph.py` and `audit_service.py` |
+| `DB_USER` / `DB_PASS` | ✅ | Cloud SQL credentials |
+| `DATA_STORE_ID` / `ENGINE_ID` | ✅ | Vertex AI Search (RAG) data store |
+| `GCS_BUCKET_NAME` | ✅ | Bucket used by the upload/moderation API (`main.py`) **and** for building public image URLs (`firestore_service.py`) |
+| `GOOGLE_CLOUD_BUCKET` | ⚠️ eval-only | Separate bucket used only by the golden-dataset eval script — **not** the same as `GCS_BUCKET_NAME` |
+| `FIRESTORE_PROJECT_ID` / `FIRESTORE_DATABASE_ID` | Optional | Override the Firestore project/database (defaults match the project's actual setup) |
+| `LOCAL_DEV` / `SERVICE_ACCOUNT_EMAIL` | Local only | Needed to generate signed upload URLs from a developer machine |
+| `REASONING_ENGINE_ID` / `REASONING_ENGINE_LOCATION` | Deploy scripts only | Used by `re_deploy_reasoning_engine.py`, `delete_reasoning_instance.py`, `test_reasoning_engine.py` |
+| `ALLOWED_ORIGINS` | Recommended | CORS allowlist; defaults to `*` if unset |
+
+See `backend/.env.example` for the full list with inline explanations.
+
+> **Note on `GCS_BUCKET_NAME`:** before this cleanup, `main.py` and `firestore_service.py` each hardcoded a *different* bucket name as their fallback default. They now read the same `GCS_BUCKET_NAME` variable, defaulting to `ecommerce-police-media-uploads` (the value seen in a real GCS URI elsewhere in the repo). **Verify this matches your actual bucket** — set `GCS_BUCKET_NAME` explicitly in Cloud Run's env vars if not.
+
+### Key variables (frontend)
+
+| Variable | Required | Notes |
+|---|---|---|
+| `NEXT_PUBLIC_DATA_SOURCE` | — | Set to `mock` to bypass GCP entirely |
+| `NEXT_PUBLIC_API_URL` | ✅ (non-mock) | FastAPI backend base URL |
+| `NEXT_PUBLIC_STORAGE_STRATEGY` | ✅ (non-mock) | `signed_url` (default) or `local` |
+| `NEXT_PUBLIC_FIREBASE_*` (6 vars) | ✅ (non-mock) | From Firebase Console; without these the app silently falls back to non-functional mock values |
+
+See `frontend/.env.example` for the full list.
 
 ---
 
@@ -238,7 +291,10 @@ uvicorn main:app --reload --port 8000
 
 **For Cloud SQL Proxy** (required for local Postgres checkpoint access):
 ```bash
-# Download Cloud SQL Proxy from https://cloud.google.com/sql/docs/postgres/connect-admin-proxy
+# Download the binary for your OS from:
+# https://cloud.google.com/sql/docs/postgres/connect-admin-proxy
+# (not vendored in this repo — it's a large per-OS executable)
+
 # Run proxy in separate terminal:
 cloud-sql-proxy <PROJECT_ID>:<REGION>:<INSTANCE_NAME> --port 5432
 ```
@@ -345,10 +401,7 @@ Results saved to `backend/tests/evals/results/{tier}/run_{timestamp}/`
 
 ## Contact
 
-**Developer**: [Your Name]  
-**GitHub**: [https://github.com/your-username/hybrid-shield](https://github.com/your-username/hybrid-shield)  
-**LinkedIn**: [Your LinkedIn URL]  
-**Live Demo**: [COMPLETAR: URL if deployed]
+**Repo**: [github.com/catrielramirez/hybrid-shield](https://github.com/catrielramirez/hybrid-shield)
 
 ---
 

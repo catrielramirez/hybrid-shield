@@ -18,15 +18,19 @@ os.chdir(BACKEND_DIR)
 sys.path.append(".")
 
 # Importación utilizando el espacio de nombres completo 'agents.moderator'
+import config
 from agents.moderator.graph import HybridShieldAgent
 
 # Definición de rutas relativas limpias para Vertex AI
 PATH_REQUIREMENTS = "agents/moderator/requirements.txt"
-PATH_EXTRA_PACKAGES = "./agents"
+# "config.py" viaja junto con "./agents" porque graph.py y sus servicios
+# hacen `import config` (ver backend/config.py). Si se omite acá, el agente
+# remoto falla con ImportError al primer query().
+PATH_EXTRA_PACKAGES = ["./agents", "config.py"]
 
 # 3. PARÁMETROS DEL PROYECTO
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "ecommerce-police-portfolio")
-LOCATION = "us-central1"
+PROJECT_ID = config.get_project_id()
+LOCATION = config.get_reasoning_engine_location()
 STAGING_BUCKET = f"gs://{PROJECT_ID}-vertex-staging"
 
 print("Inicializando la SDK de Vertex AI...")
@@ -57,7 +61,7 @@ print("Nota: Se aplicará el archivo .gcloudignore automáticamente.")
 remote_agent = reasoning_engines.ReasoningEngine.create(
     reasoning_engine=agente_instancia,
     requirements=PATH_REQUIREMENTS,
-    extra_packages=[PATH_EXTRA_PACKAGES],
+    extra_packages=PATH_EXTRA_PACKAGES,
     display_name="hybrid_shield_moderator_agent",
 )
 

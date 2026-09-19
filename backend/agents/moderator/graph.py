@@ -1,5 +1,6 @@
 import os
 import asyncio
+import config
 from langgraph.graph import StateGraph, END
 from langchain_google_cloud_sql_pg import PostgresEngine
 try:
@@ -50,23 +51,17 @@ class HybridShieldAgent:
 
         config_env = getattr(self, "env_vars", {})
 
-        conn_name = config_env.get("DB_CONNECTION_NAME") or os.getenv("DB_CONNECTION_NAME", "")
-        
-        parts = conn_name.split(":")
-        project_id = parts[0] if len(parts) > 0 else (config_env.get("GOOGLE_CLOUD_PROJECT") or os.getenv("GOOGLE_CLOUD_PROJECT"))
-        region = parts[1] if len(parts) > 1 else "us-central1"
-        instance = parts[2] if len(parts) > 2 else ""
+        conn = config.parse_cloud_sql_connection(config_env)
 
         db_kwargs = {
-            "project_id": project_id,
-            "region": region,
-            "instance": instance,
-            "database": config_env.get("DB_NAME") or os.getenv("DB_NAME", "agent_states")
+            "project_id": conn["project_id"],
+            "region": conn["region"],
+            "instance": conn["instance"],
+            "database": config.get_db_name(config_env),
         }
-        
-        db_user = config_env.get("DB_USER") or os.getenv("DB_USER")
-        db_pass = config_env.get("DB_PASS") or os.getenv("DB_PASS")
-        
+
+        db_user, db_pass = config.get_db_credentials(config_env)
+
         if db_user and db_pass:
             db_kwargs["user"] = db_user
             db_kwargs["password"] = db_pass

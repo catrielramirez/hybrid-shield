@@ -1,4 +1,5 @@
 import os
+import sys
 import vertexai
 from vertexai.preview import reasoning_engines
 from dotenv import load_dotenv
@@ -7,8 +8,11 @@ from dotenv import load_dotenv
 ruta_env = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.env"))
 load_dotenv(dotenv_path=ruta_env)
 
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "ecommerce-police-portfolio")
-LOCATION = "us-central1"
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import config
+
+PROJECT_ID = config.get_project_id()
+LOCATION = config.get_reasoning_engine_location()
 
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 

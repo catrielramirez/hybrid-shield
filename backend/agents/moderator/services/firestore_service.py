@@ -1,8 +1,8 @@
-import os
 import logging
 from datetime import datetime, timezone, timedelta
 from google.cloud import firestore
 from google.cloud import storage
+import config
 
 logger = logging.getLogger("moderation_pipeline")
 
@@ -15,8 +15,11 @@ def get_firestore_async_client():
     global _firestore_async_client
     if _firestore_async_client is None:
         try:
-            # Usamos AsyncClient en lugar de Client, forzando el project literal para evitar fallos de resolución de Vertex
-            _firestore_async_client = firestore.AsyncClient(project="ecommerce-police-portfolio", database="firestore-hybrid-shield")
+            # Usamos AsyncClient en lugar de Client, forzando el project explícito para evitar fallos de resolución de Vertex
+            _firestore_async_client = firestore.AsyncClient(
+                project=config.get_firestore_project_id(),
+                database=config.get_firestore_database(),
+            )
         except Exception as e:
             logger.error(f"Failed to initialize Firestore Async client: {e}")
             raise
@@ -28,9 +31,9 @@ def get_storage_client():
     global _storage_client
     if _storage_client is None:
         try:
-            service_account_email = "679252770153-compute@developer.gserviceaccount.com"
-            is_local = os.getenv("GOOGLE_CLOUD_PROJECT") is None or os.getenv("LOCAL_DEV") == "true"
-            
+            service_account_email = config.get_service_account_email()
+            is_local = config.is_local_dev()
+
             if is_local:
                 logger.info("Initializing Storage Client for local dev (with impersonated credentials)")
                 from google.auth import default
@@ -104,7 +107,7 @@ async def update_job_status(thread_id: str, status: str, metadata: dict = None):
             try:
                 parts = gcs_uri[5:].split("/")
                 filename = parts[-1] if parts else "raw_image.jpg"
-                public_url = f"https://storage.googleapis.com/ecommerce-police-portfolio-upload/items/{thread_id}/{filename}"
+                public_url = f"https://storage.googleapis.com/{config.get_gcs_bucket_name()}/items/{thread_id}/{filename}"
                 payload["image_url"] = public_url
             except Exception as e:
                 logger.error(f"Failed to generate public GCS URL for payload: {e}")

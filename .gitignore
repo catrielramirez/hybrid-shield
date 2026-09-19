@@ -19,3 +19,6 @@ env/
 archive/
 data/
 *.log
+
+# Binarios de terceros (descargar aparte, ver README)
+bin/cloud-sql-proxy.exe

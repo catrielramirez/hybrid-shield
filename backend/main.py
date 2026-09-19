@@ -24,10 +24,10 @@ if dotenv_path.exists():
     from dotenv import load_dotenv
     load_dotenv(dotenv_path=dotenv_path)
 
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "ecommerce-police-media-uploads")
-SERVICE_ACCOUNT_EMAIL = "679252770153-compute@developer.gserviceaccount.com"
-IS_LOCAL = PROJECT_ID is None or os.getenv("LOCAL_DEV") == "true"
+import config
+
+GCS_BUCKET_NAME = config.get_gcs_bucket_name()
+IS_LOCAL = config.is_local_dev()
 
 # ================================================================
 # 2. LOGGING CONFIGURATION
@@ -85,8 +85,7 @@ app = FastAPI(title="Semantic Shield Moderation API", lifespan=lifespan)
 # 6. CORS CONFIGURATION
 # ================================================================
 # Default to "*" so that if the .env file is ignored/missing in Cloud Run, CORS won't block requests
-raw_origins = os.getenv("ALLOWED_ORIGINS", "*")
-origins = [origin.strip() for origin in raw_origins.split(",")]
+origins = config.get_allowed_origins()
 
 # FastAPI does not allow allow_origins=["*"] when allow_credentials=True.
 # Since we don't use sessions/cookies, we can safely disable credentials if "*" is present.

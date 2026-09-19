@@ -1,8 +1,7 @@
 import logging
-import os
-import google.auth
 from typing import Dict, Any, Optional
 from langgraph.types import Command
+import config
 from ..graph import HybridShieldAgent
 
 logger = logging.getLogger("moderation_pipeline")
@@ -13,20 +12,15 @@ _agent_instance: Optional[HybridShieldAgent] = None
 def _get_agent() -> HybridShieldAgent:
     global _agent_instance
     if _agent_instance is None:
+        # Validamos DB_CONNECTION_NAME acá porque es la MISMA variable que
+        # HybridShieldAgent._initialize_checkpointer() usa para construir el
+        # checkpointer (ver graph.py). Fallar rápido acá evita apuntar a una
+        # instancia de Cloud SQL distinta entre este servicio y el grafo.
+        conn = config.parse_cloud_sql_connection()
+        if not conn["instance"]:
+            raise ValueError("ERROR: DB_CONNECTION_NAME no configurado o incompleto (formato esperado: project:region:instance).")
         _agent_instance = HybridShieldAgent()
-        
-        _, default_project_id = google.auth.default()
-        
-        if not getattr(_agent_instance, "project", None):
-            _agent_instance.project = os.getenv("PROJECT_ID") or default_project_id
-        if not getattr(_agent_instance, "region", None):
-            _agent_instance.region = os.getenv("GCP_REGION") or "us-central1"
-        if not getattr(_agent_instance, "instance_name", None):
-            instance = os.getenv("DB_INSTANCE_NAME")
-            if not instance:
-                raise ValueError("ERROR: DB_INSTANCE_NAME no configurado.")
-            _agent_instance.instance_name = instance
-            
+
     return _agent_instance
 
 async def get_full_audit_trace(thread_id: str) -> Optional[Dict[str, Any]]:

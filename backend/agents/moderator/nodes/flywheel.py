@@ -1,15 +1,14 @@
-import os
 import json
 import logging
 import asyncio
 from google.cloud import bigquery
 from langchain_core.runnables import RunnableConfig
+import config
 from ..state import AgentState
 from ..shared.observability import measure_latency
 from ..shared.audit import make_audit_entry
 
 logger = logging.getLogger("moderation_pipeline")
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "ecommerce-police-portfolio")
 
 
 @measure_latency("fly_wheel")
@@ -31,7 +30,7 @@ async def data_flywheel_node(state: AgentState, config: RunnableConfig):
             return default
 
     try:
-        table_id = f"{PROJECT_ID}.moderation_dataset.evaluations"
+        table_id = f"{config.get_project_id()}.moderation_dataset.evaluations"
         
         input_data = state.get("input_data") or {}
         features = state.get("features") or {}

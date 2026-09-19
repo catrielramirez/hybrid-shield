@@ -1,4 +1,3 @@
-import os
 import logging
 import json
 import urllib.parse
@@ -7,30 +6,30 @@ from typing import Optional
 from google import genai
 from google.genai import types
 from google.cloud import storage
+import config
 from ..utils.prompt_loader import load_prompt
 from ..schemas import MultimodalProductFeatures, SafetyAnalysis
 
 # Configuración de Logging
 logger = logging.getLogger("moderation_pipeline")
 
-# 1. Configuración Global (Instancias únicas para eficiencia)
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "ecommerce-police-portfolio")
-LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
-
 # 1. Patrón Lazy Loading para Clientes
+# project_id/location se resuelven en cada llamada (no como constantes de
+# módulo) para funcionar con la inyección tardía de env_vars del Reasoning
+# Engine (ver backend/config.py).
 _genai_client = None
 _storage_client = None
 
 def get_genai_client() -> genai.Client:
     global _genai_client
     if _genai_client is None:
-        _genai_client = genai.Client(vertexai=True, project=PROJECT_ID, location=LOCATION)
+        _genai_client = genai.Client(vertexai=True, project=config.get_project_id(), location=config.get_location())
     return _genai_client
 
 def get_storage_client() -> storage.Client:
     global _storage_client
     if _storage_client is None:
-        _storage_client = storage.Client(project=PROJECT_ID)
+        _storage_client = storage.Client(project=config.get_project_id())
     return _storage_client
 
 # Caché en memoria para evitar llamadas redundantes a GCS

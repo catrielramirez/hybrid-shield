@@ -1,7 +1,7 @@
-import os
 import logging
 import asyncio
 from google.cloud import discoveryengine_v1beta as discoveryengine
+import config
 
 logger = logging.getLogger("moderation_pipeline")
 
@@ -15,19 +15,19 @@ class RagService:
 
     @property
     def project_id(self) -> str:
-        return os.getenv("GOOGLE_CLOUD_PROJECT", "ecommerce-police-portfolio")
+        return config.get_project_id()
 
     @property
     def location(self) -> str:
-        return os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
+        return config.get_location()
 
     @property
     def data_store_id(self) -> str | None:
-        return os.getenv("DATA_STORE_ID")
+        return config.get_data_store_id()
 
     @property
     def engine_id(self) -> str | None:
-        return os.getenv("ENGINE_ID") or self.data_store_id
+        return config.get_engine_id()
 
     @property
     def serving_config(self) -> str:
