@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local manual-test uploads (not used by the app, don't recommit)
+/public/uploads/
+
 # vercel
 .vercel
 
